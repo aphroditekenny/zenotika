@@ -1,0 +1,23 @@
+# Basic SPA redirect
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security headers (adjust CSP per asset needs)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Allow Vite-built JS/CSS, SW/manifest, and your image CDN
+    # Adjust img-src to include your domains; example includes Webflow CDN used by logos
+  Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://js.sentry-cdn.com https://browser.sentry-cdn.com https://vitals.vercel-insights.com https://cdn.vercel-insights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://cdn.prod.website-files.com; font-src 'self' data:; connect-src 'self' https: https://vitals.vercel-insights.com https://vitals.vercel-analytics.com https://*.ingest.sentry.io https://o*.ingest.sentry.io; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'none'"
+    # HSTS (1 year, include subdomains, preload once stable on apex domain)
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Cross-Origin-Opener-Policy = "same-origin"
+    # If you require COEP/COOP for advanced features (e.g., SharedArrayBuffer), keep; else consider removing to avoid third-party breakage
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Resource-Policy = "same-origin"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

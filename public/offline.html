@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Offline • Zenotika</title>
+    <meta name="robots" content="noindex" />
+    <style>
+      html, body { height: 100%; }
+      body { display:flex; align-items:center; justify-content:center; margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#0b1220; color:#e5e7eb; }
+      .card { max-width: 520px; padding: 24px 28px; border-radius: 12px; background: rgba(255,255,255,0.06); box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.12); }
+      h1 { font-size: 20px; margin: 0 0 8px; }
+      p { margin: 0 0 16px; line-height: 1.5; }
+      .actions { display:flex; gap:12px; }
+      a.btn { padding: 10px 14px; border-radius: 10px; text-decoration:none; background:#0ea5e9; color:#021018; font-weight:600; }
+      a.btn.secondary { background: transparent; color:#e5e7eb; border:1px solid rgba(255,255,255,0.2); }
+    </style>
+  </head>
+  <body>
+    <div class="card" role="status" aria-live="polite">
+      <h1>You’re offline</h1>
+      <p>The app is unavailable right now. When your connection is back, reload to continue.</p>
+      <div class="actions">
+        <a class="btn" href="/">Try again</a>
+        <a class="btn secondary" href="/">Go home</a>
+      </div>
+    </div>
+  </body>
+</html>

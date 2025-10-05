@@ -1,0 +1,2442 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+  --background: #ffffff;
+  --foreground: oklch(0.145 0 0);
+  --card: #ffffff;
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: #030213;
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.0058 264.53);
+  --secondary-foreground: #030213;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #e9ebef;
+  --accent-foreground: #030213;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+  --input: transparent;
+  --input-background: #f3f3f5;
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: #030213;
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* Base styles */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-size: var(--font-size);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: color-scheme 0.3s ease;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'InterVar', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+}
+
+/* Reduced motion: respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen-reader only helper, visible when focused (for skip link) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Self-hosted font (example). Provide WOFF2 only with swap for speed. */
+@font-face {
+  font-family: 'InterVar';
+  src: url('/fonts/Inter-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Typography */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+
+    h3 {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 600;
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    h4 {
+      font-size: clamp(1.25rem, 3vw, 1.5rem);
+      font-weight: 600;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    p {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+}
+
+/* Things Inc Specific Styles */
+.page-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1a1b3e 0%, #0f1020 50%, #060712 100%);
+  color: white;
+  position: relative;
+  overflow-x: hidden;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* Light mode page wrapper */
+.light .page-wrapper,
+.day-mode .page-wrapper {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+  color: #2d3748;
+}
+
+.main-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.custom-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(168, 85, 247, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 122, 138, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse at center top, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #1a1b3e 0%, #0f1020 40%, #060712 80%, #030508 100%);
+  transition: background 0.5s ease;
+}
+
+.custom-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 60%, rgba(255, 122, 138, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 80% 40%, rgba(168, 85, 247, 0.04) 0%, transparent 40%),
+    linear-gradient(45deg, transparent 40%, rgba(59, 130, 246, 0.02) 50%, transparent 60%);
+  pointer-events: none;
+  animation: zenAmbientFlow 20s ease-in-out infinite;
+}
+
+@keyframes zenAmbientFlow {
+  0%, 100% { opacity: 0.8; transform: scale(1) translateZ(0); }
+  50% { opacity: 1; transform: scale(1.02) translateZ(0); }
+}
+
+/* Light mode background */
+.light .custom-background,
+.day-mode .custom-background {
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(255, 122, 138, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 70% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse at center top, rgba(255, 122, 138, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, #667eea 0%, #764ba2 40%, #667eea 80%, #5a67d8 100%);
+}
+
+.light .custom-background::before,
+.day-mode .custom-background::before {
+  background: 
+    radial-gradient(circle at 20% 60%, rgba(168, 85, 247, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 80% 40%, rgba(255, 122, 138, 0.06) 0%, transparent 40%),
+    linear-gradient(45deg, transparent 40%, rgba(59, 130, 246, 0.03) 50%, transparent 60%);
+}
+
+.page-content_wrap {
+  position: relative;
+  z-index: 10;
+}
+
+.padding-global {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .padding-global {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .padding-global {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.container-xlarge {
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stretch {
+  width: 100%;
+}
+
+.lift-z {
+  position: relative;
+  z-index: 10;
+}
+
+.padding-bottom {
+  padding-bottom: 2rem;
+}
+
+.padding-xxlarge {
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 1024px) {
+  .padding-xxlarge {
+    padding-bottom: 6rem;
+  }
+}
+
+.padding-small {
+  padding-bottom: 1rem;
+}
+
+/* Grid pattern */
+.animated-grid-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.grid-pattern {
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+}
+
+.is-night-grid {
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+/* Enhanced Stars overlay - Zen Philosophy */
+.stars-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(1px 1px at 25px 35px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(0.5px 0.5px at 60px 80px, rgba(255, 122, 138, 0.6), transparent),
+    radial-gradient(1px 1px at 120px 45px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(0.5px 0.5px at 180px 90px, rgba(168, 85, 247, 0.5), transparent),
+    radial-gradient(1px 1px at 220px 25px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(0.5px 0.5px at 280px 110px, rgba(59, 130, 246, 0.4), transparent),
+    radial-gradient(1px 1px at 320px 60px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(0.5px 0.5px at 380px 140px, rgba(255, 122, 138, 0.3), transparent);
+  background-repeat: repeat;
+  background-size: 400px 180px;
+  opacity: 0.5;
+  animation: zenStarfield 30s linear infinite;
+}
+
+@keyframes zenStarfield {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-400px, -180px, 0); }
+}
+
+/* Light mode stars - more subtle */
+.light .stars-overlay,
+.day-mode .stars-overlay {
+  background-image: 
+    radial-gradient(1px 1px at 25px 35px, rgba(45, 55, 72, 0.3), transparent),
+    radial-gradient(0.5px 0.5px at 60px 80px, rgba(255, 122, 138, 0.4), transparent),
+    radial-gradient(1px 1px at 120px 45px, rgba(45, 55, 72, 0.2), transparent),
+    radial-gradient(0.5px 0.5px at 180px 90px, rgba(168, 85, 247, 0.3), transparent),
+    radial-gradient(1px 1px at 220px 25px, rgba(45, 55, 72, 0.25), transparent),
+    radial-gradient(0.5px 0.5px at 280px 110px, rgba(59, 130, 246, 0.2), transparent),
+    radial-gradient(1px 1px at 320px 60px, rgba(45, 55, 72, 0.3), transparent),
+    radial-gradient(0.5px 0.5px at 380px 140px, rgba(255, 122, 138, 0.2), transparent);
+  opacity: 0.3;
+}
+
+/* Parallax wrapper */
+.parallax-wrapper {
+  position: relative;
+  z-index: 20;
+}
+
+/* Zen Button Styles - Functional, Clean */
+.w-inline-block {
+  display: inline-block;
+}
+
+.w-button {
+  background: linear-gradient(135deg, #ff7a8a 0%, #a855f7 100%);
+  border: none;
+  border-radius: 50px;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 12px 24px;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.w-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.w-button:focus-visible {
+  outline: 2px solid rgba(168, 85, 247, 0.5);
+  outline-offset: 2px;
+}
+
+.w-button:active {
+  transform: scale(0.98);
+}
+
+/* Optimized Cloud Animations */
+.cloud-container {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  contain: layout style;
+}
+
+/* Scroll Arrow Animation */
+@keyframes scrollBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+.scroll-dot-animated {
+  animation: scrollBounce 2s infinite;
+}
+
+.scroll-arrow-animated {
+  transition: transform 0.3s ease;
+}
+
+.scroll-arrow-animated:hover {
+  transform: translateY(-2px);
+}
+
+/* Hero Logo Animation */
+.home-logo-wrap {
+  will-change: transform;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.balloon {
+  animation: gentleFloat 8s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  25% { 
+    transform: translateY(-8px) rotate(0.5deg); 
+  }
+  50% { 
+    transform: translateY(-12px) rotate(0deg); 
+  }
+  75% { 
+    transform: translateY(-8px) rotate(-0.5deg); 
+  }
+}
+
+/* Performance optimizations */
+.hero-logo {
+  will-change: auto;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  contain: layout;
+}
+
+.cloud-wrapper {
+  will-change: auto;
+  contain: layout style;
+  pointer-events: none;
+}
+
+/* Voxel and Floating Animations */
+@keyframes floatVoxel {
+  0%, 100% { 
+    transform: translateY(0px) rotateY(0deg); 
+  }
+  25% { 
+    transform: translateY(-4px) rotateY(90deg); 
+  }
+  50% { 
+    transform: translateY(-8px) rotateY(180deg); 
+  }
+  75% { 
+    transform: translateY(-4px) rotateY(270deg); 
+  }
+}
+
+@keyframes floatAmbient {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  33% { 
+    transform: translateY(-6px) rotate(1deg); 
+  }
+  66% { 
+    transform: translateY(-3px) rotate(-1deg); 
+  }
+}
+
+.floating-voxel {
+  animation: floatVoxel 6s ease-in-out infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.floating-voxel-delay-1 {
+  animation-delay: -2s;
+}
+
+.floating-voxel-delay-2 {
+  animation-delay: -4s;
+}
+
+.floating-voxel-mobile {
+  animation: floatVoxel 4s ease-in-out infinite;
+}
+
+.floating-ambient {
+  animation: floatAmbient 8s ease-in-out infinite;
+  will-change: transform;
+}
+
+.floating-ambient-delay {
+  animation-delay: -4s;
+}
+
+/* Quote Image Placeholders */
+.quote-item-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.quote-image-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 8px;
+}
+
+/* Zen Button - Simplified */
+.button.big.learn-more {
+  position: relative;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.button.big.learn-more:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.button.big.learn-more:focus-visible {
+  outline: 2px solid rgba(168, 85, 247, 0.5);
+  outline-offset: 2px;
+}
+
+/* Intersection Observer Fade-in */
+.section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Performance optimizations for images */
+.quote-image,
+.tv-image,
+.train-image {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Lazy loading shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.animate-pulse {
+  background: linear-gradient(90deg, 
+    rgba(255,255,255,0.1) 25%, 
+    rgba(255,255,255,0.2) 50%, 
+    rgba(255,255,255,0.1) 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Zen Accessibility - Respect user preferences and prevent performance issues */
+@media (prefers-reduced-motion: reduce) {
+  .balloon,
+  .scroll-dot-animated,
+  .cloud-container,
+  .floating-voxel,
+  .floating-voxel-mobile,
+  .floating-ambient,
+  .stars-overlay,
+  .zenAmbientFlow,
+  .zenStarfield,
+  .zenGradientFlow,
+  .zenPulse {
+    animation: none !important;
+  }
+  
+  .cloud-container {
+    transform: none !important;
+  }
+  
+  .home-logo-wrap,
+  .section,
+  .zen-nav-link,
+  .zen-theme-toggle,
+  .project-card,
+  .project-square,
+  .w-button {
+    transition: none !important;
+  }
+  
+  * {
+    animation-duration: 0.01s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01s !important;
+  }
+}
+
+/* Performance safeguards - disable complex animations on low-end devices */
+@media (max-width: 768px) and (max-resolution: 150dpi) {
+  .cloud-container,
+  .stars-overlay {
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  .custom-background::before {
+    animation: none !important;
+  }
+}
+
+/* Optimized Project cards */
+.project-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+  position: relative;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.project-card:hover {
+  transform: translateY(-8px) translateZ(0);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* GPU acceleration for images */
+.hex-image,
+.hero-logo,
+.quote-image {
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* Contain layout to prevent cascade reflows */
+.project-grid {
+  contain: layout style;
+}
+
+.project-cell {
+  contain: layout;
+}
+
+/* Optimize animations with GPU acceleration */
+.floating-voxel,
+.floating-ambient,
+.cloud-container {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Memory optimization for large sections */
+.section {
+  contain: content;
+}
+
+/* Zen Navigation - Minimal, Functional */
+.zen-nav-link {
+  position: relative;
+  border-radius: 6px;
+}
+
+.zen-nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.light .zen-nav-link:hover,
+.day-mode .zen-nav-link:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Zen Theme Toggle - Subtle, Purposeful */
+.zen-theme-toggle {
+  position: relative;
+  border-radius: 50%;
+}
+
+.zen-theme-toggle:focus-visible {
+  outline: 2px solid rgba(168, 85, 247, 0.5);
+  outline-offset: 2px;
+}
+
+.zen-theme-toggle:active {
+  transform: scale(0.98);
+}
+
+/* Zen Project Interactions - Clean, Purposeful */
+.project-square {
+  position: relative;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.project-square:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.project-square:focus-visible {
+  outline: 2px solid rgba(168, 85, 247, 0.5);
+  outline-offset: 2px;
+}
+
+/* Zen Card Hover - Subtle Elevation */
+.project-card {
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Log Card Stagger Animation */
+.log-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.log-card:nth-child(1) { animation-delay: 0.1s; }
+.log-card:nth-child(2) { animation-delay: 0.2s; }
+.log-card:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Zen Stars - Subtle, Calming */
+.stars-overlay {
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 160px 30px, rgba(255,255,255,0.6), transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: zenSparkle 40s linear infinite;
+}
+
+@keyframes zenSparkle {
+  from { 
+    transform: translateX(0px); 
+  }
+  to { 
+    transform: translateX(200px); 
+  }
+}
+
+/* Improved Glassmorphism */
+.project-card,
+.log-card-frame {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Light/Day mode support */
+.light,
+.day-mode {
+  --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+}
+
+/* Light mode stars - less visible */
+.light .stars-overlay,
+.day-mode .stars-overlay {
+  opacity: 0.1;
+}
+
+/* Light mode scroll arrow colors */
+.light .scroll-dot-animated path,
+.day-mode .scroll-dot-animated path {
+  fill: #2d3748;
+}
+
+/* Light mode project cards */
+.light .project-card,
+.day-mode .project-card {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.light .project-card:hover,
+.day-mode .project-card:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Zen + Nova + Informatika Design Principles */
+
+/* ZEN: Mindful interactions - no unnecessary distractions */
+.zen-focus {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.zen-focus:focus-visible {
+  outline: 2px solid rgba(168, 85, 247, 0.6);
+  outline-offset: 4px;
+  outline-style: solid;
+  border-radius: 1rem;
+}
+
+.zen-focus:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.zen-focus:active {
+  transform: translateY(0) scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* NOVA: Modern, clean energy without excess */
+.nova-energy {
+  background: linear-gradient(135deg, rgba(255, 122, 138, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  transition: background 0.3s ease;
+}
+
+/* INFORMATIKA: Functional, efficient, purpose-driven */
+.informatika-efficient {
+  will-change: transform;
+  contain: layout style;
+  backface-visibility: hidden;
+}
+
+/* Enhanced Logo Button Zen Interaction */
+.hero_content:hover .home-logo-wrap {
+  transform: translateY(-4px) scale(1.02);
+  filter: drop-shadow(0 25px 50px rgba(168, 85, 247, 0.3));
+}
+
+.hero_content:active .home-logo-wrap {
+  transform: translateY(-2px) scale(0.98);
+  transition: transform 0.15s ease;
+}
+
+/* Zen Philosophy Content Enhancement */
+.zen-philosophy-header .heading-style-h2 {
+  text-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+}
+
+.zen-philosophy-footer .philosophy-essence {
+  transition: all 0.3s ease;
+}
+
+.zen-philosophy-footer:hover .philosophy-essence {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.light .zen-philosophy-footer:hover .philosophy-essence,
+.day-mode .zen-philosophy-footer:hover .philosophy-essence {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Scroll Progress - Clean and informative */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #ff7a8a, #a855f7);
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.1s ease;
+  z-index: 1000;
+  opacity: 0.8;
+}
+
+/* Enhanced Home Page Styles - Zen + Nova + Informatika */
+.zen-hero-section {
+  position: relative;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+}
+
+.zen-project-grid {
+  will-change: contents;
+  contain: layout;
+}
+
+.zen-quote-section {
+  position: relative;
+  background: 
+    radial-gradient(circle at 50% 20%, rgba(255, 122, 138, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 40%);
+}
+
+.zen-visual-elements img {
+  filter: grayscale(0.3) opacity(0.8);
+  transition: filter 0.3s ease;
+}
+
+.zen-visual-elements img:hover {
+  filter: grayscale(0) opacity(1);
+}
+
+.zen-log-grid {
+  will-change: contents;
+  contain: layout;
+}
+
+.zen-newsletter-prompt {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.log-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  will-change: transform;
+  contain: layout style;
+}
+
+.log-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.log-date {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.tag {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced Loading Animation */
+@keyframes bounceDelay {
+  0%, 80%, 100% { 
+    transform: scale(0.8);
+    opacity: 0.5;
+  } 
+  40% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-bounce {
+  animation: bounceDelay 1.4s infinite ease-in-out both;
+}
+
+/* Interactive Portfolio Grid Styles - Phase 1 */
+.zen-portfolio-section {
+  position: relative;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.04) 0%, transparent 50%);
+}
+
+.zen-portfolio-controls {
+  will-change: contents;
+  contain: layout;
+}
+
+.zen-search-input {
+  backdrop-filter: blur(16px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.zen-search-input:focus {
+  transform: scale(1.02);
+  box-shadow: 0 8px 32px rgba(255, 122, 138, 0.2);
+}
+
+.zen-filter-btn {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  will-change: transform;
+  contain: layout style;
+}
+
+.zen-filter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.zen-filter-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.zen-projects-grid {
+  will-change: contents;
+  contain: layout;
+}
+
+.enhanced-project-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  will-change: transform;
+  contain: layout style;
+  cursor: pointer;
+}
+
+.enhanced-project-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.status-badge {
+  backdrop-filter: blur(10px);
+  border: 1px solid currentColor;
+  /* Replace non-standard border-opacity with rgba color using currentColor at 0.2 alpha */
+  border-color: color-mix(in srgb, currentColor 20%, transparent);
+}
+
+.project-category {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 122, 138, 0.2);
+}
+
+.tag-badge {
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.tag-badge:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* About Section - Zenotika Styles */
+.zen-about-section {
+  position: relative;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 122, 138, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 40%);
+}
+
+.zen-story-content {
+  contain: layout;
+}
+
+.section-badge {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 122, 138, 0.2);
+}
+
+.philosophy-pillar {
+  position: relative;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.philosophy-pillar:hover {
+  border-left-color: rgba(255, 122, 138, 0.4);
+}
+
+.pillar-icon {
+  animation: zenGlow 3s ease-in-out infinite;
+}
+
+@keyframes zenGlow {
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.2);
+  }
+}
+
+.zen-symbol {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.zen-symbol::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 122, 138, 0.1), 
+    transparent
+  );
+  animation: zenShimmer 3s ease-in-out infinite;
+}
+
+@keyframes zenShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.zen-triangle-arrangement {
+  position: relative;
+}
+
+.zen-dot, .nova-dot, .informatika-dot {
+  box-shadow: 0 0 20px currentColor;
+}
+
+.zen-connections {
+  opacity: 0.6;
+}
+
+.zen-floating-elements {
+  animation: zenFloat 8s ease-in-out infinite;
+}
+
+@keyframes zenFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-4px) rotate(1deg); }
+  66% { transform: translateY(4px) rotate(-1deg); }
+}
+
+.zen-mission-statement blockquote {
+  position: relative;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+}
+
+.zen-mission-statement blockquote::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  font-size: 4rem;
+  color: rgba(255, 122, 138, 0.3);
+  font-family: serif;
+}
+
+/* Light Mode Adaptations */
+.light .zen-portfolio-section,
+.day-mode .zen-portfolio-section {
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255, 122, 138, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+}
+
+.light .zen-about-section,
+.day-mode .zen-about-section {
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 122, 138, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.04) 0%, transparent 40%);
+}
+
+.light .enhanced-project-card,
+.day-mode .enhanced-project-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #2d3748;
+}
+
+.light .enhanced-project-card:hover,
+.day-mode .enhanced-project-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.light .zen-search-input,
+.day-mode .zen-search-input {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #2d3748;
+}
+
+.light .zen-search-input::placeholder,
+.day-mode .zen-search-input::placeholder {
+  color: rgba(45, 55, 72, 0.6);
+}
+
+.light .zen-filter-btn,
+.day-mode .zen-filter-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #2d3748;
+}
+
+.light .zen-symbol,
+.day-mode .zen-symbol {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #2d3748;
+}
+
+/* Phase 2: User Experience Polish - Smooth Transitions & Mobile */
+
+/* Page Transitions - Zenotika Philosophy */
+.page-transition-wrapper {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(255, 122, 138, 0.1) 0%, 
+    rgba(168, 85, 247, 0.1) 50%, 
+    rgba(59, 130, 246, 0.1) 100%);
+  backdrop-filter: blur(20px);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.transition-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.page-content {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.page-content.fade-out {
+  opacity: 0;
+  transform: scale(0.98) translateY(20px);
+}
+
+.page-content.fade-in {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.transition-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  text-align: center;
+}
+
+.loading-spinner {
+  margin-bottom: 1rem;
+}
+
+.spinner-dots {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff7a8a, #a855f7);
+  animation: dotBounce 1.4s ease-in-out infinite both;
+}
+
+.dot-2 { animation-delay: 0.16s; }
+.dot-3 { animation-delay: 0.32s; }
+
+@keyframes dotBounce {
+  0%, 80%, 100% { 
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% { 
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Accessibility Enhancements */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 10001;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 6px;
+  outline: 2px solid #ff7a8a;
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus Visible Enhancements */
+[data-focus-visible="true"] *:focus-visible {
+  outline: 2px solid #ff7a8a;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* High Contrast Mode */
+[data-high-contrast="true"] {
+  --background: #000000;
+  --foreground: #ffffff;
+  --border: #ffffff;
+}
+
+[data-high-contrast="true"] .enhanced-project-card,
+[data-high-contrast="true"] .zen-symbol,
+[data-high-contrast="true"] .zen-search-input {
+  border: 2px solid #ffffff;
+  background: #000000;
+}
+
+[data-high-contrast="true"] .zen-filter-btn {
+  border: 2px solid #ffffff;
+  background: #000000;
+  color: #ffffff;
+}
+
+/* Reduced Motion */
+[data-reduced-motion="true"] *,
+[data-reduced-motion="true"] *::before,
+[data-reduced-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+[data-reduced-motion="true"] .page-transition-wrapper {
+  transition: none !important;
+}
+
+[data-reduced-motion="true"] .transition-overlay {
+  transition: none !important;
+}
+
+/* Enhanced Loading States */
+.skeleton-loader {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.1) 25%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    rgba(255, 255, 255, 0.1) 75%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+.skeleton-loader.no-animation {
+  animation: none;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-text {
+  border-radius: 4px;
+}
+
+.skeleton-card {
+  border-radius: 16px;
+}
+
+.skeleton-image {
+  border-radius: 12px;
+}
+
+.skeleton-button {
+  border-radius: 20px;
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+}
+
+.skeleton-project-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.page-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  text-align: center;
+  max-width: 90%;
+}
+
+.loading-spinner .spinner-ring {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+}
+
+.ring-segment {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 3px solid transparent;
+  border-top: 3px solid #ff7a8a;
+  border-radius: 50%;
+  animation: spinRing 1.2s linear infinite;
+}
+
+.ring-segment:nth-child(2) {
+  border-top-color: #a855f7;
+  animation-delay: 0.4s;
+}
+
+.ring-segment:nth-child(3) {
+  border-top-color: #3b82f6;
+  animation-delay: 0.8s;
+}
+
+@keyframes spinRing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-message {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Mobile Experience Enhancements */
+@media (max-width: 768px) {
+  .page-transition-wrapper {
+    overflow-x: hidden;
+  }
+  
+  .transition-overlay {
+    backdrop-filter: blur(10px);
+  }
+  
+  .zen-portfolio-controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .zen-search-input {
+    min-width: 100%;
+    max-width: 100%;
+  }
+  
+  .zen-filter-buttons {
+    gap: 0.5rem;
+  }
+  
+  .zen-filter-btn {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .zen-projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .enhanced-project-card {
+    margin: 0 0.5rem;
+  }
+  
+  .zen-about-section {
+    padding: 3rem 0;
+  }
+  
+  .zen-story-content,
+  .zen-visual-element {
+    text-align: center;
+  }
+  
+  .philosophy-pillar {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .philosophy-pillar:first-child {
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+  }
+  
+  .zen-symbol {
+    padding: 2rem 1.5rem;
+  }
+  
+  .zen-mission-statement blockquote {
+    font-size: 1.125rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .zen-search-input {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .zen-filter-btn {
+    font-size: 0.625rem;
+    padding: 0.375rem 0.625rem;
+  }
+  
+  .enhanced-project-card .project-card_inner {
+    padding: 1rem;
+  }
+  
+  .status-badge {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .project-category {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .tag-badge {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .zen-symbol {
+    padding: 1.5rem 1rem;
+  }
+  
+  .zen-triangle-arrangement {
+    scale: 0.8;
+  }
+  
+  .loading-spinner .spinner-ring {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .ring-segment {
+    width: 32px;
+    height: 32px;
+    border-width: 2px;
+  }
+  
+  .skeleton-project-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .enhanced-project-card:hover {
+    transform: none;
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+  
+  .zen-filter-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .zen-search-input:focus {
+    transform: none;
+  }
+  
+  /* Larger touch targets */
+  .zen-filter-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1rem;
+  }
+  
+  .enhanced-project-card {
+    cursor: default;
+  }
+  
+  /* Touch feedback */
+  .enhanced-project-card:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+  
+  .zen-filter-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* Landscape Mobile Optimization */
+@media (max-width: 896px) and (orientation: landscape) {
+  .zen-about-section {
+    padding: 2rem 0;
+  }
+  
+  .zen-mission-statement {
+    margin-top: 3rem;
+  }
+  
+  .zen-visual-element {
+    display: none;
+  }
+  
+  .zen-story-content {
+    max-width: 100%;
+  }
+}
+
+/* Dark/Light Mode Transitions for New Components */
+.light .skeleton-loader,
+.day-mode .skeleton-loader {
+  background: linear-gradient(90deg, 
+    rgba(45, 55, 72, 0.1) 25%, 
+    rgba(45, 55, 72, 0.2) 50%, 
+    rgba(45, 55, 72, 0.1) 75%);
+}
+
+.light .skeleton-loader.no-animation,
+.day-mode .skeleton-loader.no-animation {
+  background: rgba(45, 55, 72, 0.15);
+}
+
+.light .skeleton-project-card,
+.day-mode .skeleton-project-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.light .loading-message,
+.day-mode .loading-message {
+  color: rgba(45, 55, 72, 0.8);
+}
+
+.light .transition-overlay,
+.day-mode .transition-overlay {
+  background: linear-gradient(135deg, 
+    rgba(255, 122, 138, 0.15) 0%, 
+    rgba(168, 85, 247, 0.15) 50%, 
+    rgba(59, 130, 246, 0.15) 100%);
+}
+
+/* Performance Optimizations for Mobile */
+@media (max-width: 768px) {
+  .zen-projects-grid {
+    contain: layout style;
+  }
+  
+  .enhanced-project-card {
+    will-change: auto;
+    contain: layout;
+  }
+  
+  .stars-overlay {
+    animation-duration: 60s; /* Slower for mobile */
+  }
+  
+  .custom-background::before {
+    animation-duration: 40s; /* Slower for mobile */
+  }
+}
+
+/* Battery and Data Saving */
+@media (prefers-reduced-data: reduce) {
+  .stars-overlay {
+    background-image: none;
+  }
+  
+  .custom-background::before {
+    animation: none;
+    background: none;
+  }
+  
+  .skeleton-loader {
+    animation: none;
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Enhanced Landing Page Styles - Zen + Nova + Informatika */
+.landing-page-wrapper {
+  height: 100vh;
+  overflow: hidden;
+  background: 
+    radial-gradient(ellipse at top center, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(255, 122, 138, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, #1a1b3e 0%, #0f1020 40%, #060712 80%, #030508 100%);
+  color: white;
+  position: relative;
+}
+
+.light .landing-page-wrapper,
+.day-mode .landing-page-wrapper {
+  background: 
+    radial-gradient(ellipse at top center, rgba(255, 122, 138, 0.2) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #667eea 0%, #764ba2 40%, #667eea 80%, #5a67d8 100%);
+  color: #2d3748;
+}
+
+/* Zen Landing Page Enhanced Background */
+.zen-landing-page {
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 10%, rgba(255, 122, 138, 0.06) 0%, transparent 40%),
+    linear-gradient(135deg, #1a1b3e 0%, #0f1020 30%, #060712 70%, #030508 100%);
+  position: relative;
+}
+
+.zen-landing-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.03) 0%, transparent 50%),
+    linear-gradient(45deg, transparent 30%, rgba(255, 122, 138, 0.02) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.light .zen-landing-page,
+.day-mode .zen-landing-page {
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(255, 122, 138, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 50% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+    linear-gradient(135deg, #667eea 0%, #764ba2 30%, #667eea 70%, #5a67d8 100%);
+}
+
+/* Philosophy Text Styling */
+.zen-philosophy-header {
+  position: relative;
+  z-index: 10;
+}
+
+.philosophy-title h1 {
+  background: linear-gradient(135deg, 
+    rgba(255, 122, 138, 0.9) 0%, 
+    rgba(168, 85, 247, 0.9) 33%, 
+    rgba(59, 130, 246, 0.9) 66%, 
+    rgba(255, 122, 138, 0.9) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  animation: zenGradientFlow 8s ease-in-out infinite;
+}
+
+@keyframes zenGradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.zen-text, .nova-text, .informatika-text {
+  position: relative;
+  display: inline-block;
+}
+
+.philosophy-separator {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+  margin: 0 1rem;
+}
+
+.light .philosophy-separator,
+.day-mode .philosophy-separator {
+  color: rgba(45, 55, 72, 0.4);
+}
+
+/* Philosophy Essence Footer */
+.zen-philosophy-footer {
+  position: relative;
+  z-index: 10;
+}
+
+.philosophy-essence {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.light .philosophy-essence,
+.day-mode .philosophy-essence {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.zen-essence, .nova-essence, .informatika-essence {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.essence-dot {
+  background: linear-gradient(45deg, #ff7a8a, #a855f7);
+  animation: zenPulse 3s ease-in-out infinite;
+}
+
+@keyframes zenPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+}
+
+.home-page-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1a1b3e 0%, #0f1020 50%, #060712 100%);
+  color: white;
+  position: relative;
+  overflow-x: hidden;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+.light .home-page-wrapper,
+.day-mode .home-page-wrapper {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+  color: #2d3748;
+}
+
+/* Light mode optimizations for new components */
+.light .zen-hero-section,
+.day-mode .zen-hero-section {
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(255, 122, 138, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+}
+
+.light .zen-quote-section,
+.day-mode .zen-quote-section {
+  background: 
+    radial-gradient(circle at 50% 20%, rgba(255, 122, 138, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 40%);
+}
+
+.light .project-card,
+.day-mode .project-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #2d3748;
+}
+
+.light .project-card:hover,
+.day-mode .project-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.light .log-card,
+.day-mode .log-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #2d3748;
+}
+
+.light .log-card:hover,
+.day-mode .log-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.light .zen-newsletter-prompt,
+.day-mode .zen-newsletter-prompt {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #2d3748;
+}
+
+/* Landing Page CTA Button */
+.hero_grid:hover .home-logo-wrap {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.hero_grid:active .home-logo-wrap {
+  transform: translateY(-2px) scale(0.98);
+}
+
+/* Landing Page Performance */
+.landing-page-wrapper .hero_grid {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Responsive utilities */
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  
+  .mobile-only {
+    display: block !important;
+  }
+
+  .page-wrapper {
+    font-size: 14px;
+  }
+
+  .project-card {
+    border-radius: 16px;
+  }
+
+  .hero-title-text {
+    text-align: center;
+  }
+
+  .quote-text-wrap {
+    text-align: center;
+  }
+}
+
+@media (min-width: 768px) {
+  .hide-tablet {
+    display: none !important;
+  }
+  
+  .desktop-tablet {
+    display: block !important;
+  }
+  
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  .padding-global {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .hero_grid {
+    gap: 2rem;
+    text-align: center;
+    padding-top: 6rem;
+    padding-bottom: 3rem;
+  }
+
+  .project-card_inner {
+    padding: 1rem;
+  }
+
+  .footer-grid {
+    gap: 2rem;
+  }
+
+  .follow-social-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .floating-image-wrap {
+    display: none;
+  }
+
+  .scroll-prompt-wrapper {
+    bottom: 2rem;
+  }
+
+  .section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .home-logo-wrap {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title-text {
+    font-size: 2.5rem !important;
+    line-height: 1.1;
+  }
+
+  .home-quote-text {
+    font-size: 1.5rem !important;
+  }
+
+  .quote-item img {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+
+  .project-card {
+    margin: 0 0.5rem;
+  }
+
+  .footer-grid {
+    gap: 1.5rem;
+  }
+
+  .follow-social-grid {
+    gap: 0.75rem;
+  }
+
+  .footer-social-card {
+    padding: 0.75rem;
+  }
+}
+
+/* Additional utility classes */
+.background-pink-gradient {
+  background: linear-gradient(135deg, #ff7a8a 0%, #a855f7 100%);
+}
+
+.is-pink {
+  background: linear-gradient(135deg, #ff7a8a 0%, #a855f7 100%);
+}
+
+.text-color-option-2 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.light .text-color-option-2,
+.day-mode .text-color-option-2 {
+  color: rgba(45, 55, 72, 0.7);
+}
+
+.heading-style-h2 {
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.intro-paragraph {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.light .intro-paragraph,
+.day-mode .intro-paragraph {
+  color: rgba(45, 55, 72, 0.8);
+}
+
+/* Layout utilities */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.space-x-4 > * + * {
+  margin-left: 1rem;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Margin utilities */
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
+.mb-16 {
+  margin-bottom: 4rem;
+}
+
+.mt-12 {
+  margin-top: 3rem;
+}
+
+@media (min-width: 1024px) {
+  .lg\:mb-20 {
+    margin-bottom: 5rem;
+  }
+  
+  .lg\:mt-16 {
+    margin-top: 4rem;
+  }
+}
+
+/* Padding utilities */
+.p-6 {
+  padding: 1.5rem;
+}
+
+/* Size utilities */
+.w-1 {
+  width: 0.25rem;
+}
+
+.h-1 {
+  height: 0.25rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+/* Text utilities */
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+/* Border radius */
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+/* Color utilities */
+.text-white\/60 {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.text-white\/40 {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.bg-white\/40 {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.light .text-white\/60,
+.day-mode .text-white\/60 {
+  color: rgba(45, 55, 72, 0.6);
+}
+
+.light .text-white\/40,
+.day-mode .text-white\/40 {
+  color: rgba(45, 55, 72, 0.4);
+}
+
+.light .bg-white\/40,
+.day-mode .bg-white\/40 {
+  background-color: rgba(45, 55, 72, 0.4);
+}
+
+/* Form styles */
+.w-form {
+  margin: 0;
+}
+
+.w-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: white;
+  padding: 12px 20px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.w-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.w-input:focus {
+  outline: none;
+  border-color: rgba(255, 122, 138, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 122, 138, 0.1);
+}
+
+/* Dynamic content styles */
+.w-dyn-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.w-dyn-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.w-dyn-item {
+  width: 100%;
+}
+
+/* Layout grids */
+.w-layout-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .w-layout-grid {
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .w-layout-grid {
+    gap: 2.5rem;
+  }
+}

@@ -1,0 +1,72 @@
+﻿node_modules/
+bower_components/
+
+# Build output
+dist/
+build/
+out/
+.vite/
+.tmp/
+temp/
+
+# Reports & coverage
+reports/
+playwright-report/
+blob-report/
+test-results/
+coverage/
+coverage-final.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS-specific
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# npm cache
+.npm/
+
+# TypeScript incremental builds
+*.tsbuildinfo
+
+# Misc caches
+.cache/
+.eslintcache
+.parcel-cache/
+.turbo/
+.sass-cache/
+*.iml

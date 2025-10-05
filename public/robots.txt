@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Updated to public GitHub Pages URL
+Sitemap: https://aphroditekenny.github.io/zenotika/sitemap.xml
