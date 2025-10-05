@@ -30,7 +30,7 @@ describe('MetaManager runtime injection', () => {
     expect(snapshot.description?.toLowerCase()).toContain('zenotika');
     expect(snapshot).toMatchInlineSnapshot(`
       {
-        "description": "Zenotika – React 19 progressive web experience berfokus pada performa, aksesibilitas, dan desain berniat baik.",
+        "description": "Zenotika — Mindful balance, modern energy, intelligent function. Menyatukan kesederhanaan yang penuh kesadaran, energi inovatif, dan fungsi cerdas menjadi pengalaman web yang cepat, inklusif, dan terukur.",
         "keywords": [
           "zenotika",
           " react 19",

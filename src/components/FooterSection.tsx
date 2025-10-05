@@ -300,14 +300,14 @@ function FooterSection() {
           >
             <img 
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367536d9cdf539095c9eb_footer-cloud-right_night.png" 
-              alt="Floating cloud" 
+              alt="Nova pillar cloud — guiding modern energy"
               className="floating-cloud-image night-cloud-image show-hero-cloud w-24 sm:w-32 lg:w-48 h-auto opacity-60"
               sizes="(max-width: 657px) 100vw, 657px"
               srcSet="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367536d9cdf539095c9eb_footer-cloud-right_night-p-500.png 500w, https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367536d9cdf539095c9eb_footer-cloud-right_night.png 657w"
             />
             <img 
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a804f8c9cd92a372ce_footer-cloud-right_day.png" 
-              alt="Floating cloud" 
+              alt="Nova pillar cloud — guiding modern energy"
               className="floating-cloud-image day-cloud-image hide-hero-cloud w-24 sm:w-32 lg:w-48 h-auto opacity-60"
               sizes="(max-width: 657px) 100vw, 657px"
               srcSet="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a804f8c9cd92a372ce_footer-cloud-right_day-p-500.png 500w, https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a804f8c9cd92a372ce_footer-cloud-right_day.png 657w"
@@ -326,14 +326,14 @@ function FooterSection() {
           >
             <img 
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a85cb2687ca4e30838_footer-clouds-left_night.png" 
-              alt="Floating cloud" 
+              alt="Zen pillar cloud — mindful calm"
               className="floating-cloud-image night-cloud-image show-hero-cloud w-28 sm:w-36 lg:w-52 h-auto opacity-40"
               sizes="(max-width: 717px) 100vw, 717px"
               srcSet="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a85cb2687ca4e30838_footer-clouds-left_night-p-500.png 500w, https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a85cb2687ca4e30838_footer-clouds-left_night.png 717w"
             />
             <img 
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a8274968c5aa82329f_footer-clouds-left_day.png" 
-              alt="Floating cloud" 
+              alt="Zen pillar cloud — mindful calm"
               className="floating-cloud-image day-cloud-image hide-hero-cloud w-28 sm:w-36 lg:w-52 h-auto opacity-40"
               sizes="(max-width: 717px) 100vw, 717px"
               srcSet="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a8274968c5aa82329f_footer-clouds-left_day-p-500.png 500w, https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a8274968c5aa82329f_footer-clouds-left_day.png 717w"
@@ -352,12 +352,12 @@ function FooterSection() {
           >
             <img 
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a8a723298ff33cee0f_footer-clouds-bottom_night.png" 
-              alt="Floating cloud" 
+              alt="Informatika pillar cloud — intelligent motion"
               className="floating-cloud-image night-cloud-image show-hero-cloud w-24 sm:w-28 lg:w-40 h-auto opacity-50"
             />
             <img 
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66f367a805dd39bee16d5312_footer-clouds-bottom_day.png" 
-              alt="Floating cloud" 
+              alt="Informatika pillar cloud — intelligent motion"
               className="floating-cloud-image day-cloud-image hide-hero-cloud w-24 sm:w-28 lg:w-40 h-auto opacity-50"
             />
           </div>

@@ -5,6 +5,12 @@ import { isFeatureEnabled } from '../featureFlags';
 let initialized = false;
 let flushTimer: number | null = null;
 const queue: Metric[] = [];
+const logDevWarning = (message: string, error: unknown) => {
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line no-console
+    console.warn(message, error);
+  }
+};
 const sessionId = (() => {
   try {
     const k = 'zenotikaSessionId';
@@ -13,7 +19,8 @@ const sessionId = (() => {
     const v = Math.random().toString(36).slice(2) + Date.now().toString(36);
     sessionStorage.setItem(k, v);
     return v;
-  } catch {
+  } catch (error) {
+    logDevWarning('Failed to initialise vitals session ID; using anonymous session', error);
     return 'anon';
   }
 })();
@@ -38,7 +45,9 @@ function flush() {
     } else {
       void fetch(url, { method: 'POST', body: payload, headers: { 'content-type': 'application/json' } });
     }
-  } catch {}
+  } catch (error) {
+    logDevWarning('Vitals reporter beacon failed', error);
+  }
 }
 
 function scheduleFlush(delay = 5000) {

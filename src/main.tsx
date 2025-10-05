@@ -10,6 +10,13 @@ import { registerUpdateToastCallback, triggerUpdateToast } from "./pwaDebug";
 
 const pwaEnabled = isFeatureEnabled("pwa");
 
+const logDevWarning = (message: string, error?: unknown) => {
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line no-console
+    console.warn(message, error);
+  }
+};
+
 if (isFeatureEnabled("performanceMetrics")) {
   void initPerformanceMetrics();
   // Initialize batching reporter (client -> Netlify function)
@@ -59,7 +66,9 @@ const showUpdateToast = (waiting?: ServiceWorker) => {
             onClick: () => {
               try {
                 waiting.postMessage("SKIP_WAITING");
-              } catch {}
+              } catch (error) {
+                logDevWarning("Failed to post skip waiting message", error);
+              }
               if (navigator.serviceWorker) {
                 navigator.serviceWorker.addEventListener(
                   "controllerchange",
@@ -78,7 +87,9 @@ const showUpdateToast = (waiting?: ServiceWorker) => {
         duration: 10000,
       });
     })
-    .catch(() => {});
+    .catch((error) => {
+      logDevWarning("Failed to load toast notifications", error);
+    });
 };
 
 registerUpdateToastCallback(showUpdateToast);
@@ -119,7 +130,9 @@ if (pwaEnabled && import.meta.env.PROD && "serviceWorker" in navigator) {
         // Optional: periodic check when tab gains focus
         document.addEventListener("visibilitychange", () => {
           if (document.visibilityState === "visible") {
-            registration.update().catch(() => {});
+            registration.update().catch((error) => {
+              logDevWarning("Service worker update check failed", error);
+            });
           }
         });
 
@@ -132,7 +145,9 @@ if (pwaEnabled && import.meta.env.PROD && "serviceWorker" in navigator) {
               if (status.state === "granted" || status.state === "prompt") {
                 await r.periodicSync.register("check-updates", { minInterval: 24 * 60 * 60 * 1000 });
               }
-            } catch {}
+            } catch (error) {
+              logDevWarning("Periodic background sync registration failed", error);
+            }
           })();
         }
       })

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "./ThemeContext";
 import { OptimizedImage } from "./OptimizedImage";
+import { persona, personaLocales } from "../content/persona";
 
 interface HeroSectionProps {
   onNavigateToHome?: () => void;
@@ -63,19 +64,17 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
 
       const elapsed = (Date.now() - startTime) / 1000;
 
-      // Throttle animation to reduce CPU usage
-      if (elapsed % 0.016 < 0.008) { // ~60fps throttle
+      if (elapsed % 0.016 < 0.008) {
         cloudRefs.current.forEach((cloudElement, index) => {
           if (!cloudElement || !isAnimating) return;
 
-          const speed = 0.2 + index * 0.05; // Reduced speeds
-          const amplitude = 8 + index * 3; // Reduced amplitudes
-          const phase = index * Math.PI / 2; // Simplified phase
+          const speed = 0.2 + index * 0.05;
+          const amplitude = 8 + index * 3;
+          const phase = index * Math.PI / 2;
 
           const x = Math.sin(elapsed * speed + phase) * amplitude;
           const y = Math.cos(elapsed * speed * 0.5 + phase) * (amplitude * 0.4);
 
-          // Use CSS custom properties for smoother animations
           cloudElement.style.setProperty('--cloud-x', `${x}px`);
           cloudElement.style.setProperty('--cloud-y', `${y}px`);
         });
@@ -96,6 +95,11 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
     };
   }, [isLoaded]);
 
+  const heroCopyEn = personaLocales.en;
+  const heroCopyId = personaLocales.id;
+  const heroTaglineId = "hero-tagline";
+  const heroMissionId = "hero-mission";
+
   const CloudImage = ({
     src,
     alt,
@@ -107,6 +111,7 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
     className: string;
     index: number;
   }) => {
+    const pillar = persona.pillars[index % persona.pillars.length];
     return (
       <div
         ref={(el) => {
@@ -118,6 +123,8 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
           opacity: isLoaded ? 1 : 0,
           transition: 'opacity 0.3s ease'
         }}
+        data-pillar={pillar.key}
+        data-semantic-tags={pillar.semanticTags.join(' ')}
       >
         <img
           src={src}
@@ -125,7 +132,6 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
           className={className}
           loading="lazy"
           onError={(e) => {
-            // Hide broken images
             (e.target as HTMLImageElement).style.display = 'none';
           }}
         />
@@ -138,21 +144,41 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
       <div className="padding-global stretch lift-z">
         <div className="container-xlarge">
           <div className={`hero_grid flex flex-col items-center justify-center min-h-screen py-24 sm:py-28 lg:py-32 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-
-
+            <div className="hero_copy text-center max-w-3xl mx-auto mb-12 space-y-4">
+              <p className="tracking-[0.2em] uppercase text-xs sm:text-sm text-white/60" lang="en">
+                {persona.pillars.map(pillar => pillar.short).join(' • ')}
+              </p>
+              <span className="sr-only" lang="id">
+                {Object.values(personaLocales.id.pillars).map(pillar => pillar.short).join(' • ')}
+              </span>
+              <p id={heroTaglineId} className="text-2xl sm:text-3xl lg:text-4xl font-medium text-white leading-snug" lang="en">
+                {heroCopyEn.tagline}
+              </p>
+              <span className="sr-only" lang="id">
+                {heroCopyId.tagline}
+              </span>
+              <p id={heroMissionId} className="text-base sm:text-lg text-white/70 leading-relaxed" lang="en">
+                {heroCopyEn.mission}
+              </p>
+              <span className="sr-only" lang="id">
+                {heroCopyId.mission}
+              </span>
+            </div>
 
             {/* Main CTA - Logo */}
             <button
               className="hero_content zen-focus informatika-efficient transition-all duration-300 cursor-pointer border-none bg-transparent focus:outline-none focus-visible:ring-4 focus-visible:ring-pink-500/30 rounded-2xl p-6"
               onClick={onNavigateToHome}
-              aria-label="Enter Things Inc Portfolio"
+              aria-label="Enter the Zenotika core experience"
+              aria-describedby={`${heroTaglineId} ${heroMissionId}`}
               ref={logoRef}
+              data-semantic-tags={persona.pillars.flatMap(pillar => pillar.semanticTags).join(' ')}
             >
               <div className="home-logo-wrap balloon relative flex items-center justify-center">
                 {isDark ? (
                   <OptimizedImage
                     src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b9208ebb9e666ec8413b_Home-logo_night.png"
-                    alt="Things logo - Click to enter"
+                    alt="Zenotika night logo — mindful balance, modern energy, intelligent function"
                     className=""
                     imgClassName="hero-logo hero-night w-full max-w-[320px] sm:max-w-[440px] lg:max-w-[520px] xl:max-w-[600px] h-auto object-contain filter drop-shadow-2xl"
                     loading="eager"
@@ -163,7 +189,7 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
                 ) : (
                   <OptimizedImage
                     src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6724406f04b26f75915dd8c2_Home-logo_day.png"
-                    alt="Things logo day - Click to enter"
+                    alt="Zenotika day logo — mindful balance, modern energy, intelligent function"
                     className=""
                     imgClassName="hero-logo hero-day w-full max-w-[320px] sm:max-w-[440px] lg:max-w-[520px] xl:max-w-[600px] h-auto object-contain filter drop-shadow-2xl"
                     loading="eager"
@@ -189,7 +215,7 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
           <div className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8 lg:bottom-16 lg:left-16">
             <CloudImage
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b3ad591f4c89d96fc00e_Property%201%3DNight%2C%20Property%202%3DCloud%201.png"
-              alt="Floating cloud"
+              alt="A mindful Zen cloud drifting gently"
               className="w-24 sm:w-32 md:w-48 lg:w-64 xl:w-80 h-auto opacity-60 scale-60"
               index={0}
             />
@@ -199,7 +225,7 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
           <div className="absolute bottom-6 right-4 sm:bottom-12 sm:right-8 lg:bottom-20 lg:right-16">
             <CloudImage
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b3f1b2630f7f04b527d0_Property%201%3DNight%2C%20Property%202%3DCloud%203.png"
-              alt="Floating cloud"
+              alt="A pulse of Nova energy guiding focus"
               className="w-20 sm:w-28 md:w-40 lg:w-52 xl:w-64 h-auto opacity-50 scale-50"
               index={1}
             />
@@ -209,7 +235,7 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
           <div className="absolute top-8 left-4 sm:top-16 sm:left-8 lg:top-24 lg:left-16">
             <CloudImage
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b32dbbf4d28a3fe1d971_Property%201%3DNight%2C%20Property%202%3DCloud%202.png"
-              alt="Floating cloud"
+              alt="An Informatika cloud tracing intelligent pathways"
               className="w-18 sm:w-24 md:w-36 lg:w-48 xl:w-60 h-auto opacity-40 scale-40"
               index={2}
             />

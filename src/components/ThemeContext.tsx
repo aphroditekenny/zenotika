@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -11,67 +11,96 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('dark');
+const applyThemeClass = (theme: Theme) => {
+  if (typeof document === 'undefined') return;
+  const root = document.documentElement;
+  root.classList.remove('light', 'dark', 'day-mode');
+  if (theme === 'light') {
+    root.classList.add('light', 'day-mode');
+  } else {
+    root.classList.add('dark');
+  }
+};
 
-  // Initialize theme from localStorage or system preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else if (systemPrefersDark) {
-      setTheme('dark');
-    } else {
-      setTheme('light');
+const getInitialTheme = (): Theme => {
+  if (typeof window === 'undefined') {
+    return 'dark';
+  }
+
+  try {
+    const stored = window.localStorage.getItem('theme');
+    if (stored === 'light' || stored === 'dark') {
+      return stored;
     }
+  } catch {
+    // ignore storage access issues and fall back to system preference
+  }
+
+  const prefersDark = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : false;
+  return prefersDark ? 'dark' : 'light';
+};
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<Theme>(() => {
+    const initialTheme = getInitialTheme();
+    applyThemeClass(initialTheme);
+    return initialTheme;
+  });
+
+  // Keep theme in sync with system preference when user hasn't explicitly chosen.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (event: MediaQueryListEvent) => {
+      try {
+        const stored = window.localStorage.getItem('theme');
+        if (stored === 'light' || stored === 'dark') return;
+      } catch {
+        // ignore storage access issues
+      }
+      setTheme(event.matches ? 'dark' : 'light');
+    };
+
+    media.addEventListener('change', handleChange);
+    return () => media.removeEventListener('change', handleChange);
   }, []);
 
-  // Apply theme to document and save to localStorage
   useEffect(() => {
-    const root = document.documentElement;
-    
-    // Remove existing theme classes
-    root.classList.remove('light', 'dark', 'day-mode');
-    
-    // Add current theme class
-    if (theme === 'light') {
-      root.classList.add('light', 'day-mode');
-    } else {
-      root.classList.add('dark');
+    if (typeof window === 'undefined') return;
+
+    applyThemeClass(theme);
+
+    try {
+      window.localStorage.setItem('theme', theme);
+    } catch {
+      // ignore storage failures (private mode, etc.)
     }
-    
-    // Save to localStorage
-    localStorage.setItem('theme', theme);
-    
+
     // Update or create meta theme-color for mobile browsers
-    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (!metaThemeColor) {
-      metaThemeColor = document.createElement('meta');
-      metaThemeColor.setAttribute('name', 'theme-color');
-      document.head.appendChild(metaThemeColor);
-    }
-    metaThemeColor.setAttribute('content', theme === 'dark' ? '#1a1b3e' : '#667eea');
-    
-    // Update favicon if needed (optional enhancement)
-    const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
-    if (favicon) {
-      // You could switch favicons based on theme here
-      // favicon.href = theme === 'dark' ? '/favicon-dark.ico' : '/favicon-light.ico';
-    }
+    const updateThemeMeta = () => {
+      let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (!metaThemeColor) {
+        metaThemeColor = document.createElement('meta');
+        metaThemeColor.setAttribute('name', 'theme-color');
+        document.head.appendChild(metaThemeColor);
+      }
+      metaThemeColor.setAttribute('content', theme === 'dark' ? '#1a1b3e' : '#667eea');
+    };
+
+    updateThemeMeta();
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  const value: ThemeContextType = {
+  const value: ThemeContextType = useMemo(() => ({
     theme,
     toggleTheme,
     isDark: theme === 'dark',
     isLight: theme === 'light'
-  };
+  }), [theme]);
 
   return (
     <ThemeContext.Provider value={value}>

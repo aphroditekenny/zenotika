@@ -12,6 +12,8 @@ import { PageLoading, ProjectCardSkeleton } from "./LoadingStates";
 import { useAccessibility } from "./AccessibilityProvider";
 import Header from "./Header";
 import { isFeatureEnabled } from "../featureFlags";
+import { persona } from "../content/persona";
+import type { PersonaKey } from "../content/persona";
 
 const lazySectionsEnabled = isFeatureEnabled("lazyHomeSections");
 
@@ -142,7 +144,7 @@ function HomePage({ onBackToLanding }: HomePageProps) {
       const announcer = document.getElementById('page-announcer');
       if (announcer) {
         // Semantic microcopy integrates Zenotika persona pillars without altering visual UI
-        announcer.textContent = 'Zenotika home page loaded. Explore projects and our pillars: Zen for mindful balance, Nova for modern energy, Informatika for intelligent function.';
+        announcer.textContent = `Zenotika home page loaded. ${persona.tagline}`;
       }
     }
 
@@ -318,6 +320,15 @@ const projectsData = [
 
 const categories = ["All", "Digital Spaces", "Education", "Tools", "Entertainment", "Mobility", "AI/ML"];
 
+const categoryPillarMap: Record<string, PersonaKey> = {
+  "Digital Spaces": "zen",
+  "Education": "nova",
+  "Entertainment": "nova",
+  "Mobility": "nova",
+  "Tools": "informatika",
+  "AI/ML": "informatika"
+};
+
 // Interactive Portfolio Section Component
 const InteractivePortfolioSection = memo(function InteractivePortfolioSection() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -410,6 +421,10 @@ const InteractivePortfolioSection = memo(function InteractivePortfolioSection() 
                     style={{ transitionDelay: `${index * 0.1}s` }}
                     aria-pressed={activeCategory === category}
                     aria-describedby={`filter-${category.replace(/\s+/g, '-').toLowerCase()}-description`}
+                    data-pillartone={categoryPillarMap[category]}
+                    data-semantictags={categoryPillarMap[category]
+                      ? persona.pillars.find(pillar => pillar.key === categoryPillarMap[category])?.semanticTags.join(' ')
+                      : undefined}
                   >
                     {category}
                   </button>
@@ -495,6 +510,11 @@ const EnhancedProjectCard = memo(function EnhancedProjectCard({
     }
   }, [isVisible, index]);
 
+  const pillarKey = categoryPillarMap[project.category];
+  const semanticTokens = pillarKey
+    ? persona.pillars.find(pillar => pillar.key === pillarKey)?.semanticTags.join(' ')
+    : undefined;
+
   return (
     <article 
       className={`enhanced-project-card zen-focus transform transition-all duration-700 ease-out ${
@@ -504,6 +524,8 @@ const EnhancedProjectCard = memo(function EnhancedProjectCard({
       tabIndex={0}
       aria-labelledby={`project-title-${project.id}`}
       aria-describedby={`project-description-${project.id} project-tags-${project.id}`}
+      data-pillartone={pillarKey}
+      data-semantictags={semanticTokens}
     >
       <div className="project-card_inner p-6">
         {/* Status Badge */}

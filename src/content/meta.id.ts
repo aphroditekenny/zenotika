@@ -2,7 +2,8 @@ import { baseCanonical } from './meta';
 
 export const metaID = {
   title: 'Zenotika',
-  description: 'Zenotika – Pengalaman web progresif React 19 yang menekankan performa, aksesibilitas, dan fungsi cerdas.',
+  description:
+    'Zenotika — Keseimbangan mindful, energi modern, fungsi cerdas. Menyatukan kesederhanaan yang penuh kesadaran, energi inovatif, dan fungsi cerdas menjadi pengalaman web yang cepat, inklusif, dan terukur.',
   canonical: baseCanonical,
   keywords: [
     'zenotika',

@@ -35,7 +35,8 @@ async function precacheFromManifest(cache) {
     if (assets.length === 0) return false;
     await cache.addAll(assets);
     return true;
-  } catch {
+  } catch (error) {
+    console.warn('[SW] Failed to precache manifest assets', error);
     return false;
   }
 }
@@ -64,7 +65,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
       await clearOldCaches();
-      await clients.claim();
+      await self.clients.claim();
     })()
   );
 });
@@ -89,7 +90,8 @@ self.addEventListener('fetch', (event) => {
             return networkResponse;
           }
           throw new Error('offline');
-        } catch {
+        } catch (error) {
+          console.warn('[SW] Navigation fetch failed, serving fallback', error);
           // Fallback to an offline page; if missing, fallback to the SPA shell
           return (
             (await caches.match(p('offline.html'))) ||
@@ -140,7 +142,9 @@ self.addEventListener('periodicsync', (event) => {
       (async () => {
         try {
           await self.registration.update();
-        } catch {}
+        } catch (error) {
+          console.warn('[SW] Periodic update check failed', error);
+        }
       })()
     );
   }

@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@fontsource/inter": "^5.1.0",
         "@radix-ui/react-accordion": "^1.2.3",
         "@radix-ui/react-alert-dialog": "^1.1.6",
         "@radix-ui/react-aspect-ratio": "^1.1.2",
@@ -47,6 +48,7 @@
         "recharts": "^2.15.4",
         "sonner": "^2.0.3",
         "tailwind-merge": "*",
+        "typeface-inter": "^3.18.1",
         "vaul": "^1.1.2",
         "web-vitals": "^4.2.0"
     },
@@ -78,7 +80,8 @@
         "vite": "^7.1.9",
         "vitest": "^3.2.4",
         "vitest-axe": "^0.1.0",
-        "wait-on": "^9.0.1"
+        "wait-on": "^9.0.1",
+        "wawoff2": "^2.0.1"
     },
     "scripts": {
         "dev": "vite",

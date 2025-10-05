@@ -68,3 +68,56 @@ export type PersonaKey = typeof persona.pillars[number]['key'];
 export function getPillar(key: PersonaKey): PersonaPillar | undefined {
   return persona.pillars.find(p => p.key === key);
 }
+
+export interface PersonaLocalizedContent {
+  tagline: string;
+  mission: string;
+  pillars: Record<PersonaKey, {
+    title: string;
+    short: string;
+    description: string;
+  }>;
+}
+
+export const personaLocales: Record<'en' | 'id', PersonaLocalizedContent> = {
+  en: {
+    tagline: 'Mindful balance, modern energy, intelligent function.',
+    mission:
+      'Uniting mindful simplicity, modern energy, and intelligent function into a web experience that is fast, inclusive, and measurable.',
+    pillars: {
+      zen: {
+        title: 'Zen',
+        short: 'Mindful Simplicity',
+        description:
+          'Sustains balance and calm—every element serves purpose and every space breathes so focus feels effortless.'
+      },
+      nova: {
+        title: 'Nova',
+        short: 'Modern Energy',
+        description:
+          'Infuses progressive energy—adopting new technology with discernment so experiences stay relevant and resilient.'
+      },
+      informatika: {
+        title: 'Informatika',
+        short: 'Intelligent Function',
+        description:
+          'Delivers intelligent function—efficient architecture that scales gracefully, remains maintainable, and champions human needs.'
+      }
+    }
+  },
+  id: {
+    tagline: 'Keseimbangan mindful, energi modern, fungsi cerdas.',
+    mission:
+      'Menyatukan kesederhanaan yang penuh kesadaran, energi inovatif, dan fungsi cerdas menjadi pengalaman web yang cepat, inklusif, dan terukur.',
+    pillars: Object.fromEntries(
+      persona.pillars.map(pillar => [
+        pillar.key,
+        {
+          title: pillar.title,
+          short: pillar.short,
+          description: pillar.description
+        }
+      ])
+    ) as PersonaLocalizedContent['pillars']
+  }
+};

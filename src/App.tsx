@@ -21,6 +21,13 @@ import AccessibilityProvider from "./components/AccessibilityProvider";
 import { triggerUpdateToast } from "./pwaDebug";
 import { loadSonner } from "./utils/loadSonner";
 
+const logDevWarning = (message: string, error: unknown) => {
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line no-console
+    console.warn(message, error);
+  }
+};
+
 type HomePageProps = { onBackToLanding: () => void };
 type HomePageModule = typeof import("./components/HomePage");
 
@@ -347,7 +354,9 @@ const WebVitalsBadge = memo(function WebVitalsBadge() {
           CLS: clsArr.length ? Number((clsArr.reduce((a,b)=>a+b,0)/clsArr.length).toFixed(3)) : undefined,
         };
       }
-    } catch {}
+    } catch (error) {
+      logDevWarning('Failed to read stored Web Vitals averages', error);
+    }
     return {};
   });
   const [showTimeline, setShowTimeline] = useState(false);
@@ -359,7 +368,9 @@ const WebVitalsBadge = memo(function WebVitalsBadge() {
     try {
       const raw = sessionStorage.getItem('zenotikaVitals');
       if (raw) Object.assign(state, JSON.parse(raw));
-    } catch {}
+    } catch (error) {
+      logDevWarning('Failed to parse persisted Web Vitals state', error);
+    }
     const unsub = performanceCollector.subscribe((m) => {
       setMetrics(prev => {
         const next = { ...prev };
@@ -373,7 +384,11 @@ const WebVitalsBadge = memo(function WebVitalsBadge() {
         arr.push(m.value);
         // Keep only last 30 for memory safety
         if (arr.length > 30) arr.shift();
-        try { sessionStorage.setItem('zenotikaVitals', JSON.stringify(state)); } catch {}
+        try {
+          sessionStorage.setItem('zenotikaVitals', JSON.stringify(state));
+        } catch (error) {
+          logDevWarning('Failed to persist Web Vitals samples', error);
+        }
         const mean = arr.reduce((a,b)=>a+b,0)/arr.length;
         setAverages(a => ({ ...a, [m.name]: Number(mean.toFixed(m.name==='CLS'?3:2)) }));
       }
