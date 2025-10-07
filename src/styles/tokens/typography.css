@@ -1,0 +1,42 @@
+/* Typography Tokens (Phase 1) -------------------------------------------------
+   Provides base font sizing, line heights, and weight scale.
+   Future phases: responsive fluid type scale + theming variants.
+*/
+
+@layer base {
+  :root {
+    /* Font Families */
+    --font-sans-primary: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-sans-alt: 'Noto Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    /* Line Heights */
+    --line-tight: 1.1;
+    --line-snug: 1.25;
+    --line-normal: 1.5;
+
+    /* Font Weights */
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* Fluid Type Scale (clamp) */
+    --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.8rem);
+    --text-sm: clamp(0.875rem, 0.82rem + 0.25vw, 0.95rem);
+    --text-base: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 1rem + 0.8vw, 1.35rem);
+    --text-xl: clamp(1.25rem, 1.1rem + 1vw, 1.6rem);
+    --text-2xl: clamp(1.5rem, 1.2rem + 2.4vw, 2rem);
+    --text-3xl: clamp(1.75rem, 1.4rem + 3.2vw, 2.5rem);
+    --text-4xl: clamp(2rem, 1.6rem + 4vw, 3rem);
+  }
+
+  /* Utility Classes (initial migration targets) */
+  .heading-token-h1 { font-family: var(--font-sans-primary); font-size: var(--text-4xl); font-weight: var(--weight-bold); line-height: var(--line-tight); letter-spacing: -0.02em; }
+  .heading-token-h2 { font-family: var(--font-sans-primary); font-size: var(--text-3xl); font-weight: var(--weight-bold); line-height: var(--line-tight); letter-spacing: -0.02em; }
+  .heading-token-h3 { font-family: var(--font-sans-primary); font-size: var(--text-2xl); font-weight: var(--weight-semibold); line-height: var(--line-snug); }
+  .heading-token-h4 { font-family: var(--font-sans-primary); font-size: var(--text-xl); font-weight: var(--weight-semibold); line-height: var(--line-snug); }
+  .heading-token-h5 { font-family: var(--font-sans-primary); font-size: var(--text-lg); font-weight: var(--weight-medium); line-height: var(--line-snug); }
+  .paragraph-token-lead { font-family: var(--font-sans-alt); font-size: var(--text-lg); line-height: var(--line-normal); }
+  .paragraph-token-base { font-family: var(--font-sans-alt); font-size: var(--text-base); line-height: var(--line-normal); }
+}

@@ -1,0 +1,57 @@
+name: Style Audit
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.css'
+      - 'scripts/report-colors.mjs'
+      - 'scripts/report-keyframes.mjs'
+      - '.github/workflows/style-audit.yml'
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**/*.css'
+      - 'scripts/report-colors.mjs'
+      - 'scripts/report-keyframes.mjs'
+
+jobs:
+  audit:
+    name: Style Audit
+
+    on:
+      push:
+        branches: [ main ]
+      pull_request:
+
+    jobs:
+      style-audit:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+          - uses: actions/setup-node@v4
+            with:
+              node-version: '22'
+              cache: 'npm'
+          - run: npm ci
+          - name: Color report
+            run: node scripts/report-colors.mjs > color-report.txt
+          - name: Keyframe report
+            run: node scripts/report-keyframes.mjs > keyframe-report.txt
+          - name: Enforce thresholds
+            run: |
+              RAW_HEX_LIMIT=140
+              UNGUARDED_LIMIT=0
+              RAW_HEX_COUNT=$(grep -E '^#' color-report.txt | wc -l || true)
+              UNGUARDED=$(grep 'UNGUARDED' keyframe-report.txt | wc -l || true)
+              echo "Raw hex count: $RAW_HEX_COUNT / limit $RAW_HEX_LIMIT"
+              echo "Unguarded keyframes: $UNGUARDED / limit $UNGUARDED_LIMIT"
+              if [ "$RAW_HEX_COUNT" -gt "$RAW_HEX_LIMIT" ]; then echo '::error::Hex color usage exceeds limit'; exit 1; fi
+              if [ "$UNGUARDED" -gt "$UNGUARDED_LIMIT" ]; then echo '::error::Found unguarded keyframes'; exit 1; fi
+              echo "Style audit passed"
+          - name: Upload reports
+            if: always()
+            uses: actions/upload-artifact@v4
+            with:
+              name: style-audit-reports
+              path: |
+                color-report.txt
+                keyframe-report.txt

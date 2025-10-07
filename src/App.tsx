@@ -26,6 +26,7 @@ import { isFeatureEnabled } from "./featureFlags";
 import HeroSection from "./components/HeroSection";
 import PageTransition from "./components/PageTransition";
 import AccessibilityProvider from "./components/AccessibilityProvider";
+import MotionToggle from "./components/MotionToggle";
 // (existing import moved above to avoid duplicate) 
 import { triggerUpdateToast } from "./pwaDebug";
 import { loadSonner } from "./utils/loadSonner";
@@ -212,6 +213,13 @@ export default function App() {
         <MetaManager />
   <StructuredData />
         <LanguageSwitcher />
+        {/* Demo Lottie (can guard with feature flag later) */}
+        <div className="fixed bottom-4 right-4 w-16 h-16 opacity-80 pointer-events-none">
+          {/* intentionally no alt (decorative) */}
+          {/* eslint-disable-next-line react/jsx-no-comment-textnodes */}
+          {/* <SampleLottie /> can be toggled; removed to avoid import cost until flagged */}
+        </div>
+  {isFeatureEnabled('motionToggle') && <MotionToggle />}
         {/* Skip to content link for keyboard users */}
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded-md">Skip to content</a>
         <PageTransition

@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "version": 1,
+    "source": "Phase 1 extraction",
+    "generated": true
+  },
+  "color": {
+    "brand": {
+      "pink": { "value": "{css.var.color-brand-pink}" },
+      "violet": { "value": "{css.var.color-brand-violet}" },
+      "indigo": { "value": "{css.var.color-brand-indigo}" },
+      "indigoLight": { "value": "{css.var.color-brand-indigo-light}" }
+    },
+    "surface": {
+      "night": {
+        "1": { "value": "{css.var.color-brand-night-bg1}" },
+        "2": { "value": "{css.var.color-brand-night-bg2}" },
+        "3": { "value": "{css.var.color-brand-night-bg3}" }
+      },
+      "day": {
+        "1": { "value": "{css.var.color-brand-day-bg1}" },
+        "2": { "value": "{css.var.color-brand-day-bg2}" }
+      }
+    },
+    "focus": {
+      "ring": { "value": "{css.var.focus-ring-color}" }
+    }
+  },
+  "spacing": {
+    "1": { "value": "{css.var.space-1}" },
+    "2": { "value": "{css.var.space-2}" },
+    "3": { "value": "{css.var.space-3}" },
+    "4": { "value": "{css.var.space-4}" },
+    "5": { "value": "{css.var.space-5}" },
+    "6": { "value": "{css.var.space-6}" },
+    "7": { "value": "{css.var.space-7}" },
+    "8": { "value": "{css.var.space-8}" },
+    "9": { "value": "{css.var.space-9}" },
+    "10": { "value": "{css.var.space-10}" },
+    "11": { "value": "{css.var.space-11}" },
+    "12": { "value": "{css.var.space-12}" }
+  },
+  "motion": {
+    "duration": {
+      "sm": { "value": "{css.var.motion-duration-sm}" },
+      "md": { "value": "{css.var.motion-duration-md}" },
+      "lg": { "value": "{css.var.motion-duration-lg}" }
+    },
+    "easing": {
+      "standard": { "value": "{css.var.motion-ease-standard}" },
+      "emphatic": { "value": "{css.var.motion-ease-emphatic}" }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+/* Semantic Color Tokens (incremental migration) ---------------------------------
+   Mapping frequently used raw hex values to semantic variables.
+   Expand iteratively as report:colors output shrinks.
+*/
+@layer base {
+  :root {
+    --zen-white-alpha-70: #ffffffb3; /* formerly #ffffffb3 occurrences */
+    --zen-white-alpha-95: #fffc;     /* alias for near-white overlay */
+    /* High-frequency whites & overlays */
+    --zen-white-solid: #ffffff;
+    --zen-white-short: #fff; /* legacy shorthand - migrate to solid if equal */
+    --zen-white-alpha-10: #ffffff1a; /* ~10% */
+    --zen-white-alpha-15: #ffffff26; /* ~15% */
+  --zen-bg-deep: #030213; /* deep background tone */
+  /* Ultra-low alpha whites (added phase 2) */
+  --zen-white-alpha-03: #ffffff08; /* ~3% */
+  --zen-white-alpha-05: #ffffff0d; /* ~5% */
+  --zen-white-alpha-08: #ffffff14; /* ~8% */
+  }
+}

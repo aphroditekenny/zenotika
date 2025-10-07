@@ -4,7 +4,8 @@ export type FeatureFlagKey =
   | "performanceMetrics"
   | "analytics"
   | "monitoring"
-  | "pwa";
+  | "pwa"
+  | "motionToggle";
 
 const truthy = new Set(["true", "1", "yes"]);
 
@@ -17,6 +18,7 @@ const featureFlagValues: Record<FeatureFlagKey, boolean> = {
   analytics: truthy.has(String(env.VITE_ENABLE_ANALYTICS ?? "").toLowerCase()),
   monitoring: truthy.has(String(env.VITE_ENABLE_MONITORING ?? "").toLowerCase()),
   pwa: truthy.has(String(env.VITE_ENABLE_PWA ?? "").toLowerCase()),
+  motionToggle: truthy.has(String(env.VITE_ENABLE_MOTION_TOGGLE ?? "").toLowerCase()),
 };
 
 const overrides: Partial<Record<FeatureFlagKey, boolean>> = {};

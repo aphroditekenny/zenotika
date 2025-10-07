@@ -1011,10 +1011,10 @@ const InteractivePortfolioSection = memo(function InteractivePortfolioSection() 
           <div className={`text-center max-w-4xl mx-auto mb-16 transition-all duration-1000 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
-            <h1 id="portfolio-heading" className="heading-style-h2 mb-8">
+            <h1 id="portfolio-heading" className="heading-token-h2 mb-8">
               Things that make you think
             </h1>
-            <p className="intro-paragraph text-color-option-2 mb-12">
+            <p className="paragraph-token-lead text-color-option-2 mb-12">
               We create thoughtful digital experiences that bridge creativity and functionality. 
               Each project reflects our philosophy of mindful design and purposeful innovation.
             </p>
@@ -1301,7 +1301,7 @@ const PhilosophySection = memo(function PhilosophySection() {
                 </span>
               </div>
               
-              <h2 className="heading-style-h2 mb-8">
+              <h2 className="heading-token-h2 mb-8">
                 Zenotika: The Art of Purposeful Creation
               </h2>
               

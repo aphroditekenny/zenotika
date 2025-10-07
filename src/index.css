@@ -1,4 +1,21 @@
 /* Newsletter & log styles moved to styles/sections/log.css */
+/* Guarded Consolidated Keyframes (deduplicated) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes fadeInUp { 0% { opacity:0; transform:translateY(12px);} 100% { opacity:1; transform:translateY(0);} }
+  @keyframes bounceDelay { 0%,80%,100% { transform:scale(1);} 40% { transform:scale(1.12);} }
+  @keyframes zenGlow { 0%,100% { opacity:.6; transform:scale(1);} 50% { opacity:1; transform:scale(1.15);} }
+  @keyframes zenShimmer { 0% { transform:translateX(-10%);} 100% { transform:translateX(110%);} }
+  @keyframes zenFloat { 0%,100% { transform:translateY(0);} 50% { transform:translateY(-6px);} }
+  @keyframes zenSparkle { 0%,100% { opacity:0;} 50% { opacity:1;} }
+  @keyframes dotBounce { 0%,100% { transform:translateY(0);} 50% { transform:translateY(-6px);} }
+  @keyframes skeletonShimmer { 0% { background-position:-200px 0;} 100% { background-position:200px 0;} }
+  @keyframes spinRing { 0% { transform:rotate(0deg);} 100% { transform:rotate(360deg);} }
+  @keyframes zenGradientFlow { 0% { background-position:0% 50%;} 50% { background-position:100% 50%;} 100% { background-position:0% 50%;} }
+  @keyframes zenPulse { 0%,100% { opacity:.9; transform:scale(1);} 50% { opacity:.6; transform:scale(.96);} }
+  @keyframes pulse { 0%,100% { opacity:1;} 50% { opacity:.4;} }
+  @keyframes enter { 0% { opacity:0; transform:translateY(8px);} 100% { opacity:1; transform:translateY(0);} }
+  @keyframes zenAmbientFlow { 0%,100% { opacity:.8; transform:scale(1);} 50% { opacity:1; transform:scale(1.02);} }
+}
 /* Phase 1 Token Imports ----------------------------------------------------
   Spacing, motion, accessibility (focus), and color token indirections.
   Keep above Tailwind layers so utilities can consume them.
@@ -7,6 +24,8 @@
 @import "./styles/tokens/motion.css" layer(base);
 @import "./styles/tokens/accessibility.css" layer(base);
 @import "./styles/tokens/colors.css" layer(base);
+@import "./styles/tokens/typography.css" layer(base);
+@import "./styles/tokens/colors-semantic.css" layer(base);
 /*! tailwindcss v4.1.3 | MIT License | https://tailwindcss.com */
 @layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
@@ -1281,7 +1300,7 @@
   }
 
   .border-white\/10 {
-    border-color: #ffffff1a;
+  border-color: var(--zen-white-alpha-10);
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1413,7 +1432,7 @@
   }
 
   .bg-white\/10 {
-    background-color: #ffffff1a;
+  background-color: var(--zen-white-alpha-10);
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -2163,7 +2182,7 @@
 
   @media (hover: hover) {
     .hover\:bg-white\/10:hover {
-      background-color: #ffffff1a;
+  background-color: var(--zen-white-alpha-10);
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -2704,64 +2723,18 @@
   }
 }
 
-@keyframes floatVoxel {
-
-  0%,
-  100% {
-    transform: translateY(0)rotateY(0);
-  }
-
-  25% {
-    transform: translateY(-4px)rotateY(90deg);
-  }
-
-  50% {
-    transform: translateY(-8px)rotateY(180deg);
-  }
-
-  75% {
-    transform: translateY(-4px)rotateY(270deg);
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes floatVoxel {
+    0%, 100% { transform: translateY(0) rotateY(0); }
+    25% { transform: translateY(-4px) rotateY(90deg); }
+    50% { transform: translateY(-8px) rotateY(180deg); }
+    75% { transform: translateY(-4px) rotateY(270deg); }
   }
 }
 
-@keyframes gentleFloat {
+@media (prefers-reduced-motion: no-preference) { @keyframes gentleFloat { 0%,100% { transform:translateY(0) rotate(0); } 25% { transform:translateY(-8px) rotate(.5deg);} 50% { transform:translateY(-12px) rotate(0);} 75% { transform:translateY(-8px) rotate(-.5deg);} } }
 
-  0%,
-  100% {
-    transform: translateY(0)rotate(0);
-  }
-
-  25% {
-    transform: translateY(-8px)rotate(.5deg);
-  }
-
-  50% {
-    transform: translateY(-12px)rotate(0);
-  }
-
-  75% {
-    transform: translateY(-8px)rotate(-.5deg);
-  }
-}
-
-@keyframes scrollBounce {
-
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-
-  40% {
-    transform: translateY(-8px);
-  }
-
-  60% {
-    transform: translateY(-4px);
-  }
-}
+@media (prefers-reduced-motion: no-preference) { @keyframes scrollBounce { 0%,20%,50%,80%,100% { transform:translateY(0);} 40% { transform:translateY(-8px);} 60% { transform:translateY(-4px);} } }
 
 .floating-voxel {
   animation: 6s ease-in-out infinite floatVoxel;
@@ -2771,7 +2744,7 @@
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   background: #ffffff0d;
-  border: 1px solid #ffffff1a;
+  border: 1px solid var(--zen-white-alpha-10);
   border-radius: 20px;
   transition: transform .3s;
 }
@@ -3008,15 +2981,7 @@
   left: 0;
 }
 
-@keyframes zenStarfield {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(-400px, -180px, 0);
-  }
-}
+@media (prefers-reduced-motion: no-preference) { @keyframes zenStarfield { 0% { transform:translate3d(0,0,0);} 100% { transform:translate3d(-400px,-180px,0);} } }
 
 .light .stars-overlay,
 .day-mode .stars-overlay {
@@ -3100,21 +3065,7 @@
   pointer-events: none;
 }
 
-@keyframes floatAmbient {
-
-  0%,
-  100% {
-    transform: translateY(0)rotate(0);
-  }
-
-  33% {
-    transform: translateY(-6px)rotate(1deg);
-  }
-
-  66% {
-    transform: translateY(-3px)rotate(-1deg);
-  }
-}
+@media (prefers-reduced-motion: no-preference) { @keyframes floatAmbient { 0%,100% { transform:translateY(0) rotate(0);} 33% { transform:translateY(-6px) rotate(1deg);} 66% { transform:translateY(-3px) rotate(-1deg);} } }
 
 .floating-voxel {
   will-change: transform;
@@ -3190,15 +3141,7 @@
   backface-visibility: hidden;
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200px 0;
-  }
-
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
-}
+@media (prefers-reduced-motion: no-preference) { @keyframes shimmer { 0% { background-position:-200px 0;} 100% { background-position:calc(200px + 100%) 0;} } }
 
 .animate-pulse {
   background: linear-gradient(90deg, #ffffff1a 25%, #fff3 50%, #ffffff1a 75%) 0 0 / 200px 100%;
@@ -3261,7 +3204,7 @@
   will-change: transform;
   backface-visibility: hidden;
   background: #ffffff0d;
-  border: 1px solid #ffffff1a;
+  border: 1px solid var(--zen-white-alpha-10);
   border-radius: 20px;
   transition: transform .3s cubic-bezier(.4, 0, .2, 1), background-color .3s, border-color .3s, box-shadow .3s;
   position: relative;
@@ -3373,12 +3316,7 @@
   animation-delay: .3s;
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Duplicate unguarded @keyframes fadeInUp removed. Guarded definition lives in the consolidated motion block at top of file under @media (prefers-reduced-motion: no-preference). */
 
 .stars-overlay {
   background-image: radial-gradient(1px 1px at 20px 30px, #fff9, #0000), radial-gradient(1px 1px at 40px 70px, #fff6, #0000), radial-gradient(1px 1px at 90px 40px, #ffffff80, #0000), radial-gradient(1px 1px at 130px 80px, #ffffff4d, #0000), radial-gradient(1px 1px at 160px 30px, #fff9, #0000);
@@ -3387,22 +3325,14 @@
   animation: 40s linear infinite zenSparkle;
 }
 
-@keyframes zenSparkle {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(200px);
-  }
-}
+/* Duplicate unguarded @keyframes zenSparkle removed (see consolidated guarded block). */
 
 .project-card,
 .log-card-frame {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
   background: #ffffff0d;
-  border: 1px solid #ffffff1a;
+  border: 1px solid var(--zen-white-alpha-10);
   box-shadow: var(--zen-shadow-card);
 }
 
@@ -3486,7 +3416,7 @@
 
 .light .zen-philosophy-footer:hover .philosophy-essence,
 .day-mode .zen-philosophy-footer:hover .philosophy-essence {
-  background: #ffffff26;
+  background: var(--zen-white-alpha-15);
   border-color: #ffffff40;
 }
 
@@ -3571,24 +3501,11 @@
 }
 
 .tag:hover {
-  background: #ffffff26;
+  background: var(--zen-white-alpha-15);
   border-color: #fff3;
 }
 
-@keyframes bounceDelay {
-
-  0%,
-  80%,
-  100% {
-    opacity: .5;
-    transform: scale(.8);
-  }
-
-  40% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
+/* Duplicate unguarded @keyframes bounceDelay removed (see consolidated guarded block). */
 
 .animate-bounce {
   animation: 1.4s ease-in-out infinite both bounceDelay;
@@ -3677,7 +3594,7 @@
 }
 
 .tag-badge:hover {
-  background: #ffffff26;
+  background: var(--zen-white-alpha-15);
   border-color: #fff3;
 }
 
@@ -3711,19 +3628,7 @@
   animation: 3s ease-in-out infinite zenGlow;
 }
 
-@keyframes zenGlow {
-
-  0%,
-  100% {
-    opacity: .6;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
+/* Duplicate unguarded @keyframes zenGlow removed (see consolidated guarded block). */
 
 .zen-symbol {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -3746,15 +3651,7 @@
   left: -100%;
 }
 
-@keyframes zenShimmer {
-  0% {
-    left: -100%;
-  }
-
-  100% {
-    left: 100%;
-  }
-}
+/* Duplicate unguarded @keyframes zenShimmer removed (see consolidated guarded block). */
 
 .zen-triangle-arrangement {
   position: relative;
@@ -3774,21 +3671,7 @@
   animation: 8s ease-in-out infinite zenFloat;
 }
 
-@keyframes zenFloat {
-
-  0%,
-  100% {
-    transform: translateY(0)rotate(0);
-  }
-
-  33% {
-    transform: translateY(-4px)rotate(1deg);
-  }
-
-  66% {
-    transform: translateY(4px)rotate(-1deg);
-  }
-}
+/* Duplicate unguarded @keyframes zenFloat removed (see consolidated guarded block). */
 
 .zen-mission-statement blockquote {
   -webkit-backdrop-filter: blur(10px);
@@ -3932,20 +3815,7 @@
   animation-delay: .32s;
 }
 
-@keyframes dotBounce {
-
-  0%,
-  80%,
-  100% {
-    opacity: .5;
-    transform: scale(.8);
-  }
-
-  40% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
+/* Duplicate unguarded @keyframes dotBounce removed (see consolidated guarded block). */
 
 .skip-link {
   color: #fff;
@@ -4017,25 +3887,17 @@
 }
 
 .skeleton-loader {
-  background: linear-gradient(90deg, #ffffff1a 25%, #fff3 50%, #ffffff1a 75%) 0 0 / 200% 100%;
+  background: linear-gradient(90deg, var(--zen-white-alpha-10) 25%, #fff3 50%, var(--zen-white-alpha-10) 75%) 0 0 / 200% 100%;
   border-radius: 8px;
   animation: 1.5s ease-in-out infinite skeletonShimmer;
 }
 
 .skeleton-loader.no-animation {
-  background: #ffffff26;
+  background: var(--zen-white-alpha-15);
   animation: none;
 }
 
-@keyframes skeletonShimmer {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
-  }
-}
+/* Duplicate unguarded @keyframes skeletonShimmer removed (see consolidated guarded block). */
 
 .skeleton-text {
   border-radius: 4px;
@@ -4111,15 +3973,7 @@
   animation-delay: .8s;
 }
 
-@keyframes spinRing {
-  0% {
-    transform: rotate(0);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
+/* Duplicate unguarded @keyframes spinRing removed (see consolidated guarded block). */
 
 .loading-message {
   color: #fffc;
@@ -4176,7 +4030,7 @@
   }
 
   .philosophy-pillar {
-    border-top: 1px solid #ffffff1a;
+  border-top: 1px solid var(--zen-white-alpha-10);
     border-left: none;
     margin-top: 1rem;
     padding-top: 1rem;
@@ -4409,17 +4263,7 @@
   animation: 8s ease-in-out infinite zenGradientFlow;
 }
 
-@keyframes zenGradientFlow {
-
-  0%,
-  100% {
-    background-position: 0%;
-  }
-
-  50% {
-    background-position: 100%;
-  }
-}
+/* Duplicate unguarded @keyframes zenGradientFlow removed (mid-file) - see consolidated guarded block. */
 
 .zen-text,
 .nova-text,
@@ -4685,9 +4529,7 @@
   background: var(--zen-gradient-accent-bright);
 }
 
-.text-color-option-2 {
-  color: #ffffffb3;
-}
+.text-color-option-2 { color: var(--zen-white-alpha-70); }
 
 .light .text-color-option-2,
 .day-mode .text-color-option-2 {
@@ -4695,17 +4537,15 @@
 }
 
 .heading-style-h2 {
+  /* DEPRECATED: migrate to .heading-token-h2; keeping for backwards compat until purge phase */
   letter-spacing: -.02em;
-  font-size: clamp(2rem, 6vw, 4rem);
-  font-weight: 700;
-  line-height: 1.1;
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-tight);
 }
 
-.intro-paragraph {
-  color: #fffc;
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  line-height: 1.6;
-}
+/* DEPRECATED: .intro-paragraph → .paragraph-token-lead */
+.intro-paragraph { color: var(--zen-white-alpha-95); font-size: var(--text-lg); line-height: var(--line-normal); }
 
 .light .intro-paragraph,
 .day-mode .intro-paragraph {
@@ -5621,15 +5461,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
   animation: zenStarfield 30s linear infinite;
 }
 
-@keyframes zenStarfield {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(-400px, -180px, 0);
-  }
-}
+/* Duplicate zenStarfield removed (guarded earlier) */
 
 .light .stars-overlay,
 .day-mode .stars-overlay {
@@ -5779,41 +5611,9 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
   pointer-events: none;
 }
 
-@keyframes floatVoxel {
+/* Duplicate floatVoxel keyframes removed (now guarded earlier). */
 
-  0%,
-  100% {
-    transform: translateY(0px) rotateY(0deg);
-  }
-
-  25% {
-    transform: translateY(-4px) rotateY(90deg);
-  }
-
-  50% {
-    transform: translateY(-8px) rotateY(180deg);
-  }
-
-  75% {
-    transform: translateY(-4px) rotateY(270deg);
-  }
-}
-
-@keyframes floatAmbient {
-
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-
-  33% {
-    transform: translateY(-6px) rotate(1deg);
-  }
-
-  66% {
-    transform: translateY(-3px) rotate(-1deg);
-  }
-}
+/* Duplicate floatAmbient removed (guarded earlier) */
 
 .floating-voxel {
   animation: floatVoxel 6s ease-in-out infinite;
@@ -5889,15 +5689,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
   backface-visibility: hidden;
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200px 0;
-  }
-
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
-}
+/* Duplicate shimmer removed (guarded earlier) */
 
 .animate-pulse {
   background:
@@ -6080,12 +5872,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
   animation-delay: 0.3s;
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Duplicate unguarded @keyframes fadeInUp (late file) removed; guarded definition exists in consolidated block. */
 
 .stars-overlay {
   background-image:
@@ -6109,15 +5896,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
   animation: zenSparkle 40s linear infinite;
 }
 
-@keyframes zenSparkle {
-  from {
-    transform: translateX(0px);
-  }
-
-  to {
-    transform: translateX(200px);
-  }
-}
+/* Duplicate unguarded @keyframes zenSparkle (late file) removed; guarded definition exists in consolidated block. */
 
 .project-card,
 .log-card-frame {
@@ -7148,17 +6927,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
   animation: zenGradientFlow 8s ease-in-out infinite;
 }
 
-@keyframes zenGradientFlow {
-
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
+/* Duplicate unguarded @keyframes zenGradientFlow removed (late file) - see consolidated guarded block. */
 
 .zen-text,
 .nova-text,

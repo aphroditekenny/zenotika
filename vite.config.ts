@@ -68,6 +68,9 @@ export default defineConfig(async ({ mode }) => {
         provider: 'v8',
         reporter: ['text', 'lcov'],
       },
+      alias: {
+        'lottie-web': path.resolve(__dirname, 'src/test/stubs/lottie-web.ts')
+      }
     },
   };
   // Note: Sentry upload plugin is disabled for now; app-level Sentry init is still active via flags.

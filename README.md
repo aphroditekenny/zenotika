@@ -68,8 +68,51 @@ Toggle performance and monitoring behaviour via Vite environment variables (set 
 | `VITE_ENABLE_ANALYTICS=true`          | Injects [Vercel Analytics](https://vercel.com/analytics) for real-time engagement/performance tracking.                                                |
 | `VITE_ENABLE_MONITORING=true`         | Boots [Sentry](https://sentry.io/) in production (requires `VITE_SENTRY_DSN`) to capture runtime errors and traces.                                    |
 | `VITE_ENABLE_PWA=true`                | Registers the service worker, surfaces install prompts, and enables update toasts (production builds only).                                            |
+| motionToggle | `VITE_ENABLE_MOTION_TOGGLE` | Show floating motion preference override panel |
+| segmentLoop (hook opt) | n/a (per-hook option) | In `useLottie`, when `segmentLoop: true` + `segmentIndex`, the specified segment loops instead of full animation |
+
+### Accessibility Preference Overrides
+
+The accessibility layer auto-detects user preferences via media queries and interaction heuristics. We also provide **manual overrides** (persisted in `localStorage`) for testing or explicit user control:
+
+Key `localStorage` entries:
+- `a11y.reducedMotionOverride` : `'true' | 'false'` or removed (null) to follow system.
+- `a11y.highContrastOverride` : `'true' | 'false'` or removed.
+- `a11y.focusVisibleOverride` : `'true' | 'false'` or removed.
+
+When `motionToggle` flag is enabled, a floating control allows toggling reduced motion and resetting to system defaults. High contrast & focus visibility overrides can be set programmatically via the `AccessibilityContext` setters (future UI can surface these if needed).
 
 All flags default to `false`, keeping the legacy behaviour until you're ready to roll out.
+
+## CSS Layering & Governance
+
+We use `@layer` to enforce a predictable cascade and future purge friendliness. Current ordering:
+
+1. `base` – tokens (`spacing`, `motion`, `accessibility`, `colors`, `typography`) + resets.
+2. `components` – extracted modular component/section styles (migrating from legacy monolith).
+3. `utilities` – Tailwind utility layer (imported after tokens so it can reference vars).
+4. `overrides` – one-off patches / deprecation shims scheduled for removal.
+
+### Token Expansion Phase (In Progress)
+
+Typography tokens added (`src/styles/tokens/typography.css`) define the initial fluid scale + utility classes (`heading-token-*`, `paragraph-token-*`). Future steps:
+
+- Replace ad-hoc `heading-style-h2`, `intro-paragraph`, etc. with token utilities.
+- Migrate raw hex colors to semantic tokens (see color report script below).
+- Introduce `[data-theme]` root scoping to remove duplicated day/night DOM variants.
+
+### Reporting Scripts
+
+Run these to guide refactors:
+
+```bash
+npm run report:colors      # raw hex usage + frequency guidance
+npm run report:keyframes   # list keyframes + reduced-motion guard heuristic
+npm run report:daynight    # detect duplicated day-/night- prefixed DOM siblings
+npm run style:audit        # run reports + enforce thresholds (CI friendly)
+```
+
+Add them to CI later to prevent regressions once the purge pipeline lands.
 
 ## Monitoring
 

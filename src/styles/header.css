@@ -50,7 +50,7 @@
 .zen-crumb::before { left:-31px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04)); clip-path: path('M0 60L0.999994 60C17.5685 60 31 46.5685 31 30C31 13.4315 17.5685 0 1 0L0 0L0 60Z'); transform: scaleY(0.5) translateY(50%); }
 .zen-crumb::after { right:-16px; background: rgba(255,255,255,0.04); clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); transform: scaleY(0.5) translateY(50%); }
 .zen-header--light .zen-crumb::before, .zen-header--light .zen-crumb::after { background: linear-gradient(90deg, transparent, rgba(22,25,61,0.06)); }
-.zen-crumb.is-active .zen-crumb__button { color:#fff; background: linear-gradient(135deg, var(--zen-accent-pink), var(--zen-accent-violet)); }
+.zen-crumb.is-active .zen-crumb__button { color:var(--zen-white-solid); background: linear-gradient(135deg, var(--zen-accent-pink), var(--zen-accent-violet)); }
 .zen-header--light .zen-crumb.is-active .zen-crumb__button { color:#0b0c29; background: linear-gradient(135deg, rgba(255,180,210,0.95), rgba(193,200,255,0.9)); }
 .zen-crumb.is-visited:not(.is-active) .zen-crumb__button { color:rgba(255,255,255,0.7); }
 .zen-header--light .zen-crumb.is-visited:not(.is-active) .zen-crumb__button { color:rgba(22,25,61,0.72); }
@@ -109,13 +109,15 @@
 .zen-header--light .zen-mobile-menu__footer::before { background:linear-gradient(90deg,transparent,rgba(22,25,61,0.2),transparent); }
 
 /* Animations */
-@keyframes zenHeaderReveal { from { opacity:0; transform:translateY(-100%);} to { opacity:1; transform:translateY(0);} }
-@keyframes zenHeaderGlow { 0%,100% { opacity:.6; transform:scale(1);} 50% { opacity:.85; transform:scale(1.03);} }
-@keyframes zenLogoRipple { 0% { transform:scale(.95); opacity:.8;} 50% { transform:scale(1.05); opacity:.4;} 100% { transform:scale(1.15); opacity:0;} }
-@keyframes zenBarGradientFlow { 0% { background-position:0% 50%; } 50% { background-position:100% 50%; } 100% { background-position:0% 50%; } }
-@keyframes zenCrumbPulse { 0%,100% { box-shadow:0 0 0 0 var(--brand-pink-30);} 50% { box-shadow: var(--zen-shadow-focus-pulse); } }
-@keyframes zenMobileMenuSlideIn { from { opacity:0; transform:translateX(40px);} to { opacity:1; transform:translateX(0);} }
-@keyframes zenCountReveal { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:translateY(0);} }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes zenHeaderReveal { from { opacity:0; transform:translateY(-100%);} to { opacity:1; transform:translateY(0);} }
+  @keyframes zenHeaderGlow { 0%,100% { opacity:.6; transform:scale(1);} 50% { opacity:.85; transform:scale(1.03);} }
+  @keyframes zenLogoRipple { 0% { transform:scale(.95); opacity:.8;} 50% { transform:scale(1.05); opacity:.4;} 100% { transform:scale(1.15); opacity:0;} }
+  @keyframes zenBarGradientFlow { 0% { background-position:0% 50%; } 50% { background-position:100% 50%; } 100% { background-position:0% 50%; } }
+  @keyframes zenCrumbPulse { 0%,100% { box-shadow:0 0 0 0 var(--brand-pink-30);} 50% { box-shadow: var(--zen-shadow-focus-pulse); } }
+  @keyframes zenMobileMenuSlideIn { from { opacity:0; transform:translateX(40px);} to { opacity:1; transform:translateX(0);} }
+  @keyframes zenCountReveal { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:translateY(0);} }
+}
 
 .zen-header { animation: zenHeaderReveal .6s cubic-bezier(0.22,1,0.36,1) forwards; }
 .zen-header__glow { position:absolute; inset:-20% -10%; background: radial-gradient(ellipse at 50% 50%, rgba(168,85,247,0.15), transparent 60%); filter:blur(40px); opacity:0; pointer-events:none; transition:opacity .6s ease; animation: zenHeaderGlow 8s ease-in-out infinite; }

@@ -307,45 +307,11 @@
   animation: zenScrollBounce 1.5s ease-in-out infinite;
 }
 
-@keyframes zenHeroFloat {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, -10px, 0);
-  }
-}
-
-@keyframes zenHeroOrbit {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes zenHeroPulse {
-  0%,
-  100% {
-    opacity: 0.75;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.55;
-    transform: scale(0.9);
-  }
-}
-
-@keyframes zenScrollBounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(3px);
-  }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes zenHeroFloat { 0%,100% { transform: translate3d(0,0,0);} 50% { transform: translate3d(0,-10px,0);} }
+  @keyframes zenHeroOrbit { 0% { transform:rotate(0deg);} 100% { transform:rotate(360deg);} }
+  @keyframes zenHeroPulse { 0%,100% { opacity:.75; transform:scale(1);} 50% { opacity:.55; transform:scale(.9);} }
+  @keyframes zenScrollBounce { 0%,100% { transform:translateY(0);} 50% { transform:translateY(3px);} }
 }
 
 @media (prefers-reduced-motion: reduce) {
