@@ -144,6 +144,62 @@
   --zen-gradient-accent-bright-fade-strong: linear-gradient(135deg, rgba(255,122,138,0.20) 0%, rgba(168,85,247,0.20) 100%);
   --zen-shadow-accent-soft: 0 25px 50px var(--brand-violet-30);
   --zen-text-glow-accent: 0 4px 20px var(--brand-violet-30);
+  /* Elevation & shadow system (tokenized from legacy literals) */
+  --zen-shadow-elev-sm: 0 4px 12px rgba(0,0,0,0.2);
+  --zen-shadow-elev-md: 0 8px 32px rgba(0,0,0,0.2);
+  --zen-shadow-elev-md-strong: 0 8px 32px rgba(0,0,0,0.3);
+  --zen-shadow-elev-lg: 0 12px 24px rgba(0,0,0,0.2);
+  --zen-shadow-elev-xl: 0 20px 60px rgba(0,0,0,0.3);
+  --zen-shadow-elev-2xl: 0 25px 50px rgba(0,0,0,0.3);
+  /* Accent / glow variants */
+  --zen-shadow-glow-accent-soft: 0 8px 25px var(--brand-pink-28);
+  --zen-shadow-accent-pink-md: 0 8px 32px var(--brand-pink-20);
+  --zen-shadow-glow-current: 0 0 20px currentColor;
+  --zen-shadow-focus-ring: 0 0 0 3px var(--brand-pink-20);
+  /* Inset highlight layers */
+  --zen-shadow-inset-strong: inset 0 1px 0 rgba(255,255,255,0.10);
+  --zen-shadow-inset-mid: inset 0 1px 0 rgba(255,255,255,0.08);
+  --zen-shadow-inset-soft: inset 0 1px 0 rgba(255,255,255,0.05);
+  /* Composite convenience tokens */
+  --zen-shadow-card: var(--zen-shadow-elev-md-strong), var(--zen-shadow-inset-strong);
+  --zen-shadow-card-soft: var(--zen-shadow-elev-md), var(--zen-shadow-inset-soft);
+  --zen-shadow-card-hover: var(--zen-shadow-elev-2xl), var(--zen-shadow-inset-strong);
+  /* Header / navigation atmospheric shadows */
+  --zen-shadow-header-night: 0 22px 48px rgba(10,12,36,0.42);
+  --zen-shadow-header-day: 0 20px 40px rgba(61,71,140,0.2);
+  --zen-shadow-menu-panel-night: 0 32px 60px rgba(6,7,18,0.5);
+  --zen-shadow-menu-panel-day: 0 30px 60px rgba(18,24,72,0.18);
+  --zen-shadow-collection-hover-night: 0 18px 36px rgba(0,0,0,0.25);
+  --zen-shadow-collection-hover-day: 0 18px 36px rgba(22,25,61,0.15);
+  /* Footer / CTA specific */
+  --zen-shadow-footer-card-night: 0 18px 45px rgba(15,14,22,0.4);
+  --zen-shadow-footer-card-night-hover: 0 24px 58px var(--brand-pink-28);
+  --zen-shadow-footer-card-day: 0 14px 36px rgba(73,82,176,0.22);
+  --zen-shadow-footer-card-day-hover: 0 20px 50px rgba(73,82,176,0.32);
+  --zen-shadow-newsletter-night: 0 8px 32px rgba(0,0,0,0.2);
+  --zen-shadow-newsletter-day: 0 8px 32px rgba(0,0,0,0.12);
+  --zen-shadow-newsletter-focus-night: 0 12px 48px rgba(0,0,0,0.25);
+  --zen-shadow-newsletter-focus-day: 0 12px 48px rgba(0,0,0,0.15);
+  --zen-shadow-footer-cta-night: 0 18px 42px var(--brand-pink-30);
+  --zen-shadow-footer-cta-night-hover: 0 24px 58px var(--brand-pink-28);
+  /* Focus ring soft variant */
+  --zen-shadow-focus-accent-soft: 0 0 0 3px var(--brand-pink-12);
+  /* Extended legacy conversions */
+  --zen-shadow-accent-xl-soft: 0 15px 45px rgba(168,85,247,0.35);
+  --zen-shadow-accent-xl-strong: 0 22px 60px rgba(168,85,247,0.45);
+  --zen-shadow-deep-ambient-strong: 0 30px 80px rgba(12,14,30,0.45);
+  --zen-shadow-deep-ambient-soft: 0 20px 60px rgba(12,14,30,0.12);
+  --zen-shadow-deep-ambient-mid: 0 26px 75px rgba(12,14,30,0.35);
+  --zen-shadow-deep-ambient-mid-soft: 0 18px 60px rgba(12,14,30,0.15);
+  --zen-shadow-inset-strong-alt: inset 0 1px 0 rgba(255,255,255,0.10);
+  --zen-shadow-inset-hard: inset 0 1px 0 rgba(255,255,255,0.20);
+  --zen-shadow-mixed-lg: 0 12px 24px rgba(13,16,47,0.25), 0 4px 8px rgba(13,16,47,0.15);
+  --zen-shadow-mixed-xl: 0 16px 28px rgba(7,9,32,0.45), 0 6px 12px rgba(7,9,32,0.25);
+  --zen-shadow-focus-pulse: 0 0 0 8px rgba(241,119,164,0);
+  /* Multi-stop strong accent gradient (replaces multi-stop literals) */
+  --zen-gradient-accent-bright-multi-strong: linear-gradient(135deg, rgba(255,122,138,0.90) 0%, rgba(168,85,247,0.90) 33%, rgba(59,130,246,0.90) 66%, rgba(255,122,138,0.90) 100%);
+  /* 45deg bright accent (for small decorative dots/buttons) */
+  --zen-gradient-accent-bright-45: linear-gradient(45deg, #ff7a8a, #a855f7);
   --zen-glass-layer-strong: rgba(255,255,255,0.18);
   --zen-glass-layer-soft: rgba(255,255,255,0.08);
   --zen-glass-layer-ultra: rgba(255,255,255,0.04);
@@ -251,6 +307,32 @@
   --brand-violet-22: rgba(88,101,242,0.22);
   --brand-violet-18: rgba(88,101,242,0.18);
   --brand-violet-08: rgba(88,101,242,0.08);
+  /* Additional violet translucency steps for radial layer fidelity */
+  --brand-violet-15: rgba(168,85,247,0.15);
+  --brand-violet-12: rgba(168,85,247,0.12);
+  --brand-violet-06: rgba(168,85,247,0.06);
+  --brand-violet-03: rgba(168,85,247,0.03);
+  /* Extended pink translucency for border highlight */
+  --brand-pink-30: rgba(241,119,164,0.30);
+  --brand-pink-20: rgba(241,119,164,0.20);
+  --brand-pink-12: rgba(241,119,164,0.12);
+  --brand-pink-08: rgba(241,119,164,0.08);
+  --brand-pink-05: rgba(241,119,164,0.05);
+  --brand-pink-40: rgba(241,119,164,0.40);
+
+  /* Composite radial layer tokens (Phase 2.5) removing scattered literals */
+  --zen-radial-duo-portfolio-night: radial-gradient(circle at 30% 30%, var(--brand-violet-06) 0%, #0000 50%), radial-gradient(circle at 70% 70%, var(--blue-brand-08) 0%, #0000 50%);
+  --zen-radial-duo-portfolio-day: radial-gradient(circle at 30% 30%, var(--pink-hot-08) 0%, #0000 50%), radial-gradient(circle at 70% 70%, var(--brand-violet-08) 0%, #0000 50%);
+  --zen-radial-duo-about-night: radial-gradient(circle at 20% 20%, var(--pink-hot-05) 0%, #0000 40%), radial-gradient(circle at 80% 80%, var(--brand-violet-03) 0%, #0000 40%);
+  --zen-radial-duo-about-day: radial-gradient(circle at 20% 20%, var(--pink-hot-08) 0%, #0000 40%), radial-gradient(circle at 80% 80%, var(--brand-violet-06) 0%, #0000 40%);
+  --zen-radial-hero-day: radial-gradient(circle at 25% 25%, var(--brand-pink-12) 0%, #0000 50%), radial-gradient(circle at 75% 75%, var(--brand-violet-08) 0%, #0000 50%);
+  --zen-radial-quote-day: radial-gradient(circle at 50% 20%, var(--pink-hot-08) 0%, #0000 40%), radial-gradient(circle at 20% 80%, var(--brand-violet-06) 0%, #0000 40%);
+  --zen-background-landing-night: radial-gradient(at top, var(--brand-violet-15) 0%, #0000 60%), radial-gradient(at 20% 80%, var(--blue-brand-10) 0%, #0000 50%), radial-gradient(at 80% 20%, var(--pink-hot-08) 0%, #0000 50%), var(--zen-gradient-app-night-alt);
+  --zen-background-landing-day: radial-gradient(at top, var(--pink-hot-14) 0%, #0000 60%), radial-gradient(at 20% 80%, var(--brand-violet-15) 0%, #0000 50%), radial-gradient(at 80% 20%, var(--blue-brand-10) 0%, #0000 50%), var(--zen-gradient-app-day-alt);
+  --zen-background-landing-inner-night: radial-gradient(circle at 25% 25%, var(--brand-violet-12) 0%, #0000 50%), radial-gradient(circle at 75% 75%, var(--blue-brand-08) 0%, #0000 50%), radial-gradient(circle at 50% 10%, var(--pink-hot-05) 0%, #0000 40%), var(--zen-gradient-app-night-alt);
+  --zen-background-landing-inner-day: radial-gradient(circle at 25% 25%, var(--pink-hot-14) 0%, #0000 50%), radial-gradient(circle at 75% 75%, var(--brand-violet-12) 0%, #0000 50%), radial-gradient(circle at 50% 10%, var(--blue-brand-08) 0%, #0000 40%), var(--zen-gradient-app-day-alt);
+  --zen-background-landing-overlay-night: radial-gradient(circle, var(--brand-violet-03) 0%, #0000 50%), linear-gradient(45deg,#0000 30%, var(--pink-hot-03) 50%, #0000 70%);
+  --zen-background-landing-overlay-day: radial-gradient(circle, var(--brand-violet-03) 0%, #0000 50%), linear-gradient(45deg,#0000 30%, var(--pink-hot-05) 50%, #0000 70%);
   --brand-indigo-25: rgba(73,82,176,0.25);
   --brand-indigo-22: rgba(73,82,176,0.22);
   --brand-indigo-15: rgba(73,82,176,0.15);
@@ -1007,7 +1089,7 @@ html[data-theme='light'] .custom-background::before {
   transform: translateY(-8px) translateZ(0);
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--zen-shadow-elev-2xl);
 }
 
 /* GPU acceleration for images */
@@ -1094,7 +1176,7 @@ html[data-theme='light'] .custom-background::before {
 
 .project-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--zen-shadow-elev-lg);
 }
 
 /* Log Card Stagger Animation */
@@ -1119,9 +1201,7 @@ html[data-theme='light'] .custom-background::before {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--zen-shadow-card);
 }
 
 /* Light/Day mode support */
@@ -1197,7 +1277,7 @@ html[data-theme='light'] .custom-background::before {
 /* Enhanced Logo Button Zen Interaction */
 .hero_content:hover .home-logo-wrap {
   transform: translateY(-4px) scale(1.02);
-  filter: drop-shadow(0 25px 50px rgba(168, 85, 247, 0.3));
+  filter: var(--zen-shadow-accent-soft);
 }
 
 .hero_content:active .home-logo-wrap {
@@ -1329,12 +1409,12 @@ html[data-theme='light'] .custom-background::before {
   background: linear-gradient(120deg, rgba(255, 122, 138, 0.92), rgba(168, 85, 247, 0.92));
   color: #ffffff;
   border-color: transparent;
-  box-shadow: 0 15px 45px rgba(168, 85, 247, 0.35);
+  box-shadow: var(--zen-shadow-accent-xl-soft);
 }
 
 .zen-hero__button.is-primary:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 22px 60px rgba(168, 85, 247, 0.45);
+  box-shadow: var(--zen-shadow-accent-xl-strong);
 }
 
 .zen-hero__button.is-ghost {
@@ -1552,7 +1632,7 @@ html[data-theme='light'] .custom-background::before {
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   padding: clamp(2rem, 5vw, 3rem);
-  box-shadow: 0 30px 80px rgba(12, 14, 30, 0.45);
+  box-shadow: var(--zen-shadow-deep-ambient-strong);
   backdrop-filter: blur(26px);
 }
 
@@ -1560,7 +1640,7 @@ html[data-theme='light'] .custom-background::before {
 .day-mode .zen-typewriter__card {
   background: rgba(255, 255, 255, 0.85);
   border-color: rgba(15, 15, 45, 0.08);
-  box-shadow: 0 20px 60px rgba(12, 14, 30, 0.12);
+  box-shadow: var(--zen-shadow-deep-ambient-soft);
 }
 
 .zen-typewriter__header {
@@ -1755,14 +1835,14 @@ html[data-theme='light'] .custom-background::before {
   border: 1px solid rgba(255, 255, 255, 0.12);
   padding: clamp(2rem, 5vw, 3rem);
   backdrop-filter: blur(24px);
-  box-shadow: 0 26px 75px rgba(12, 14, 30, 0.35);
+  box-shadow: var(--zen-shadow-deep-ambient-mid);
 }
 
 .light .zen-hunt__card,
 .day-mode .zen-hunt__card {
   background: rgba(255, 255, 255, 0.9);
   border-color: rgba(15, 15, 45, 0.1);
-  box-shadow: 0 18px 60px rgba(12, 14, 30, 0.15);
+  box-shadow: var(--zen-shadow-deep-ambient-mid-soft);
 }
 
 .zen-hunt__header {
@@ -2085,18 +2165,14 @@ html[data-theme='light'] .custom-background::before {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--zen-shadow-card-soft);
 }
 
 .log-card {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--zen-shadow-card-soft);
   will-change: transform;
   contain: layout style;
 }
@@ -2160,7 +2236,7 @@ html[data-theme='light'] .custom-background::before {
 
 .zen-search-input:focus {
   transform: scale(1.02);
-  box-shadow: 0 8px 32px rgba(255, 122, 138, 0.2);
+  box-shadow: var(--zen-shadow-accent-pink-md);
 }
 
 .zen-filter-btn {
@@ -2172,7 +2248,7 @@ html[data-theme='light'] .custom-background::before {
 
 .zen-filter-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--zen-shadow-elev-sm);
 }
 
 .zen-filter-btn:active {
@@ -2282,9 +2358,7 @@ html[data-theme='light'] .custom-background::before {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--zen-shadow-card-soft);
   will-change: transform;
   contain: layout style;
   cursor: pointer;
@@ -2294,9 +2368,7 @@ html[data-theme='light'] .custom-background::before {
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.15);
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--zen-shadow-card-hover);
 }
 
 .status-badge {
@@ -2369,9 +2441,7 @@ html[data-theme='light'] .custom-background::before {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--zen-shadow-card-soft);
   position: relative;
   overflow: hidden;
 }

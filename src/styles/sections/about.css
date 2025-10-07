@@ -1,0 +1,9 @@
+/* About Section (extracted) */
+.zen-about-section { background: var(--zen-radial-duo-about-night); position: relative; }
+.light .zen-about-section, .day-mode .zen-about-section { background: var(--zen-radial-duo-about-day); }
+.philosophy-pillar { border-left:1px solid #ffffff1a; padding-left:1rem; transition:border-color .3s; position:relative; }
+.philosophy-pillar:hover { border-left-color: var(--brand-pink-30); }
+.zen-philosophy-header .heading-style-h2 { text-shadow: var(--zen-text-glow-accent); }
+.zen-philosophy-footer .philosophy-essence { transition: all .3s; }
+.zen-philosophy-footer:hover .philosophy-essence { background:#ffffff14; border-color:#ffffff26; transform:translateY(-1px); }
+.light .zen-philosophy-footer:hover .philosophy-essence, .day-mode .zen-philosophy-footer:hover .philosophy-essence { background:#ffffff26; border-color:#ffffff40; }

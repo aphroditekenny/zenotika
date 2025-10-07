@@ -1,0 +1,12 @@
+/* Portfolio Section (extracted from index.css) */
+.zen-portfolio-section { background: var(--zen-radial-duo-portfolio-night); position: relative; }
+.light .zen-portfolio-section, .day-mode .zen-portfolio-section { background: var(--zen-radial-duo-portfolio-day); }
+.zen-portfolio-controls { will-change: contents; contain: layout; }
+.zen-projects-grid { will-change: contents; contain: layout; }
+.zen-search-input { backdrop-filter: blur(16px); transition: all var(--dur-medium) var(--ease-standard); }
+.zen-search-input:focus { transform: scale(1.02); box-shadow: var(--zen-shadow-accent-pink-md); }
+.zen-filter-btn { backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); will-change: transform; contain: layout style; }
+.zen-filter-btn:hover { transform: translateY(-2px); box-shadow: var(--zen-shadow-elev-sm); }
+.zen-filter-btn:active { transform: translateY(0) scale(.98); }
+.light .zen-search-input, .day-mode .zen-search-input { color: var(--color-foreground-day-alt); background:#ffffff26; border-color:#ffffff40; }
+.light .zen-filter-btn, .day-mode .zen-filter-btn { color: var(--color-foreground-day-alt); background:#ffffff26; border-color:#ffffff40; }

@@ -36,6 +36,23 @@ export default defineConfig(async ({ mode }) => {
     build: {
       target: 'esnext',
       outDir: 'build',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
+            ui: [
+              '@radix-ui/react-accordion',
+              '@radix-ui/react-dialog',
+              '@radix-ui/react-popover',
+              '@radix-ui/react-tooltip',
+              '@radix-ui/react-dropdown-menu',
+              '@radix-ui/react-navigation-menu'
+            ],
+            charts: ['recharts'],
+            carousel: ['embla-carousel-react']
+          }
+        }
+      }
     },
     server: {
       port: 3000,

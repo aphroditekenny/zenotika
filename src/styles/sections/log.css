@@ -1,0 +1,7 @@
+/* Log & Newsletter Section (extracted) */
+.zen-newsletter-prompt { backdrop-filter: blur(20px) saturate(180%); background:#ffffff08; border:1px solid #ffffff14; box-shadow: var(--zen-shadow-card-soft); }
+.log-card { backdrop-filter: blur(20px) saturate(180%); background:#ffffff08; border:1px solid #ffffff14; box-shadow: var(--zen-shadow-card-soft); will-change: transform; contain: layout style; }
+.log-card:hover { background:#ffffff0d; border-color:#ffffff1f; transform:translateY(-2px); }
+.log-date { letter-spacing:.05em; font-family:Monaco,Menlo,Ubuntu Mono,monospace; font-size:.75rem; }
+.tag { backdrop-filter: blur(10px); border:1px solid #ffffff1a; transition: all .2s; }
+.tag:hover { background:#ffffff26; border-color:#fff3; }

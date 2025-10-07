@@ -106,7 +106,8 @@
         "analyze": "vite build --mode analyze",
         "ci:local": "npm run lint && npm run test && npm run build && npm run bundle:check && npm run baseline:collect",
         "pwa:icons": "node scripts/generate-pwa-icons.mjs",
-        "og:image": "node scripts/generate-og-image.mjs",
-        "lint:colors": "node scripts/lint-colors.mjs"
+    "og:image": "node scripts/generate-og-image.mjs",
+    "lint:colors": "node scripts/lint-colors.mjs",
+    "lint:shadows": "node scripts/lint-shadows.mjs"
     }
 }
