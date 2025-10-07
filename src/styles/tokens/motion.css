@@ -1,0 +1,19 @@
+:root {
+  --motion-duration-sm: 120ms;
+  --motion-duration-md: 240ms;
+  --motion-duration-lg: 480ms;
+  --motion-ease-standard: cubic-bezier(.4,0,.2,1);
+  --motion-ease-emphatic: cubic-bezier(.83,0,.17,1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+  }
+  .allow-motion {
+    animation-duration: initial !important;
+    transition-duration: initial !important;
+  }
+}

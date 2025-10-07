@@ -1,7 +1,9 @@
+'''
 import { IntersectionObserver } from './IntersectionObserver';
 import { useState, useEffect, memo } from 'react';
 import { persona, personaLocales } from '../content/persona';
 import type { PersonaKey } from '../content/persona';
+import matter from 'gray-matter';
 
 interface LogEntryItem {
   id: number;
@@ -12,6 +14,32 @@ interface LogEntryItem {
   pillar: PersonaKey;
 }
 
+// Use Vite's import.meta.glob to import all markdown files as raw text
+const modulesEn = import.meta.glob('/src/content/logs/en/*.md', { eager: true, as: 'raw' });
+const modulesId = import.meta.glob('/src/content/logs/id/*.md', { eager: true, as: 'raw' });
+
+const parseLogEntries = (modules: Record<string, string>): LogEntryItem[] => {
+  const logEntries = Object.values(modules).map((rawContent) => {
+    const { data, content } = matter(rawContent);
+    return {
+      id: data.id,
+      date: data.date,
+      title: data.title,
+      content: content.trim(),
+      tags: data.tags,
+      pillar: data.pillar,
+    };
+  });
+  // Sort entries by date descending
+  return logEntries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+};
+
+// Pre-parse the logs for both languages
+const allLogEntries = {
+  en: parseLogEntries(modulesEn),
+  id: parseLogEntries(modulesId),
+};
+
 function LogBookSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [cardsLoaded, setCardsLoaded] = useState(false);
@@ -21,10 +49,19 @@ function LogBookSection() {
   const logbookMissionId = 'logbook-mission';
   const logbookHeadingId = 'logbook-heading';
 
+  const [logEntries, setLogEntries] = useState<LogEntryItem[]>([]);
+
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => setCardsLoaded(true), 300);
       return () => clearTimeout(timer);
+    }
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (isVisible) {
+      const locale = (document.documentElement.lang as 'en' | 'id') || 'en';
+      setLogEntries(allLogEntries[locale]);
     }
   }, [isVisible]);
 
@@ -34,33 +71,6 @@ function LogBookSection() {
       style={{ animationDelay: `${delay}s` }}
     />
   );
-
-  const logEntries: LogEntryItem[] = [
-    {
-      id: 1,
-      date: "2025.01.05",
-      title: "Zen Framework Implementation",
-      content: "Integrated mindful design principles into our core development process. Focus on intentional interactions and reduced cognitive load.",
-      tags: ["Philosophy", "UX", "Framework"],
-      pillar: "zen"
-    },
-    {
-      id: 2,
-      date: "2025.01.03",
-      title: "Nova Energy Systems",
-      content: "Launched modern energy-efficient backend architecture. 60% performance improvement across all digital experiences.",
-      tags: ["Performance", "Backend", "Optimization"],
-      pillar: "nova"
-    },
-    {
-      id: 3,
-      date: "2024.12.28",
-      title: "Informatika Protocol",
-      content: "Established clean data structures and efficient algorithms. Every line of code serves a purpose, nothing superfluous.",
-      tags: ["Architecture", "Efficiency", "Clean Code"],
-      pillar: "informatika"
-    }
-  ];
 
   return (
     <IntersectionObserver
@@ -255,3 +265,4 @@ const LogEntry = memo(function LogEntry({
 });
 
 export default memo(LogBookSection);
+'''
