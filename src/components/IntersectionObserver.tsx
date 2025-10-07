@@ -1,6 +1,6 @@
-import { useEffect, useRef, ReactNode, useState, useCallback } from 'react';
+import { useEffect, useRef, ReactNode, useState, useCallback, HTMLAttributes } from 'react';
 
-interface IntersectionObserverProps {
+interface IntersectionObserverProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   className?: string;
   threshold?: number | number[];
@@ -17,7 +17,8 @@ export function IntersectionObserver({
   rootMargin = '50px',
   triggerOnce = true,
   onIntersect,
-  fallbackDelay = 100
+  fallbackDelay = 100,
+  ...rest
 }: IntersectionObserverProps) {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -102,7 +103,7 @@ export function IntersectionObserver({
   }, []);
 
   return (
-    <div ref={elementRef} className={`section ${className}`}>
+    <div ref={elementRef} className={`section ${className}`} {...rest}>
       {children}
     </div>
   );

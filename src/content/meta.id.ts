@@ -1,4 +1,4 @@
-import { baseCanonical } from './meta';
+import { baseCanonical } from './meta.base';
 
 export const metaID = {
   title: 'Zenotika',

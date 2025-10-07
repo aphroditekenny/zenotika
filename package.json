@@ -83,6 +83,7 @@
     },
     "scripts": {
         "dev": "vite",
+        "dev:debug": "node --trace-warnings scripts/dev-debug.mjs",
         "dev:3000": "vite --host localhost --port 3000 --strictPort",
         "build": "npm run og:image && vite build && node scripts/emit-asset-manifest.mjs",
         "build:clean": "rimraf build && vite build",

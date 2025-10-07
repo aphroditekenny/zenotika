@@ -110,8 +110,9 @@ function QuoteSection() {
     <section
       ref={sectionRef}
       id="philosophy"
-      className={`zen-quote-section relative py-20 lg:py-32 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      className={`zen-quote-section lazy-section relative py-20 lg:py-32 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}
+      data-intrinsic="quote"
       role="region"
       aria-labelledby={quoteHeadingId}
       aria-describedby={quoteContentId}

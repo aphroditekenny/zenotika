@@ -20,6 +20,7 @@ import AccessibilityProvider from "./components/AccessibilityProvider";
 // (existing import moved above to avoid duplicate) 
 import { triggerUpdateToast } from "./pwaDebug";
 import { loadSonner } from "./utils/loadSonner";
+import { usePerformanceMode } from "./hooks/usePerformanceMode";
 
 const logDevWarning = (message: string, error: unknown) => {
   if (import.meta.env.DEV) {
@@ -29,18 +30,21 @@ const logDevWarning = (message: string, error: unknown) => {
 };
 
 type HomePageProps = { onBackToLanding: () => void };
-type HomePageModule = typeof import("./components/HomePage");
-
 const lazyHomeEnabled = isFeatureEnabled("lazyHomePage");
 const pwaEnabled = isFeatureEnabled("pwa");
 
-let homePageModulePromise: Promise<HomePageModule> | null = null;
+// Eager import for non-lazy path so we don't block module evaluation with top-level await
+import HomePageEager from "./components/HomePage";
 
-function ensureHomePageModule() {
-  if (!homePageModulePromise) {
-    homePageModulePromise = import("./components/HomePage");
-  }
-  return homePageModulePromise;
+// Conditionally choose lazy or eager component reference without top-level await
+let HomePageComponent: ComponentType<HomePageProps> = lazyHomeEnabled
+  ? lazy(() => import("./components/HomePage"))
+  : HomePageEager;
+
+// Preload function (only meaningful when lazy loading is enabled)
+export function preloadHomePage() {
+  if (!lazyHomeEnabled) return Promise.resolve();
+  return import("./components/HomePage");
 }
 
 const LazyToaster = lazy(async () => {
@@ -53,20 +57,9 @@ const LazyPWAInstallFab = lazy(async () => {
   return { default: mod.PWAInstallFab };
 });
 
-export function preloadHomePage() {
-  return ensureHomePageModule();
-}
-
-let HomePageComponent: ComponentType<HomePageProps>;
-
-if (lazyHomeEnabled) {
-  HomePageComponent = lazy(async () => ensureHomePageModule());
-} else {
-  const module = await ensureHomePageModule();
-  HomePageComponent = module.default;
-}
-
 export default function App() {
+  // Detect low-end mobile contexts early
+  usePerformanceMode();
   const [currentPage, setCurrentPage] = useState<'landing' | 'home'>('landing');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [nextPage, setNextPage] = useState<'landing' | 'home' | null>(null);
@@ -261,22 +254,11 @@ const HomePageFallback = memo(function HomePageFallback() {
   );
 });
 
-// Runtime meta manager: keeps <head> tags in sync with meta module.
+// Updated MetaManager with runtime assertions & reactive locale updates
 const MetaManager = memo(function MetaManager() {
   useEffect(() => {
-    // Locale heuristic with override
-    const stored = localStorage.getItem('zenotikaLocale');
-    const auto = (navigator?.language || 'en').toLowerCase().startsWith('id') ? 'id' : 'en';
-    const locale = (stored === 'en' || stored === 'id') ? stored : auto;
-    const selected = locale === 'id' ? metaID : defaultMeta;
-    const meta = buildMeta({
-      title: selected.title,
-      description: selected.description,
-      keywords: selected.keywords,
-      canonical: selected.canonical
-    });
-    (window as any).__ZENOTIKA_META = { meta, locale, at: Date.now() };
-    document.title = meta.title;
+    const warn = (...a: unknown[]) => { if (import.meta.env.DEV) console.warn('[meta]', ...a); };
+
     const ensure = (name: string, attr: 'name' | 'property' = 'name') => {
       let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
       if (!el) {
@@ -286,60 +268,106 @@ const MetaManager = memo(function MetaManager() {
       }
       return el;
     };
-    ensure('description').setAttribute('content', meta.description);
-    ensure('keywords').setAttribute('content', meta.keywords.join(', '));
-    ensure('og:title', 'property').setAttribute('content', meta.title);
-    ensure('og:description', 'property').setAttribute('content', meta.description);
-    ensure('og:url', 'property').setAttribute('content', meta.canonical);
-    // OG images (PNG fallback + svg)
-    ensure('og:image', 'property').setAttribute('content', meta.canonical + 'share.png');
-    const secondOg = document.createElement('meta');
-    secondOg.setAttribute('property','og:image');
-    secondOg.setAttribute('content', meta.canonical + 'share.svg');
-    document.head.appendChild(secondOg);
-    ensure('twitter:title').setAttribute('content', meta.title);
-    ensure('twitter:description').setAttribute('content', meta.description);
-    ensure('twitter:image').setAttribute('content', meta.canonical + 'share.png');
-    // hreflang alternates (id/en same canonical now)
-    const existingHL = Array.from(document.head.querySelectorAll('link[rel="alternate"][hreflang]'));
-    existingHL.forEach(l => l.remove());
-    ['en','id'].forEach(lang => {
-      const link = document.createElement('link');
-      link.setAttribute('rel','alternate');
-      link.setAttribute('hreflang', lang);
-      link.setAttribute('href', meta.canonical);
-      document.head.appendChild(link);
-    });
+
+    const applyMeta = (locale: string) => {
+      const selected = locale === 'id' ? metaID : defaultMeta;
+      const meta = buildMeta({
+        title: selected.title,
+        description: selected.description,
+        keywords: selected.keywords,
+        canonical: selected.canonical
+      });
+      if (!meta.title) warn('Missing meta.title');
+      if (!meta.description) warn('Missing meta.description');
+      if (!meta.canonical) warn('Missing meta.canonical');
+      if (!Array.isArray(meta.keywords) || meta.keywords.length === 0) warn('Meta keywords empty');
+
+      (window as any).__ZENOTIKA_META = { meta, locale, at: Date.now() };
+      document.title = meta.title;
+      ensure('description').setAttribute('content', meta.description);
+      ensure('keywords').setAttribute('content', meta.keywords.join(', '));
+      ensure('og:title', 'property').setAttribute('content', meta.title);
+      ensure('og:description', 'property').setAttribute('content', meta.description);
+      ensure('og:url', 'property').setAttribute('content', meta.canonical);
+      ensure('og:image', 'property').setAttribute('content', meta.canonical + 'share.png');
+      // Clean extra og:image then add svg version second
+      document.head.querySelectorAll('meta[property="og:image"]').forEach((m,i) => { if (i > 0) m.remove(); });
+      const secondOg = document.createElement('meta');
+      secondOg.setAttribute('property','og:image');
+      secondOg.setAttribute('content', meta.canonical + 'share.svg');
+      document.head.appendChild(secondOg);
+      ensure('twitter:title').setAttribute('content', meta.title);
+      ensure('twitter:description').setAttribute('content', meta.description);
+      ensure('twitter:image').setAttribute('content', meta.canonical + 'share.png');
+      // hreflang links
+      const existingHL = Array.from(document.head.querySelectorAll('link[rel="alternate"][hreflang]'));
+      existingHL.forEach(l => l.remove());
+      ['en','id'].forEach(lang => {
+        const link = document.createElement('link');
+        link.setAttribute('rel','alternate');
+        link.setAttribute('hreflang', lang);
+        link.setAttribute('href', meta.canonical);
+        document.head.appendChild(link);
+      });
+    };
+
+    const initial = (() => {
+      const stored = localStorage.getItem('zenotikaLocale');
+      const auto = (navigator?.language || 'en').toLowerCase().startsWith('id') ? 'id' : 'en';
+      return (stored === 'en' || stored === 'id') ? stored : auto;
+    })();
+    applyMeta(initial);
+
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ locale:string }>).detail;
+      applyMeta(detail?.locale || initial);
+    };
+    window.addEventListener('zenotika:locale-changed', handler);
+    return () => window.removeEventListener('zenotika:locale-changed', handler);
   }, []);
   return null;
 });
 
 const LanguageSwitcher = memo(function LanguageSwitcher(){
   const [locale,setLocale] = useState<string>(()=> localStorage.getItem('zenotikaLocale') || 'auto');
+  const debouncedRef = (globalThis as any).__ZEN_LOCALE_TIMER || { current: 0 };
+  (globalThis as any).__ZEN_LOCALE_TIMER = debouncedRef;
   const apply = (val:string)=>{
-    if(val==='auto'){ localStorage.removeItem('zenotikaLocale'); } else { localStorage.setItem('zenotikaLocale', val); }
+    if(val==='auto'){
+      localStorage.removeItem('zenotikaLocale');
+    } else {
+      localStorage.setItem('zenotikaLocale', val);
+    }
     setLocale(val);
-    // Re-run MetaManager logic by forcing a minimal tick
-    setTimeout(()=>{
-      const evt = new Event('zenotika:meta-refresh');
+    if (debouncedRef.current) window.clearTimeout(debouncedRef.current);
+    debouncedRef.current = window.setTimeout(()=>{
+      const stored = localStorage.getItem('zenotikaLocale') || 'auto';
+      const auto = (navigator?.language || 'en').toLowerCase().startsWith('id') ? 'id' : 'en';
+      const effective = (stored==='en'||stored==='id') ? stored : auto;
+      const evt = new CustomEvent('zenotika:locale-changed', { detail: { locale: effective }});
       window.dispatchEvent(evt);
-      // naive: re-mount MetaManager by manipulating title (cheap) — or simply call location.reload() for simplicity
-      location.reload();
-    },10);
+    },150);
   };
   return (
-    <div className="fixed top-3 left-3 z-[1200] text-xs font-medium text-white/80 backdrop-blur bg-black/30 border border-white/10 rounded-full px-3 py-1 flex gap-2 items-center">
+    <div className="lang-switcher fixed left-1/2 top-auto z-[1200] flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur transition-colors sm:left-3 sm:top-3 sm:bottom-auto sm:translate-x-0">
       <span className="hidden sm:inline">Lang</span>
       {['auto','en','id'].map(code => (
-        <button key={code} onClick={()=>apply(code)} className={`px-2 py-0.5 rounded-full border transition-colors ${locale===code ? 'bg-white/20 border-white/40 text-white' : 'border-transparent text-white/60 hover:text-white'}`}>{code}</button>
+        <button
+          key={code}
+          onClick={()=>apply(code)}
+          className={`px-2 py-0.5 rounded-full border transition-colors ${locale===code ? 'bg-white/20 border-white/40 text-white' : 'border-transparent text-white/60 hover:text-white'}`}
+          aria-pressed={locale===code}
+        >
+          {code}
+        </button>
       ))}
     </div>
   );
 });
 
-// Lightweight Web Vitals Badge (client-only)
+// WebVitalsBadge (restored original implementation with persistence + timeline)
 const WebVitalsBadge = memo(function WebVitalsBadge() {
-  const [metrics, setMetrics] = useState<{ LCP?: number; INP?: number; CLS?: number }>(() => ({}));
+  const [metrics, setMetrics] = useState<{ LCP?: number; INP?: number; CLS?: number }>({});
   const [averages, setAverages] = useState<{ LCP?: number; INP?: number; CLS?: number }>(() => {
     try {
       const raw = sessionStorage.getItem('zenotikaVitals');
@@ -351,25 +379,24 @@ const WebVitalsBadge = memo(function WebVitalsBadge() {
         return {
           LCP: lcpArr.length ? Number((lcpArr.reduce((a,b)=>a+b,0)/lcpArr.length).toFixed(2)) : undefined,
           INP: inpArr.length ? Number((inpArr.reduce((a,b)=>a+b,0)/inpArr.length).toFixed(2)) : undefined,
-          CLS: clsArr.length ? Number((clsArr.reduce((a,b)=>a+b,0)/clsArr.length).toFixed(3)) : undefined,
+            CLS: clsArr.length ? Number((clsArr.reduce((a,b)=>a+b,0)/clsArr.length).toFixed(3)) : undefined,
         };
       }
     } catch (error) {
-      logDevWarning('Failed to read stored Web Vitals averages', error);
+      logDevWarning('Failed to read stored Web Vitals averages', error as Error);
     }
     return {};
   });
   const [showTimeline, setShowTimeline] = useState(false);
   const [timeline, setTimeline] = useState<Array<{ name:string; value:number; ts:number }>>([]);
 
-  // Accumulate samples for averages (session-scoped)
   useEffect(() => {
     const state = { samples: { LCP: [] as number[], INP: [] as number[], CLS: [] as number[] } } as { samples: Record<string, number[]> };
     try {
       const raw = sessionStorage.getItem('zenotikaVitals');
       if (raw) Object.assign(state, JSON.parse(raw));
     } catch (error) {
-      logDevWarning('Failed to parse persisted Web Vitals state', error);
+      logDevWarning('Failed to parse persisted Web Vitals state', error as Error);
     }
     const unsub = performanceCollector.subscribe((m) => {
       setMetrics(prev => {
@@ -382,12 +409,11 @@ const WebVitalsBadge = memo(function WebVitalsBadge() {
       if (m.name === 'LCP' || m.name === 'INP' || m.name === 'CLS') {
         const arr = state.samples[m.name] || (state.samples[m.name] = []);
         arr.push(m.value);
-        // Keep only last 30 for memory safety
         if (arr.length > 30) arr.shift();
         try {
           sessionStorage.setItem('zenotikaVitals', JSON.stringify(state));
         } catch (error) {
-          logDevWarning('Failed to persist Web Vitals samples', error);
+          logDevWarning('Failed to persist Web Vitals samples', error as Error);
         }
         const mean = arr.reduce((a,b)=>a+b,0)/arr.length;
         setAverages(a => ({ ...a, [m.name]: Number(mean.toFixed(m.name==='CLS'?3:2)) }));
@@ -401,12 +427,9 @@ const WebVitalsBadge = memo(function WebVitalsBadge() {
     return unsub;
   }, []);
 
-  // (subscription moved above to include averaging/persist logic)
-
   if (!metrics || (metrics.LCP === undefined && metrics.INP === undefined && metrics.CLS === undefined)) {
-    return null; // avoid layout shift
+    return null;
   }
-
   const quality = (name: 'LCP' | 'INP' | 'CLS', value?: number) => {
     if (value === undefined) return '';
     switch (name) {
@@ -415,19 +438,17 @@ const WebVitalsBadge = memo(function WebVitalsBadge() {
       case 'CLS': return value <= 0.1 ? 'good' : value <= 0.25 ? 'needs' : 'poor';
     }
   };
-
   const badgeColor = (q?: string) => q === 'good' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : q === 'needs' ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-rose-500/25 text-rose-300 border-rose-500/40';
-
   return (
     <div className="fixed bottom-3 right-3 z-[1100] select-none">
       <div className="pointer-events-auto backdrop-blur-md bg-black/30 border border-white/10 rounded-xl px-3 py-2 shadow-lg flex gap-2 text-[11px] font-mono tracking-tight text-white/80">
         {(['LCP','INP','CLS'] as const).map(key => {
           const val = metrics[key];
-            if (val === undefined) return null;
-            const q = quality(key, val);
-            return (
-              <span key={key} className={`inline-flex items-center gap-1 px-2 py-1 rounded-md border ${badgeColor(q)}`} aria-label={`${key} ${val} ${q}`}> {key}: {val}{key==='LCP'|| key==='INP' ? 'ms' : ''}</span>
-            );
+          if (val === undefined) return null;
+          const q = quality(key, val);
+          return (
+            <span key={key} className={`inline-flex items-center gap-1 px-2 py-1 rounded-md border ${badgeColor(q)}`} aria-label={`${key} ${val} ${q}`}> {key}: {val}{key==='LCP'|| key==='INP' ? 'ms' : ''}</span>
+          );
         })}
         {(averages.LCP !== undefined || averages.INP !== undefined || averages.CLS !== undefined) && (
           <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border bg-white/10 text-white/70 border-white/20" aria-label="Averages">

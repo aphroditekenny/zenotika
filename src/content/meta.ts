@@ -1,6 +1,8 @@
 // Central meta defaults referencing persona. Keep framework-agnostic.
 // Future i18n: extend MetaLocaleMap and add resolveMeta(locale).
 import { persona } from './persona';
+import { baseCanonical } from './meta.base';
+// Safe now: meta.id.ts only imports baseCanonical (no back import) so no circular dependency.
 import { metaID } from './meta.id';
 
 export interface SiteMeta {
@@ -12,7 +14,7 @@ export interface SiteMeta {
   brand: string;
 }
 
-export const baseCanonical = 'https://aphroditekenny.github.io/zenotika/';
+// baseCanonical now lives in meta.base.ts to prevent circular import issues.
 
 export const defaultMeta: SiteMeta = {
   title: persona.brand,

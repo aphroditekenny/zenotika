@@ -64,7 +64,8 @@ function LogBookSection() {
 
   return (
     <IntersectionObserver
-      className="home-logs relative py-20 lg:py-32 overflow-hidden"
+      className="home-logs lazy-section relative py-20 lg:py-32 overflow-hidden"
+      data-intrinsic="log"
       onIntersect={() => setIsVisible(true)}
     >
       <section
