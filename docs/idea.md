@@ -872,7 +872,7 @@ document.getElementById('screenFog').addEventListener('click', () => {
     lenis.stop();
   });
   
-  
+   
   $("[data-lenis-toggle]").on("click", function () {
     $(this).toggleClass("stop-scroll");
     if ($(this).hasClass("stop-scroll")) {

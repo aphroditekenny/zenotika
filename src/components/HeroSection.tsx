@@ -1,54 +1,42 @@
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "./ThemeContext";
 import { OptimizedImage } from "./OptimizedImage";
-import { persona, personaLocales } from "../content/persona";
+import { getPersona, getPersonaLocales } from "../content/persona";
+import type { ZenotikaPersona, PersonaLocalizedContent } from "../content/persona";
 
 interface HeroSectionProps {
   onNavigateToHome?: () => void;
 }
 
-function HeroSection({ onNavigateToHome }: HeroSectionProps) {
+interface HeroSectionContentProps extends HeroSectionProps {
+  persona: ZenotikaPersona;
+  personaLocales: Record<'en' | 'id', PersonaLocalizedContent>;
+}
+
+function HeroSectionContent({ onNavigateToHome, persona, personaLocales }: HeroSectionContentProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const cloudRefs = useRef<(HTMLDivElement | null)[]>([]);
   const logoRef = useRef<HTMLButtonElement>(null);
-  const { isDark, isLight } = useTheme();
+  const { isDark } = useTheme();
 
   useEffect(() => {
-    // Simplified loading with timeout fallback
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 100); // Quick fallback
+    // Optimistic immediate paint with quick image preload attempt
+    const timer = setTimeout(() => setIsLoaded(true), 100);
 
-    // Preload critical images for both themes
     const preloadImages = [
       "https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b9208ebb9e666ec8413b_Home-logo_night.png",
       "https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6724406f04b26f75915dd8c2_Home-logo_day.png"
     ];
-
-    const imagePromises = preloadImages.map(src => {
-      return new Promise((resolve) => {
-        const img = new Image();
-        const timeout = setTimeout(resolve, 1000); // 1s timeout per image
-        img.onload = () => {
-          clearTimeout(timeout);
-          resolve(true);
-        };
-        img.onerror = () => {
-          clearTimeout(timeout);
-          resolve(false);
-        };
-        img.src = src;
-      });
-    });
-
+    const imagePromises = preloadImages.map(src => new Promise(resolve => {
+      const img = new Image();
+      const timeout = setTimeout(resolve, 1000);
+      img.onload = img.onerror = () => { clearTimeout(timeout); resolve(true); };
+      img.src = src;
+    }));
     Promise.race([
       Promise.all(imagePromises),
-      new Promise(resolve => setTimeout(resolve, 2000)) // 2s max wait
-    ]).then(() => {
-      clearTimeout(timer);
-      setIsLoaded(true);
-    });
-
+      new Promise(res => setTimeout(res, 2000))
+    ]).then(() => { clearTimeout(timer); setIsLoaded(true); });
     return () => clearTimeout(timer);
   }, []);
 
@@ -164,8 +152,6 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
                 {heroCopyId.mission}
               </span>
             </div>
-
-            {/* Main CTA - Logo */}
             <button
               className="hero_content zen-focus informatika-efficient transition-all duration-300 cursor-pointer border-none bg-transparent focus:outline-none focus-visible:ring-4 focus-visible:ring-pink-500/30 rounded-2xl p-6"
               onClick={onNavigateToHome}
@@ -200,18 +186,12 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
                 )}
               </div>
             </button>
-
-
           </div>
         </div>
       </div>
 
-
-
-      {/* Optimized Floating Clouds */}
       {isLoaded && (
         <div className="cloud-wrapper absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Bottom Left Cloud */}
           <div className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8 lg:bottom-16 lg:left-16">
             <CloudImage
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b3ad591f4c89d96fc00e_Property%201%3DNight%2C%20Property%202%3DCloud%201.png"
@@ -220,8 +200,6 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
               index={0}
             />
           </div>
-
-          {/* Bottom Right Cloud */}
           <div className="absolute bottom-6 right-4 sm:bottom-12 sm:right-8 lg:bottom-20 lg:right-16">
             <CloudImage
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b3f1b2630f7f04b527d0_Property%201%3DNight%2C%20Property%202%3DCloud%203.png"
@@ -230,8 +208,6 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
               index={1}
             />
           </div>
-
-          {/* Top Left Cloud */}
           <div className="absolute top-8 left-4 sm:top-16 sm:left-8 lg:top-24 lg:left-16">
             <CloudImage
               src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b32dbbf4d28a3fe1d971_Property%201%3DNight%2C%20Property%202%3DCloud%202.png"
@@ -243,20 +219,43 @@ function HeroSection({ onNavigateToHome }: HeroSectionProps) {
         </div>
       )}
 
-      {/* Optimized Stars Overlay */}
       <div
         id="aboutStars"
         className="stars-overlay home-stars absolute inset-0 pointer-events-none"
-        style={{
-          display: 'block',
-          opacity: isLoaded ? 1 : 0,
-          transition: 'opacity 1s ease-in-out'
-        }}
+        style={{ display: 'block', opacity: isLoaded ? 1 : 0, transition: 'opacity 1s ease-in-out' }}
       />
-
-
     </div>
   );
+}
+
+function HeroSection({ onNavigateToHome }: HeroSectionProps) {
+  const [data, setData] = useState<{ persona: ZenotikaPersona; locales: Record<'en' | 'id', PersonaLocalizedContent> } | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [persona, personaLocales] = await Promise.all([getPersona(), getPersonaLocales()]);
+        if (!cancelled) setData({ persona, locales: personaLocales });
+      } catch (e) {
+        if (!cancelled) setError(e as Error);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  if (error) {
+    return <div className="text-red-500 p-8" role="alert">Failed to load hero content.</div>;
+  }
+  if (!data) {
+    return (
+      <div className="section_hero home-hero relative min-h-[60vh] flex items-center justify-center text-white/60" role="status">
+        Loading hero…
+      </div>
+    );
+  }
+  return <HeroSectionContent onNavigateToHome={onNavigateToHome} persona={data.persona} personaLocales={data.locales} />;
 }
 
 export default HeroSection;

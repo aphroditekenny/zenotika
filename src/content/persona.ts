@@ -19,54 +19,13 @@ export interface ZenotikaPersona {
   version: 1;
 }
 
-export const persona: ZenotikaPersona = {
-  brand: 'Zenotika',
-  tagline: 'Mindful balance, modern energy, intelligent function.',
-  mission:
-    'Menyatukan kesederhanaan yang penuh kesadaran, energi inovatif, dan fungsi cerdas menjadi pengalaman web yang cepat, inklusif, dan terukur.',
-  pillars: [
-    {
-      key: 'zen',
-      title: 'Zen',
-      short: 'Mindful Simplicity',
-      description:
-        'Menjaga keseimbangan dan ketenangan—setiap elemen hadir karena fungsi, setiap ruang bernapas untuk fokus.',
-      semanticTags: ['balance', 'calm', 'clarity']
-    },
-    {
-      key: 'nova',
-      title: 'Nova',
-      short: 'Modern Energy',
-      description:
-        'Energi modern yang progresif—mengadopsi teknologi baru dengan selektif agar relevan dan berumur panjang.',
-      semanticTags: ['innovation', 'energy', 'progressive']
-    },
-    {
-      key: 'informatika',
-      title: 'Informatika',
-      short: 'Intelligent Function',
-      description:
-        'Fungsi cerdas—arsitektur yang efisien, terukur, dan mudah dipelihara, melayani kebutuhan manusia.',
-      semanticTags: ['architecture', 'efficiency', 'system']
-    }
-  ],
-  keywords: [
-    'zenotika',
-    'react 19',
-    'performance',
-    'pwa',
-    'accessibility',
-    'web vitals',
-    'progressive enhancement',
-    'feature flags'
-  ],
-  version: 1
-};
+// The heavy data moved to personaData.ts for dynamic import.
+// Keep only types here and a thin helper that dynamically loads when needed.
+export type PersonaKey = 'zen' | 'nova' | 'informatika';
 
-export type PersonaKey = typeof persona.pillars[number]['key'];
-
-export function getPillar(key: PersonaKey): PersonaPillar | undefined {
-  return persona.pillars.find(p => p.key === key);
+export async function getPillar(key: PersonaKey) {
+  const mod = await import('./personaData');
+  return (await mod.getPersona()).pillars.find(p => p.key === key);
 }
 
 export interface PersonaLocalizedContent {
@@ -79,45 +38,50 @@ export interface PersonaLocalizedContent {
   }>;
 }
 
-export const personaLocales: Record<'en' | 'id', PersonaLocalizedContent> = {
+export async function getPersonaLocales() {
+  const mod = await import('./personaData');
+  return mod.getPersonaLocales();
+}
+
+// Minimal locales stub (en + id) with only fields used synchronously in tests/components
+export const personaLocales: Record<'en'|'id', PersonaLocalizedContent> = {
   en: {
     tagline: 'Mindful balance, modern energy, intelligent function.',
-    mission:
-      'Uniting mindful simplicity, modern energy, and intelligent function into a web experience that is fast, inclusive, and measurable.',
+    mission: 'Uniting mindful simplicity, modern energy, and intelligent function into a web experience that is fast, inclusive, and measurable.',
     pillars: {
-      zen: {
-        title: 'Zen',
-        short: 'Mindful Simplicity',
-        description:
-          'Sustains balance and calm—every element serves purpose and every space breathes so focus feels effortless.'
-      },
-      nova: {
-        title: 'Nova',
-        short: 'Modern Energy',
-        description:
-          'Infuses progressive energy—adopting new technology with discernment so experiences stay relevant and resilient.'
-      },
-      informatika: {
-        title: 'Informatika',
-        short: 'Intelligent Function',
-        description:
-          'Delivers intelligent function—efficient architecture that scales gracefully, remains maintainable, and champions human needs.'
-      }
+      zen: { title: 'Zen', short: 'Mindful Simplicity', description: 'Balance & calm.' },
+      nova: { title: 'Nova', short: 'Modern Energy', description: 'Progressive energy.' },
+      informatika: { title: 'Informatika', short: 'Intelligent Function', description: 'Efficient architecture.' }
     }
   },
   id: {
     tagline: 'Keseimbangan mindful, energi modern, fungsi cerdas.',
-    mission:
-      'Menyatukan kesederhanaan yang penuh kesadaran, energi inovatif, dan fungsi cerdas menjadi pengalaman web yang cepat, inklusif, dan terukur.',
-    pillars: Object.fromEntries(
-      persona.pillars.map(pillar => [
-        pillar.key,
-        {
-          title: pillar.title,
-          short: pillar.short,
-          description: pillar.description
-        }
-      ])
-    ) as PersonaLocalizedContent['pillars']
+    mission: 'Menyatukan kesederhanaan yang penuh kesadaran, energi inovatif, dan fungsi cerdas menjadi pengalaman web yang cepat, inklusif, dan terukur.',
+    pillars: {
+      zen: { title: 'Zen', short: 'Mindful Simplicity', description: 'Menjaga keseimbangan dan ketenangan.' },
+      nova: { title: 'Nova', short: 'Modern Energy', description: 'Energi modern yang progresif.' },
+      informatika: { title: 'Informatika', short: 'Intelligent Function', description: 'Arsitektur efisien.' }
+    }
   }
 };
+
+// Lightweight sync stub so existing meta + tests that import { persona } keep working without awaiting.
+// This keeps only minimal fields; full descriptive content stays in dynamically loaded module.
+export const persona: ZenotikaPersona = {
+  brand: 'Zenotika',
+  tagline: 'Mindful balance, modern energy, intelligent function.',
+  mission: 'Menyatukan kesederhanaan yang penuh kesadaran, energi inovatif, dan fungsi cerdas menjadi pengalaman web yang cepat, inklusif, dan terukur.',
+  pillars: [
+    { key: 'zen', title: 'Zen', short: 'Mindful Simplicity', description: 'Balance & calm.', semanticTags: ['balance'] },
+    { key: 'nova', title: 'Nova', short: 'Modern Energy', description: 'Progressive energy.', semanticTags: ['innovation'] },
+    { key: 'informatika', title: 'Informatika', short: 'Intelligent Function', description: 'Efficient architecture.', semanticTags: ['efficiency'] },
+  ],
+  keywords: ['zenotika', 'performance', 'react 19', 'pwa', 'accessibility'],
+  version: 1
+};
+
+export async function getPersona() {
+  // Dynamically load full persona for runtime rich usage.
+  const mod = await import('./personaData');
+  return mod.getPersona();
+}

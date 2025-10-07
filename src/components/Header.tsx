@@ -1,9 +1,14 @@
-import { useState, useEffect, useCallback, memo } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo, useRef } from 'react';
+import { track } from '@/utils/analytics';
+import { useServiceWorkerStatus } from '@/hooks/useServiceWorkerStatus';
 import { isFeatureEnabled } from '@/featureFlags';
 import { useInstallPrompt } from '@/hooks/useInstallPrompt';
 import { useTheme } from './ThemeContext';
 import { checkForUpdates } from '@/utils/swUpdates';
 import type { SectionDescriptor } from '@/hooks/useSectionTracker';
+import ActiveSectionLink from './ActiveSectionLink';
+import { loadLogBookSectionModule, loadFooterSectionModule } from './HomePage';
+import usePrefetchOnIntent from '@/hooks/usePrefetchOnIntent';
 
 interface HeaderProps {
   onBackToLanding?: () => void;
@@ -27,45 +32,67 @@ type CrumbSegment = {
   kind?: 'progress' | 'default';
 };
 
-const MENU_LINKS = [
-  { label: 'Our Things', target: '#our-things', description: 'Explore the rooms and playful tools.' },
-  { label: 'Log Book', target: '#log-book', description: 'Catch up on the latest dispatches.' },
-  { label: 'Newsletter', target: '#newsletter', description: 'Hop on the list for new drops.' },
+type MenuLink = {
+  label: string;
+  target: string;
+  description: string;
+  annotation?: string;
+  external?: boolean;
+};
+
+const PRIMARY_MENU_LINKS: MenuLink[] = [
+  { label: 'Home', target: '#top', description: '> step 0, where it all began' },
+  { label: 'About us', target: '#philosophy', description: '> learn who the hay we are' },
+  { label: 'Log book', target: '#log-book', description: '> news and updates about all things Things' },
+  { label: 'Contact', target: '#newsletter', description: '> say hi! we read every email' },
+];
+
+const PRODUCT_MENU_LINKS: MenuLink[] = [
+  { label: 'Hunt', target: '#collection', description: '> collect the scattered relics' },
+  { label: 'Projects', target: '#projects', description: '> see the interactive rooms and tools' },
+];
+
+const MENU_LINK_GROUPS = [
+  { heading: 'Navigate', links: PRIMARY_MENU_LINKS },
+  { heading: 'Our Things', links: PRODUCT_MENU_LINKS },
 ];
 
 function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const { toggleTheme, isDark, isLight } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
   const showPwa = isFeatureEnabled('pwa');
   const { canInstall, promptInstall, isStandalone, installed } = useInstallPrompt();
   const canCheckUpdates = typeof navigator !== 'undefined' && 'serviceWorker' in navigator;
+  const menuTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const menuPanelRef = useRef<HTMLDivElement | null>(null);
+  const sw = useServiceWorkerStatus();
 
   // Enhanced scroll handling with hide/show on scroll direction
   const handleScroll = useCallback(() => {
     const currentScrollY = window.scrollY;
-    
+
     // Throttle state updates to prevent excessive re-renders
     if (Math.abs(currentScrollY - lastScrollY) < 5) return;
-    
+
     setIsScrolled(currentScrollY > 20);
-    
+
     // Hide header when scrolling down, show when scrolling up
     if (currentScrollY > lastScrollY && currentScrollY > 100) {
       setIsVisible(false);
     } else {
       setIsVisible(true);
     }
-    
+
     setLastScrollY(currentScrollY);
   }, [lastScrollY]);
 
   useEffect(() => {
     let ticking = false;
     let isActive = true;
-    
+
     const throttledHandleScroll = () => {
       if (!ticking && isActive) {
         requestAnimationFrame(() => {
@@ -85,49 +112,48 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
     };
   }, [handleScroll]);
 
-  // Close mobile menu when clicking outside or pressing escape
+  // Close menu when clicking outside or pressing escape
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setIsMobileMenuOpen(false);
+        setIsMenuOpen(false);
+        track('menu_close');
       }
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-      if (isMobileMenuOpen && !(e.target as Element).closest('header')) {
-        setIsMobileMenuOpen(false);
+      if (isMenuOpen && !(e.target as Element).closest('.zen-header, .zen-menu-panel')) {
+        setIsMenuOpen(false);
+        track('menu_close');
       }
     };
 
-    if (isMobileMenuOpen) {
+    if (isMenuOpen) {
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('click', handleClickOutside);
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('click', handleClickOutside);
-      document.body.style.overflow = '';
     };
-  }, [isMobileMenuOpen]);
+  }, [isMenuOpen]);
 
 
 
   const smoothScrollTo = (elementId: string) => {
-    const element = document.getElementById(elementId.replace('#', ''));
+    const rawId = elementId.startsWith('#') ? elementId.slice(1) : elementId;
+    const element = document.getElementById(rawId);
     if (element) {
       const headerHeight = 80;
-      const targetPosition = element.offsetTop - headerHeight;
-      
+      const targetPosition = Math.max(0, element.offsetTop - headerHeight);
+      const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({
         top: targetPosition,
-        behavior: 'smooth'
+        behavior: prefersReduced ? 'auto' : 'smooth'
       });
     }
-    setIsMobileMenuOpen(false);
+    setIsMenuOpen(false);
   };
 
   const breadcrumbState = breadcrumb ?? {
@@ -138,77 +164,77 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
     visitedSections: [],
   };
 
-  const crumbSegments: CrumbSegment[] = (() => {
+  const crumbSegments: CrumbSegment[] = useMemo(() => {
     const segments: CrumbSegment[] = [
       {
         id: 'home',
         label: '/home',
         title: 'Scroll to top',
         onClick: () => smoothScrollTo('#top'),
-        isActive: breadcrumbState.activeIndex <= 0,
+        isActive: (breadcrumbState.activeIndex ?? 0) <= 0,
         isVisited: true,
         interactive: true,
       },
     ];
 
-    if (breadcrumbState.sections.length > 0) {
-      const visited = breadcrumbState.visitedSections;
-      const hasPrevious = visited.length > 1;
-      const previous = hasPrevious ? visited[visited.length - 2] : null;
-      const current =
-        breadcrumbState.activeSection ??
-        (visited.length > 0 ? visited[visited.length - 1] : null) ??
-        breadcrumbState.sections[Math.max(0, Math.min(breadcrumbState.activeIndex, breadcrumbState.sections.length - 1))];
+    if (breadcrumbState.sections.length === 0) return segments;
 
-      if (previous && previous.id !== 'home') {
-        segments.push({
-          id: `prev-${previous.id}`,
-          label: previous.crumb ?? `/${previous.label.toLowerCase().replace(/\s+/g, '-')}`,
-          title: `Return to ${previous.label}`,
-          onClick: () => smoothScrollTo(`#${previous.id}`),
-          isVisited: true,
-          interactive: true,
-        });
-      }
+    const visited = breadcrumbState.visitedSections;
+    const previous = visited.length > 1 ? visited[visited.length - 2] : null;
+    const current =
+      breadcrumbState.activeSection ??
+      (visited.length > 0 ? visited[visited.length - 1] : null) ??
+      breadcrumbState.sections[Math.max(0, Math.min(breadcrumbState.activeIndex, breadcrumbState.sections.length - 1))];
 
-      if (current) {
-        const normalizedLabel = current.crumb ?? `/${current.label.toLowerCase().replace(/\s+/g, '-')}`;
+    if (previous && previous.id !== 'home') {
+      segments.push({
+        id: `prev-${previous.id}`,
+        label: previous.crumb ?? `/${previous.label.toLowerCase().replace(/\s+/g, '-')}`,
+        title: `Return to ${previous.label}`,
+        onClick: () => smoothScrollTo(`#${previous.id}`),
+        isVisited: true,
+        interactive: true,
+      });
+    }
+
+    if (current) {
+      const normalizedLabel = current.crumb ?? `/${current.label.toLowerCase().replace(/\s+/g, '-')}`;
+      const currentVisited = breadcrumbState.visitedIds.includes(current.id);
+      segments.push({
+        id: current.id,
+        label: normalizedLabel,
+        title: current.label,
+        onClick: () => smoothScrollTo(`#${current.id}`),
+        isActive: true,
+        isVisited: currentVisited,
+        interactive: true,
+      });
+
+      const inferredIndex =
+        breadcrumbState.activeIndex >= 0
+          ? breadcrumbState.activeIndex
+          : breadcrumbState.sections.findIndex((section) => section.id === current.id);
+      const total = breadcrumbState.sections.length;
+      if (inferredIndex >= 0 && total > 0) {
         segments.push({
-          id: current.id,
-          label: normalizedLabel,
-          title: current.label,
-          onClick: () => smoothScrollTo(`#${current.id}`),
+          id: `${current.id}-step`,
+          label: `/${String(inferredIndex + 1).padStart(3, '0')}`,
+          title: `Section ${inferredIndex + 1} of ${total}`,
           isActive: true,
-          isVisited: breadcrumbState.visitedIds.includes(current.id),
-          interactive: true,
+          isVisited: currentVisited,
+          interactive: false,
+          kind: 'progress',
         });
-
-        const inferredIndex =
-          breadcrumbState.activeIndex >= 0
-            ? breadcrumbState.activeIndex
-            : breadcrumbState.sections.findIndex((section) => section.id === current.id);
-        const totalSections = breadcrumbState.sections.length;
-        if (inferredIndex >= 0 && totalSections > 0) {
-          const progressLabel = `/${String(inferredIndex + 1).padStart(3, '0')}`;
-          segments.push({
-            id: `${current.id}-step`,
-            label: progressLabel,
-            title: `Section ${inferredIndex + 1} of ${totalSections}`,
-            isActive: true,
-            isVisited: breadcrumbState.visitedIds.includes(current.id),
-            interactive: false,
-            kind: 'progress',
-          });
-        }
       }
     }
 
     return segments;
-  })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [breadcrumbState.activeIndex, breadcrumbState.activeSection, breadcrumbState.sections, breadcrumbState.visitedIds, breadcrumbState.visitedSections]);
 
   const hasBreadcrumb = crumbSegments.length > 0;
   const visitedCount = breadcrumbState.visitedIds.length;
-  const totalSections = breadcrumbState.sections.length || 3;
+  const totalSections = breadcrumbState.sections.length;
   const progressPercent = totalSections > 0 ? Math.min(100, Math.round((visitedCount / totalSections) * 100)) : 0;
   const mobileBreadcrumbText = breadcrumbState.activeSection
     ? `${breadcrumbState.activeSection.label} · ${visitedCount}/${totalSections}`
@@ -219,22 +245,87 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
     isDark ? 'zen-header--dark' : 'zen-header--light',
     isScrolled ? 'zen-header--scrolled' : 'zen-header--top',
     isVisible ? 'zen-header--visible' : 'zen-header--hidden',
-    isMobileMenuOpen ? 'zen-header--menu-open' : '',
+    isMenuOpen ? 'zen-header--menu-open' : '',
   ].filter(Boolean).join(' ');
+
+  const menuHighlights = useMemo(() => {
+    const total = totalSections;
+    const visited = visitedCount;
+    const completion = total > 0 ? Math.round((visited / total) * 100) : 0;
+
+    const activeLabel = breadcrumbState.activeSection?.label ?? 'Starter log';
+    const nextSection = breadcrumbState.sections.find((section) => !breadcrumbState.visitedIds.includes(section.id));
+    const nextLabel = nextSection?.label ?? 'Explore the archive';
+
+    return {
+      completion,
+      activeLabel,
+      nextLabel,
+    };
+  }, [breadcrumbState.activeSection?.label, breadcrumbState.sections, breadcrumbState.visitedIds, totalSections, visitedCount]);
+
+  // Focus trap & restoration for menu
+  useEffect(() => {
+    const body = document.body;
+    if (isMenuOpen) {
+      body.setAttribute('data-menu-open', 'true');
+      track('menu_open');
+    } else {
+      body.removeAttribute('data-menu-open');
+    }
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const panel = menuPanelRef.current;
+    if (!panel) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusable = Array.from(panel.querySelectorAll<HTMLElement>(focusableSelectors)).filter(el => !el.hasAttribute('disabled'));
+    if (focusable.length) focusable[0].focus();
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || focusable.length < 2) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+      menuTriggerRef.current?.focus();
+      previouslyFocused?.focus?.();
+    };
+  }, [isMenuOpen]);
+
+  const toggleMenu = () => setIsMenuOpen(o => !o);
 
   return (
     <header className={headerClassName}>
-      <div className="zen-header__atmosphere" aria-hidden="true" />
+      <div className="zen-header__atmosphere" aria-hidden="true">
+        <div className="zen-header__atmosphere-layers" aria-hidden="true">
+          <div className="zen-header__gradient-layer" />
+          <div className="zen-header__stars-layer" />
+          <div className="zen-header__glow" />
+        </div>
+      </div>
       <div className="padding-global zen-header__padding">
         <div className="container-xlarge">
           <nav className="zen-header__nav" aria-label="Primary navigation">
             <div className="zen-header__left">
               <button
                 type="button"
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="zen-primary-menu"
+                ref={menuTriggerRef}
+                aria-expanded={isMenuOpen}
+                aria-controls="zen-primary-menu zen-menu-panel"
+                aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
                 className="zen-menu-trigger"
-                onClick={() => setIsMobileMenuOpen((open) => !open)}
+                onClick={toggleMenu}
               >
                 <span className="zen-menu-trigger__bars" aria-hidden="true">
                   <span data-index="0" />
@@ -250,10 +341,13 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
               </button>
 
               <button
-                onClick={onBackToLanding ? onBackToLanding : () => smoothScrollTo('#top')}
-                className="zen-logo-button"
-                aria-label={onBackToLanding ? 'Back to landing' : 'Things Inc home'}
                 type="button"
+                className="zen-logo-button"
+                aria-label="Back to landing"
+                onClick={() => {
+                  onBackToLanding?.();
+                  track('navigate_landing');
+                }}
               >
                 <img
                   src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/66ea3a5528a044beafcf917f_Logo_Icon.svg"
@@ -262,45 +356,30 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
                 />
               </button>
 
-              {hasBreadcrumb && (
-                <div className="zen-crumbs" aria-label="Section breadcrumb" role="navigation">
-                  <ul className="zen-crumbs__list" role="list">
-                    {crumbSegments.map((segment, index) => {
-                      const isFirst = index === 0;
-                      const isLast = index === crumbSegments.length - 1;
-                      const interactive = segment.interactive !== false && Boolean(segment.onClick);
-                      const classes = [
-                        'zen-crumb',
-                        segment.isActive ? 'is-active' : '',
-                        segment.isVisited ? 'is-visited' : '',
-                        isFirst ? 'zen-crumb--first' : 'zen-crumb--mid',
-                        isLast ? 'zen-crumb--last' : '',
-                        segment.kind === 'progress' ? 'zen-crumb--progress' : '',
-                      ]
-                        .filter(Boolean)
-                        .join(' ');
-
-                      return (
-                        <li key={segment.id} className={classes}>
-                          <button
-                            type="button"
-                            onClick={segment.onClick}
-                            disabled={!interactive}
-                            className="zen-crumb__button"
-                            aria-label={segment.title}
-                            aria-current={segment.isActive ? 'page' : undefined}
-                          >
-                            <span>{segment.label}</span>
-                            {segment.isActive && segment.id !== 'home' && segment.kind !== 'progress' ? (
-                              <span className="zen-crumb__active-indicator" aria-hidden="true" />
-                            ) : null}
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
+              {/* Inline primary nav quick links (desktop) */}
+              {breadcrumb && breadcrumb.sections?.length ? (
+                <div className="hidden md:flex items-center gap-2 pl-2" aria-label="Quick section links">
+                  {PRIMARY_MENU_LINKS.map(link => {
+                    const ref = useRef<HTMLAnchorElement | null>(null);
+                    // Intent prefetch only for heavier sections (Log book & Contact -> Footer)
+                    if (link.label === 'Log book') {
+                      usePrefetchOnIntent({ ref, prefetch: () => loadLogBookSectionModule() });
+                    } else if (link.label === 'Contact') {
+                      usePrefetchOnIntent({ ref, prefetch: () => loadFooterSectionModule() });
+                    }
+                    return (
+                      <ActiveSectionLink
+                        key={link.target}
+                        ref={ref}
+                        href={link.target}
+                        label={link.label}
+                        active={typeof window !== 'undefined' && window.location.hash === link.target}
+                        onClick={() => track('navigate_' + link.label.toLowerCase().replace(/\s+/g,'_'))}
+                      />
+                    );
+                  })}
                 </div>
-              )}
+              ) : null}
             </div>
 
             <div className="zen-header__right">
@@ -309,7 +388,7 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
                 <button
                   type="button"
                   className="zen-theme-toggle__control"
-                  onClick={toggleTheme}
+                  onClick={() => { toggleTheme(); track('theme_toggle', { to: isDark ? 'day' : 'night' }); }}
                   aria-label={`Switch to ${isDark ? 'day' : 'night'} theme`}
                   aria-pressed={isDark}
                 >
@@ -326,6 +405,11 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
                         />
                       )}
                     </svg>
+                  </span>
+                  {/* Scene layers for enhanced theme toggle visuals */}
+                  <span className="zen-theme-toggle__scene" aria-hidden="true">
+                    <span className="zen-theme-toggle__scene-day" />
+                    <span className="zen-theme-toggle__scene-night" />
                   </span>
                 </button>
                 <span aria-hidden="true">Day</span>
@@ -407,45 +491,135 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
       </div>
 
       <div
-        className={`zen-header__overlay ${isMobileMenuOpen ? 'is-visible' : ''}`}
+        className={`zen-header__overlay ${isMenuOpen ? 'is-visible' : ''}`}
         role="presentation"
-        onClick={() => setIsMobileMenuOpen(false)}
-        aria-hidden={!isMobileMenuOpen}
+        onClick={() => setIsMenuOpen(false)}
+        aria-hidden={!isMenuOpen}
       />
+
+      <div
+        id="zen-menu-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!isMenuOpen}
+        aria-label="Site navigation"
+        className={`zen-menu-panel ${isMenuOpen ? 'is-visible' : ''}`}
+        ref={menuPanelRef}
+      >
+        <div className="zen-menu-panel__inner">
+          <div className="zen-menu-panel__header">
+            <div className="zen-menu-panel__title">Things navigator</div>
+            <button type="button" className="zen-menu-panel__close" onClick={() => setIsMenuOpen(false)}>
+              Close
+            </button>
+          </div>
+          <div className="zen-menu-panel__grid">
+            <div className="zen-menu-panel__column">
+              {MENU_LINK_GROUPS.map((group) => (
+                <div key={group.heading} className="zen-menu-panel__group">
+                  <p className="zen-menu-panel__eyebrow">{group.heading}</p>
+                  <ul role="list" className="zen-menu-panel__list">
+                    {group.links.map((link) => (
+                      <li key={link.label}>
+                        <button
+                          type="button"
+                          className="zen-menu-panel__link"
+                          onClick={() => smoothScrollTo(link.target)}
+                        >
+                          <span className="zen-menu-panel__link-label">{link.label}</span>
+                          <span className="zen-menu-panel__link-description">{link.description}</span>
+                          <span className="zen-menu-panel__link-arrow" aria-hidden="true">
+                            <svg viewBox="0 0 17 12" fill="none">
+                              <path
+                                d="M13.2404 4.92144L10.1346 1.84756C9.91667 1.63185 9.81223 1.38019 9.82132 1.09257C9.8304 0.804959 9.93483 0.553297 10.1346 0.337586C10.3526 0.121875 10.6114 0.00952527 10.9111 0.00053734C11.2107 -0.00845059 11.4696 0.0949107 11.6875 0.310622L16.6731 5.24501C16.891 5.46072 17 5.71238 17 6C17 6.28761 16.891 6.53928 16.6731 6.75499L11.6875 11.6894C11.4696 11.9051 11.2107 12.0084 10.9111 11.9995C10.6114 11.9905 10.3526 11.8781 10.1346 11.6624C9.93483 11.4467 9.8304 11.195 9.82131 10.9074C9.81223 10.6198 9.91667 10.3681 10.1346 10.1524L13.2404 7.07855L1.08975 7.07855C0.780985 7.07855 0.522171 6.97519 0.313303 6.76847C0.104436 6.56174 0 6.30559 0 6C0 5.69441 0.104436 5.43825 0.313304 5.23153C0.522171 5.0248 0.780985 4.92144 1.08975 4.92144L13.2404 4.92144Z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="zen-menu-panel__column zen-menu-panel__column--accent">
+              <div className="zen-menu-panel__card">
+                <p className="zen-menu-panel__card-eyebrow">Current mission</p>
+                <h4 className="zen-menu-panel__card-title">{menuHighlights.activeLabel}</h4>
+                <p className="zen-menu-panel__card-description">
+                  {menuHighlights.completion >= 100
+                    ? 'You have explored the full scavenger hunt. Peek the archive for hidden rewards.'
+                    : `Next up: ${menuHighlights.nextLabel}. Keep collecting the sparks and we’ll reveal an extra.`}
+                </p>
+                <div className="zen-menu-panel__progress" role="img" aria-label={`Progress ${menuHighlights.completion}%`}>
+                  <div className="zen-menu-panel__progress-bar">
+                    <span style={{ width: `${menuHighlights.completion}%` }} />
+                  </div>
+                  <span className="zen-menu-panel__progress-value">{menuHighlights.completion}% complete</span>
+                </div>
+                <button type="button" className="zen-menu-panel__cta" onClick={() => { smoothScrollTo('#collection'); track('resume_hunt'); }}>
+                  Resume hunt
+                </button>
+              </div>
+              <div className="zen-menu-panel__note">
+                <p className="zen-menu-panel__note-eyebrow">Quick actions</p>
+                <div className="zen-menu-panel__note-actions">
+                  <button type="button" className="zen-chip" onClick={() => { toggleTheme(); track('theme_toggle', { fromMenu: true, to: isDark ? 'day' : 'night' }); }}>
+                    Switch to {isDark ? 'day' : 'night'}
+                  </button>
+                  {showPwa && canInstall && !isStandalone && !installed ? (
+                    <button type="button" className="zen-chip" onClick={() => { void promptInstall(); }}>
+                      Install app
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <aside
         id="zen-primary-menu"
-        className={`zen-mobile-menu ${isMobileMenuOpen ? 'is-visible' : ''}`}
-        aria-hidden={!isMobileMenuOpen}
+        className={`zen-mobile-menu ${isMenuOpen ? 'is-visible' : ''}`}
+        aria-hidden={!isMenuOpen}
       >
         <div className="zen-mobile-menu__inner">
           <div className="zen-mobile-menu__header">
             <span className="zen-mobile-menu__eyebrow">Navigation</span>
-            <button type="button" onClick={() => setIsMobileMenuOpen(false)} className="zen-mobile-menu__close">
+            <button type="button" onClick={() => { setIsMenuOpen(false); track('menu_close'); }} className="zen-mobile-menu__close">
               Close
             </button>
           </div>
-          <ul className="zen-mobile-menu__links" role="list">
-            {MENU_LINKS.map((link) => (
-              <li key={link.label}>
-                <button
-                  type="button"
-                  onClick={() => smoothScrollTo(link.target)}
-                  className="zen-mobile-menu__link"
-                >
-                  <span>{link.label}</span>
-                  <span className="zen-mobile-menu__description">{link.description}</span>
-                </button>
-              </li>
+          <div className="zen-mobile-menu__stack">
+            {MENU_LINK_GROUPS.map((group) => (
+              <div key={group.heading} className="zen-mobile-menu__group">
+                <p className="zen-mobile-menu__eyebrow">{group.heading}</p>
+                <ul className="zen-mobile-menu__links" role="list">
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      <button
+                        type="button"
+                        onClick={() => smoothScrollTo(link.target)}
+                        className="zen-mobile-menu__link"
+                      >
+                        <span>{link.label}</span>
+                        <span className="zen-mobile-menu__description">{link.description}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
 
           <div className="zen-mobile-menu__footer">
             <div className="zen-mobile-menu__theme">
               <span>Theme</span>
               <button
                 type="button"
-                onClick={toggleTheme}
+                onClick={() => { toggleTheme(); track('theme_toggle', { fromMobile: true, to: isDark ? 'day' : 'night' }); }}
                 className="zen-chip"
               >
                 Switch to {isDark ? 'day' : 'night'}
@@ -454,7 +628,7 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
             {showPwa && (
               <div className="zen-mobile-menu__actions">
                 {canInstall && !isStandalone && !installed && (
-                  <button type="button" className="zen-chip" onClick={() => { void promptInstall(); }}>
+                  <button type="button" className="zen-chip" onClick={() => { void promptInstall(); track('pwa_update_trigger'); }}>
                     Install app
                   </button>
                 )}
@@ -462,6 +636,14 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
                   <span className="zen-chip zen-chip--muted" aria-label="App installed">
                     Installed
                   </span>
+                )}
+                {sw.offline && (
+                  <span className="zen-chip zen-chip--muted" aria-label="Offline mode active">Offline</span>
+                )}
+                {sw.waiting && (
+                  <button type="button" className="zen-chip" onClick={() => { sw.update(); track('pwa_refresh'); }}>
+                    Update ready
+                  </button>
                 )}
                 {canCheckUpdates && (
                   <button type="button" className="zen-chip" onClick={() => { void checkForUpdates(); }}>

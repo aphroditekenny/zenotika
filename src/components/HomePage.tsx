@@ -479,8 +479,14 @@ const HERO_STATS = [
 ];
 
 const HeroSection = memo(function HeroSection({ onBackToLanding }: { onBackToLanding: () => void }) {
+  const { reducedMotion } = useAccessibility();
+
   return (
-    <section id="hero" className="zen-hero" aria-labelledby="hero-heading">
+    <section
+      id="hero"
+      className={`zen-hero ${reducedMotion ? "is-reduced-motion" : ""}`}
+      aria-labelledby="hero-heading"
+    >
       <div className="padding-global stretch">
         <div className="container-xlarge">
           <div className="zen-hero__grid">
@@ -547,16 +553,22 @@ const HeroSection = memo(function HeroSection({ onBackToLanding }: { onBackToLan
 });
 
 const BootSequenceSection = memo(function BootSequenceSection({ reducedMotion }: { reducedMotion: boolean }) {
-  const [lines, setLines] = useState<string[]>(() => (reducedMotion ? BOOT_SEQUENCE_LINES : BOOT_SEQUENCE_LINES.map(() => "")));
+  const [forceReveal, setForceReveal] = useState(false);
+  const [lines, setLines] = useState<string[]>(() =>
+    reducedMotion ? BOOT_SEQUENCE_LINES : BOOT_SEQUENCE_LINES.map(() => "")
+  );
   const [activeLine, setActiveLine] = useState(0);
+  const [bootStatusMessage, setBootStatusMessage] = useState<string | null>(null);
   const timers = useRef<number[]>([]);
   const viewportRef = useRef<HTMLDivElement>(null);
+
+  const instantMode = reducedMotion || forceReveal;
 
   useEffect(() => {
     timers.current.forEach((timerId) => clearTimeout(timerId));
     timers.current = [];
 
-    if (reducedMotion || typeof window === "undefined") {
+    if (instantMode || typeof window === "undefined") {
       setLines(BOOT_SEQUENCE_LINES);
       setActiveLine(BOOT_SEQUENCE_LINES.length - 1);
       return;
@@ -609,12 +621,46 @@ const BootSequenceSection = memo(function BootSequenceSection({ reducedMotion }:
       timers.current.forEach((timerId) => clearTimeout(timerId));
       timers.current = [];
     };
-  }, [reducedMotion]);
+  }, [instantMode]);
+
+  useEffect(() => {
+    if (!bootStatusMessage) {
+      return;
+    }
+
+    const timeout = setTimeout(() => setBootStatusMessage(null), 3200);
+    return () => clearTimeout(timeout);
+  }, [bootStatusMessage]);
 
   const collectedLines = lines.reduce((count, line) => (line.length > 0 ? count + 1 : count), 0);
-  const visibleCount = reducedMotion ? BOOT_SEQUENCE_LINES.length : Math.min(BOOT_SEQUENCE_LINES.length, Math.max(collectedLines + 1, 1));
+  const visibleCount = instantMode
+    ? BOOT_SEQUENCE_LINES.length
+    : Math.min(BOOT_SEQUENCE_LINES.length, Math.max(collectedLines + 1, 1));
   const renderedLines = lines.slice(0, visibleCount);
   const progress = Math.round((collectedLines / BOOT_SEQUENCE_LINES.length) * 100);
+
+  const skipButtonDisabled = reducedMotion;
+  const skipButtonPressed = !skipButtonDisabled && forceReveal;
+  const skipButtonLabel = skipButtonDisabled
+    ? "Animation disabled"
+    : forceReveal
+      ? "Replay animation"
+      : "Skip animation";
+  const skipButtonTitle = skipButtonDisabled
+    ? "Reduced motion is enabled; animation is shown instantly."
+    : skipButtonLabel;
+
+  const handleSkipToggle = () => {
+    if (skipButtonDisabled) {
+      return;
+    }
+
+    setForceReveal((prev) => {
+      const next = !prev;
+      setBootStatusMessage(next ? "Boot log displayed instantly." : "Boot log animation restarted.");
+      return next;
+    });
+  };
 
   return (
     <section id="boot-sequence" className="zen-typewriter" aria-labelledby="boot-heading">
@@ -626,10 +672,25 @@ const BootSequenceSection = memo(function BootSequenceSection({ reducedMotion }:
                 <p className="zen-typewriter__eyebrow">Boot log</p>
                 <h2 id="boot-heading">System diagnostics</h2>
               </div>
-              <div className="zen-typewriter__meta" aria-live="polite">
-                <span className="zen-typewriter__progress-value">{progress}%</span>
-                <span className="zen-typewriter__progress-label">Complete</span>
+              <div className="zen-typewriter__controls">
+                <div className="zen-typewriter__meta" aria-live="polite">
+                  <span className="zen-typewriter__progress-value">{progress}%</span>
+                  <span className="zen-typewriter__progress-label">Complete</span>
+                </div>
+                <button
+                  type="button"
+                  className="zen-typewriter__skip"
+                  onClick={handleSkipToggle}
+                  disabled={skipButtonDisabled}
+                  aria-pressed={skipButtonPressed}
+                  title={skipButtonTitle}
+                >
+                  {skipButtonLabel}
+                </button>
               </div>
+            </div>
+            <div className="sr-only" role="status" aria-live="polite">
+              {bootStatusMessage}
             </div>
             <div
               className="zen-typewriter__viewport"
@@ -643,8 +704,10 @@ const BootSequenceSection = memo(function BootSequenceSection({ reducedMotion }:
                 return (
                   <div key={BOOT_SEQUENCE_LINES[index]} className={`zen-typewriter__line ${isActive ? "is-active" : ""}`}>
                     <span className="zen-typewriter__prompt">&gt;</span>
-                    <span className="zen-typewriter__text">{line || (reducedMotion ? BOOT_SEQUENCE_LINES[index] : "")}</span>
-                    {isActive && !reducedMotion && index < BOOT_SEQUENCE_LINES.length && (
+                    <span className="zen-typewriter__text">
+                      {line || (instantMode ? BOOT_SEQUENCE_LINES[index] : "")}
+                    </span>
+                    {isActive && !instantMode && index < BOOT_SEQUENCE_LINES.length && (
                       <span className="zen-typewriter__cursor" aria-hidden="true" />
                     )}
                   </div>
@@ -659,10 +722,82 @@ const BootSequenceSection = memo(function BootSequenceSection({ reducedMotion }:
 });
 
 const ScavengerHuntSection = memo(function ScavengerHuntSection({ reducedMotion }: { reducedMotion: boolean }) {
-  const [expanded, setExpanded] = useState(false);
-  const collected = HUNT_ITEMS.filter((item) => item.collected).length;
-  const progressPercent = Math.round((collected / HUNT_ITEMS.length) * 100);
+  const [expanded, setExpanded] = useState(reducedMotion);
+  const [collectedSet, setCollectedSet] = useState<Set<string>>(() => {
+    if (typeof window === "undefined") {
+      return new Set(DEFAULT_COLLECTED_IDS);
+    }
+
+    try {
+      const stored = window.localStorage.getItem(HUNT_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          const ids = parsed.filter((id: unknown): id is string => typeof id === "string");
+          return new Set(ids);
+        }
+      }
+    } catch (error) {
+      console.warn("[scavenger-hunt] failed to read progress", error);
+    }
+
+    return new Set(DEFAULT_COLLECTED_IDS);
+  });
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const panelId = "zen-hunt-panel";
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setExpanded(true);
+    }
+  }, [reducedMotion]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(HUNT_STORAGE_KEY, JSON.stringify(Array.from(collectedSet)));
+    } catch (error) {
+      console.warn("[scavenger-hunt] failed to persist progress", error);
+    }
+  }, [collectedSet]);
+
+  useEffect(() => {
+    if (!statusMessage) {
+      return;
+    }
+
+    const timeout = setTimeout(() => setStatusMessage(null), 3200);
+    return () => clearTimeout(timeout);
+  }, [statusMessage]);
+
+  const totalItems = HUNT_ITEMS.length;
+  const collectedCount = collectedSet.size;
+  const progressPercent = Math.round((collectedCount / totalItems) * 100);
+  const panelVisible = expanded;
+
+  const handleToggleItem = (item: HuntItem) => {
+    setExpanded(true);
+    setCollectedSet((prev) => {
+      const next = new Set(prev);
+      const wasCollected = next.has(item.id);
+
+      if (wasCollected) {
+        next.delete(item.id);
+      } else {
+        next.add(item.id);
+      }
+
+      const updatedCount = next.size;
+      setStatusMessage(
+        `${item.name} ${wasCollected ? "marked as hidden" : "marked as collected"}. ${String(updatedCount).padStart(2, "0")} of ${String(totalItems).padStart(2, "0")} found.`
+      );
+
+      return next;
+    });
+  };
 
   return (
     <section id="collection" className="zen-hunt" aria-labelledby="hunt-heading">
@@ -679,16 +814,17 @@ const ScavengerHuntSection = memo(function ScavengerHuntSection({ reducedMotion 
               </div>
               <div className="zen-hunt__meta">
                 <div className="zen-hunt__count" aria-live="polite">
-                  <span className="zen-hunt__count-value">{String(collected).padStart(2, "0")}</span>
+                  <span className="zen-hunt__count-value">{String(collectedCount).padStart(2, "0")}</span>
                   <span className="zen-hunt__count-divider">/</span>
-                  <span className="zen-hunt__count-total">{String(HUNT_ITEMS.length).padStart(2, "0")}</span>
+                  <span className="zen-hunt__count-total">{String(totalItems).padStart(2, "0")}</span>
                 </div>
                 <div
                   className="zen-hunt__progress"
                   role="progressbar"
-                  aria-valuenow={collected}
+                  aria-valuenow={collectedCount}
                   aria-valuemin={0}
-                  aria-valuemax={HUNT_ITEMS.length}
+                  aria-valuemax={totalItems}
+                  aria-valuetext={`${collectedCount} of ${totalItems} items collected`}
                 >
                   <span style={{ width: `${progressPercent}%` }} aria-hidden="true" />
                 </div>
@@ -704,25 +840,47 @@ const ScavengerHuntSection = memo(function ScavengerHuntSection({ reducedMotion 
               </div>
             </div>
 
-            <div id={panelId} className={`zen-hunt__panel ${expanded || reducedMotion ? "is-visible" : ""}`} hidden={!expanded && !reducedMotion}>
+            <div id={panelId} className={`zen-hunt__panel ${panelVisible ? "is-visible" : ""}`} hidden={!panelVisible}>
               <ul className="zen-hunt__grid" role="list">
-                {HUNT_ITEMS.map((item) => (
-                  <li
-                    key={item.id}
-                    className={`zen-hunt__item ${item.collected ? "is-collected" : "is-hidden"}`}
-                    aria-label={`${item.name} ${item.collected ? "collected" : "hidden"}`}
-                  >
-                    <div className="zen-hunt__item-icon" aria-hidden="true">
-                      <img src={item.icon} alt="" loading="lazy" />
-                    </div>
-                    <div className="zen-hunt__item-meta">
-                      <p className="zen-hunt__item-name">{item.name}</p>
-                      <p className="zen-hunt__item-description">{item.description}</p>
-                    </div>
-                    <span className="zen-hunt__item-status">{item.collected ? "Collected" : "Hidden"}</span>
-                  </li>
-                ))}
+                {HUNT_ITEMS.map((item) => {
+                  const isCollected = collectedSet.has(item.id);
+                  const toggleLabel = isCollected ? "Reset to hidden" : "Mark as found";
+                  const toggleAriaLabel = `${toggleLabel} — ${item.name}`;
+
+                  return (
+                    <li
+                      key={item.id}
+                      className={`zen-hunt__item ${isCollected ? "is-collected" : "is-hidden"}`}
+                      aria-label={`${item.name} ${isCollected ? "collected" : "hidden"}`}
+                    >
+                      <div className="zen-hunt__item-icon" aria-hidden="true">
+                        <img src={item.icon} alt="" loading="lazy" />
+                      </div>
+                      <div className="zen-hunt__item-meta">
+                        <p className="zen-hunt__item-name">{item.name}</p>
+                        <p className="zen-hunt__item-description">{item.description}</p>
+                      </div>
+                      <div className="zen-hunt__item-actions">
+                        <span className="zen-hunt__item-status">{isCollected ? "Collected" : "Hidden"}</span>
+                        <button
+                          type="button"
+                          className={`zen-hunt__item-toggle ${isCollected ? "is-collected" : ""}`}
+                          onClick={() => handleToggleItem(item)}
+                          aria-pressed={isCollected}
+                          aria-label={toggleAriaLabel}
+                          title={toggleAriaLabel}
+                        >
+                          {toggleLabel}
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
+            </div>
+
+            <div className="sr-only" role="status" aria-live="polite">
+              {statusMessage}
             </div>
           </div>
         </div>

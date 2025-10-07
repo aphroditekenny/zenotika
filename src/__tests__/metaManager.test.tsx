@@ -23,7 +23,7 @@ describe('MetaManager runtime injection', () => {
     expect(og).toBeTruthy();
     const snapshot = {
       description: desc?.getAttribute('content'),
-      keywords: kw?.getAttribute('content')?.split(',').slice(0,3),
+      keywords: kw?.getAttribute('content')?.split(',').slice(0,3).map(k => k.trim()),
       ogTitle: og?.getAttribute('content'),
       locale: (window as any).__ZENOTIKA_META?.locale
     };
@@ -33,8 +33,8 @@ describe('MetaManager runtime injection', () => {
         "description": "Zenotika — Mindful balance, modern energy, intelligent function. Menyatukan kesederhanaan yang penuh kesadaran, energi inovatif, dan fungsi cerdas menjadi pengalaman web yang cepat, inklusif, dan terukur.",
         "keywords": [
           "zenotika",
-          " react 19",
-          " performance",
+          "performance",
+          "react 19",
         ],
         "locale": "en",
         "ogTitle": "Zenotika",

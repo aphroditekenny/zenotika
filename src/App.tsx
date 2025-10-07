@@ -9,6 +9,8 @@ import {
   type ComponentType,
 } from "react";
 import "./styles/globals.css";
+import "./styles/header.css"; // modularized header styles
+import "./styles/footer.css"; // modularized footer styles
 import { ThemeProvider } from "./components/ThemeContext";
 import { defaultMeta, buildMeta } from "./content/meta";
 import { metaID } from "./content/meta.id";
@@ -21,6 +23,7 @@ import AccessibilityProvider from "./components/AccessibilityProvider";
 import { triggerUpdateToast } from "./pwaDebug";
 import { loadSonner } from "./utils/loadSonner";
 import { usePerformanceMode } from "./hooks/usePerformanceMode";
+import StructuredData from "./components/StructuredData";
 
 const logDevWarning = (message: string, error: unknown) => {
   if (import.meta.env.DEV) {
@@ -200,6 +203,7 @@ export default function App() {
     <ThemeProvider>
       <AccessibilityProvider>
         <MetaManager />
+  <StructuredData />
         <LanguageSwitcher />
         {/* Skip to content link for keyboard users */}
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded-md">Skip to content</a>

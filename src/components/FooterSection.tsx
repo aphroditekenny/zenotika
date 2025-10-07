@@ -1,4 +1,4 @@
-import { memo, useEffect, useState, type CSSProperties, type FormEvent } from 'react';
+import { memo, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { useTheme } from './ThemeContext';
 import { useAccessibility } from './AccessibilityProvider';
 
@@ -194,11 +194,16 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type FormStatus = 'idle' | 'success' | 'error';
 
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
 function FooterSection() {
   const { isDark } = useTheme();
   const { reducedMotion } = useAccessibility();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<FormStatus>('idle');
+  const [parallaxOffset, setParallaxOffset] = useState(0);
+  const innerRef = useRef<HTMLDivElement | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -221,6 +226,52 @@ function FooterSection() {
     setStatus('success');
     setEmail('');
   };
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setParallaxOffset(0);
+      return undefined;
+    }
+
+    const updateParallax = () => {
+      rafRef.current = null;
+      const node = innerRef.current;
+      if (!node) {
+        return;
+      }
+
+      const rect = node.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || 0;
+      if (viewportHeight === 0) {
+        return;
+      }
+
+      const middle = rect.top + rect.height / 2;
+      const distanceFromCenter = middle - viewportHeight / 2;
+      const normalized = clamp(distanceFromCenter / viewportHeight, -1, 1);
+      setParallaxOffset(normalized * -36);
+    };
+
+    const queueUpdate = () => {
+      if (rafRef.current !== null) {
+        return;
+      }
+      rafRef.current = window.requestAnimationFrame(updateParallax);
+    };
+
+    queueUpdate();
+    window.addEventListener('scroll', queueUpdate, { passive: true });
+    window.addEventListener('resize', queueUpdate);
+
+    return () => {
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      window.removeEventListener('scroll', queueUpdate);
+      window.removeEventListener('resize', queueUpdate);
+    };
+  }, [reducedMotion]);
 
   const inputClasses = [
     'w-full rounded-full border px-4 py-3 text-sm md:text-base transition-all duration-300 focus-visible:outline-none focus-visible:ring-2',
@@ -265,13 +316,22 @@ function FooterSection() {
     .filter(Boolean)
     .join(' ');
 
+  const parallaxStyle = !reducedMotion
+    ? ({ transform: `translate3d(0, ${parallaxOffset}px, 0)` } as CSSProperties)
+    : undefined;
+
   return (
     <footer className="zen-footer footer-wrap lazy-section relative z-20 isolate overflow-hidden py-16 md:py-20 lg:py-24">
+      <div
+        className={`zen-footer__grid ${isDark ? 'zen-footer__grid--night' : 'zen-footer__grid--day'}`}
+        aria-hidden="true"
+      />
       <div className="zen-footer__gradient" aria-hidden="true" />
       <div className="zen-footer__mist" aria-hidden="true" />
       <div className="zen-footer__stars" aria-hidden="true" />
 
-      <div className="padding-global">
+      <div ref={innerRef} className="zen-footer__inner" style={parallaxStyle}>
+        <div className="padding-global">
         <div className="container-xlarge">
           <h2 id="footer-heading" className="sr-only">
             Stay looped in with Things
@@ -470,6 +530,7 @@ function FooterSection() {
             </div>
           </div>
         </div>
+      </div>
       </div>
 
       {FLOATING_CLOUDS.map((cloud) => {
