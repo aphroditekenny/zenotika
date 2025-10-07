@@ -1,9 +1,179 @@
-/* About Section (extracted) */
-.zen-about-section { background: var(--zen-radial-duo-about-night); position: relative; }
-.light .zen-about-section, .day-mode .zen-about-section { background: var(--zen-radial-duo-about-day); }
-.philosophy-pillar { border-left:1px solid #ffffff1a; padding-left:1rem; transition:border-color .3s; position:relative; }
-.philosophy-pillar:hover { border-left-color: var(--brand-pink-30); }
-.zen-philosophy-header .heading-style-h2 { text-shadow: var(--zen-text-glow-accent); }
-.zen-philosophy-footer .philosophy-essence { transition: all .3s; }
-.zen-philosophy-footer:hover .philosophy-essence { background:#ffffff14; border-color:#ffffff26; transform:translateY(-1px); }
-.light .zen-philosophy-footer:hover .philosophy-essence, .day-mode .zen-philosophy-footer:hover .philosophy-essence { background:#ffffff26; border-color:#ffffff40; }
+/* About Section (extracted from legacy globals, token aligned) */
+.zen-about-section {
+	position: relative;
+	background: var(--zen-radial-duo-about-night);
+}
+
+.light .zen-about-section,
+.day-mode .zen-about-section {
+	background: var(--zen-radial-duo-about-day);
+}
+
+.zen-story-content {
+	contain: layout;
+}
+
+.section-badge {
+	backdrop-filter: blur(10px);
+	border: 1px solid color-mix(in oklab, var(--color-brand-pink) 20%, transparent);
+}
+
+.philosophy-pillar {
+	position: relative;
+	border-left: 1px solid var(--zen-border-night);
+	padding-left: var(--space-4);
+	transition: border-color var(--dur-medium) var(--ease-standard);
+}
+
+.philosophy-pillar:hover {
+	border-left-color: color-mix(in oklab, var(--color-brand-pink-hot) 40%, transparent);
+}
+
+.zen-philosophy-header .heading-style-h2 {
+	text-shadow: var(--zen-text-glow-accent);
+}
+
+.zen-philosophy-footer .philosophy-essence {
+	transition: transform var(--dur-medium) var(--ease-standard),
+		background-color var(--dur-medium) var(--ease-standard),
+		border-color var(--dur-medium) var(--ease-standard);
+}
+
+.zen-philosophy-footer:hover .philosophy-essence {
+	background: color-mix(in oklab, var(--color-foreground) 9%, transparent);
+	border-color: color-mix(in oklab, var(--color-foreground) 15%, transparent);
+	transform: translateY(-1px);
+}
+
+.light .zen-philosophy-footer:hover .philosophy-essence,
+.day-mode .zen-philosophy-footer:hover .philosophy-essence {
+	background: color-mix(in oklab, var(--color-foreground-day-alt) 15%, transparent);
+	border-color: color-mix(in oklab, var(--color-foreground-day-alt) 25%, transparent);
+}
+
+.pillar-icon {
+	animation: zenGlow 3s ease-in-out infinite;
+}
+
+@keyframes zenGlow {
+	0%,
+	100% {
+		opacity: 0.6;
+		transform: scale(1);
+	}
+
+	50% {
+		opacity: 1;
+		transform: scale(1.2);
+	}
+}
+
+.zen-symbol {
+	position: relative;
+	overflow: hidden;
+	backdrop-filter: blur(20px) saturate(180%);
+	background: color-mix(in oklab, var(--color-foreground) 8%, transparent);
+	border: 1px solid color-mix(in oklab, var(--color-foreground) 8%, transparent);
+	box-shadow: var(--zen-shadow-card-soft);
+}
+
+.zen-symbol::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		color-mix(in oklab, var(--color-brand-pink-hot) 10%, transparent),
+		transparent
+	);
+	animation: zenShimmer 3s ease-in-out infinite;
+}
+
+@keyframes zenShimmer {
+	0% {
+		left: -100%;
+	}
+
+	100% {
+		left: 100%;
+	}
+}
+
+.zen-triangle-arrangement {
+	position: relative;
+}
+
+.zen-dot,
+.nova-dot,
+.informatika-dot {
+	box-shadow: var(--zen-shadow-glow-current);
+}
+
+.zen-connections {
+	opacity: 0.6;
+}
+
+.zen-floating-elements {
+	animation: zenFloat 8s ease-in-out infinite;
+}
+
+@keyframes zenFloat {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0);
+	}
+
+	33% {
+		transform: translateY(-4px) rotate(1deg);
+	}
+
+	66% {
+		transform: translateY(4px) rotate(-1deg);
+	}
+}
+
+.zen-mission-statement blockquote {
+	position: relative;
+	padding: var(--space-6);
+	border-radius: var(--radius-xl);
+	backdrop-filter: blur(10px);
+	background: color-mix(in oklab, var(--color-foreground) 4%, transparent);
+	border: 1px solid color-mix(in oklab, var(--color-foreground) 8%, transparent);
+}
+
+.zen-mission-statement blockquote::before {
+	content: "\"";
+	position: absolute;
+	top: calc(-1 * var(--space-2));
+	left: calc(var(--space-4) + var(--space-1));
+	font-family: serif;
+	font-size: clamp(3rem, 6vw, 4rem);
+	color: var(--brand-pink-30);
+}
+
+.light .zen-symbol,
+.day-mode .zen-symbol {
+	color: var(--color-foreground-day-alt);
+	background: color-mix(in oklab, var(--color-background) 18%, transparent);
+	border-color: color-mix(in oklab, var(--color-background) 35%, transparent);
+}
+
+.light .section-badge,
+.day-mode .section-badge {
+	border-color: color-mix(in oklab, var(--color-foreground-day-alt) 25%, transparent);
+}
+
+.light .philosophy-pillar,
+.day-mode .philosophy-pillar {
+	border-left-color: color-mix(in oklab, var(--color-foreground-day-alt) 20%, transparent);
+}
+
+.light .zen-mission-statement blockquote,
+.day-mode .zen-mission-statement blockquote {
+	background: color-mix(in oklab, var(--color-background) 15%, transparent);
+	border-color: color-mix(in oklab, var(--color-background) 30%, transparent);
+}

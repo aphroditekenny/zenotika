@@ -1,0 +1,79 @@
+/* Quote & Philosophy Section styling extracted from globals.css */
+.zen-quote-section {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 20%, var(--pink-hot-05) 0%, transparent 40%),
+    radial-gradient(circle at 20% 80%, var(--brand-violet-06) 0%, transparent 40%);
+}
+
+.zen-visual-elements img {
+  filter: grayscale(0.3) opacity(0.8);
+  transition: filter var(--dur-medium) var(--ease-standard);
+}
+
+.zen-visual-elements img:hover {
+  filter: grayscale(0) opacity(1);
+}
+
+.quote-item-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.quote-image-placeholder {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--zen-gradient-accent-bright-soft);
+  animation: shimmer 1.5s infinite;
+  background-size: 200px 100%;
+}
+
+.quote-image,
+.tv-image,
+.train-image {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.zen-focus {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.zen-focus:focus-visible {
+  outline: 2px solid var(--zen-outline-strong);
+  outline-offset: 4px;
+  border-radius: var(--radius-xl);
+}
+
+.zen-focus:hover {
+  opacity: 0.95;
+  transform: translateY(-2px);
+}
+
+.zen-focus:active {
+  transform: translateY(0) scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.zen-philosophy-header .heading-style-h2 {
+  text-shadow: var(--zen-text-glow-accent);
+}
+
+.zen-philosophy-footer .philosophy-essence {
+  transition: all 0.3s ease;
+}
+
+.zen-philosophy-footer:hover .philosophy-essence {
+  background: color-mix(in oklab, #ffffff 8%, transparent);
+  border-color: color-mix(in oklab, #ffffff 15%, transparent);
+  transform: translateY(-1px);
+}
+
+.light .zen-philosophy-footer:hover .philosophy-essence,
+.day-mode .zen-philosophy-footer:hover .philosophy-essence {
+  background: color-mix(in oklab, #ffffff 15%, transparent);
+  border-color: color-mix(in oklab, #ffffff 25%, transparent);
+}
