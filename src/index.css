@@ -2898,7 +2898,7 @@
   pointer-events: none;
   opacity: .5;
   /* migrated: background sparkle field (legacy) */
-  background-image: radial-gradient(1px 1px at 25px 35px, #fffc, transparent), radial-gradient(.5px .5px at 60px 80px, var(--pink-hot-60, rgba(255, 122, 138, 0.60)), transparent), radial-gradient(1px 1px at 120px 45px, #ffffffb3, transparent), radial-gradient(.5px .5px at 180px 90px, var(--brand-violet-50, rgba(168, 85, 247, 0.50)), transparent), radial-gradient(1px 1px at 220px 25px, #fff9, transparent), radial-gradient(.5px .5px at 280px 110px, var(--blue-brand-40, rgba(59, 130, 246, 0.40)), transparent), radial-gradient(1px 1px at 320px 60px, #fffc, transparent), radial-gradient(.5px .5px at 380px 140px, var(--pink-hot-30), transparent);
+  background-image: radial-gradient(1px 1px at 25px 35px, var(--zen-white-alpha-95), transparent), radial-gradient(.5px .5px at 60px 80px, var(--pink-hot-60, rgba(255, 122, 138, 0.60)), transparent), radial-gradient(1px 1px at 120px 45px, var(--zen-white-alpha-70), transparent), radial-gradient(.5px .5px at 180px 90px, var(--brand-violet-50, rgba(168, 85, 247, 0.50)), transparent), radial-gradient(1px 1px at 220px 25px, var(--zen-white-alpha-95), transparent), radial-gradient(.5px .5px at 280px 110px, var(--blue-brand-40, rgba(59, 130, 246, 0.40)), transparent), radial-gradient(1px 1px at 320px 60px, var(--zen-white-alpha-95), transparent), radial-gradient(.5px .5px at 380px 140px, var(--pink-hot-30), transparent);
   background-repeat: repeat;
   background-size: 400px 180px;
   width: 100%;
@@ -3072,7 +3072,7 @@
 @media (prefers-reduced-motion: no-preference) { @keyframes shimmer { 0% { background-position:-200px 0;} 100% { background-position:calc(200px + 100%) 0;} } }
 
 .animate-pulse {
-  background: linear-gradient(90deg, #ffffff1a 25%, #fff3 50%, #ffffff1a 75%) 0 0 / 200px 100%;
+  background: linear-gradient(90deg, var(--zen-white-alpha-10) 25%, var(--zen-white-alpha-08) 50%, var(--zen-white-alpha-10) 75%) 0 0 / 200px 100%;
   animation: 1.5s infinite shimmer;
 }
 
@@ -3142,7 +3142,7 @@
 
 .project-card:hover {
   background: #ffffff1a;
-  border-color: #fff3;
+  border-color: var(--zen-white-alpha-08);
   transform: translateY(-8px)translateZ(0);
   box-shadow: var(--zen-shadow-elev-2xl);
 }
@@ -3815,7 +3815,7 @@
 }
 
 .skeleton-loader {
-  background: linear-gradient(90deg, var(--zen-white-alpha-10) 25%, #fff3 50%, var(--zen-white-alpha-10) 75%) 0 0 / 200% 100%;
+  background: linear-gradient(90deg, var(--zen-white-alpha-10) 25%, var(--zen-white-alpha-08) 50%, var(--zen-white-alpha-10) 75%) 0 0 / 200% 100%;
   border-radius: 8px;
   animation: 1.5s ease-in-out infinite skeletonShimmer;
 }
@@ -4201,7 +4201,7 @@
 }
 
 .philosophy-separator {
-  color: #fff6;
+  color: var(--zen-white-alpha-60);
   margin: 0 1rem;
   font-weight: 300;
 }
@@ -6851,19 +6851,7 @@ body { background: var(--color-background,var(--zen-white-solid)); color: var(--
   animation: zenPulse 3s ease-in-out infinite;
 }
 
-@keyframes zenPulse {
-
-  0%,
-  100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.8;
-    transform: scale(1.2);
-  }
-}
+/* duplicate zenPulse keyframes removed (guarded version at top) */
 
 .home-page-wrapper {
   min-height: 100vh;
