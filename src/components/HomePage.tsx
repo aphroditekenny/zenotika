@@ -419,58 +419,8 @@ const BOOT_SEQUENCE_LINES = [
   "C:\\> ZENOTIKA.EXE",
 ];
 
-interface HuntItem {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  initiallyCollected?: boolean;
-}
-
-const HUNT_ITEMS: HuntItem[] = [
-  {
-    id: "crab",
-    name: "Crab",
-    description: "Spotted near the footer tidepools.",
-    icon: "/ZENO-05.svg",
-    initiallyCollected: true,
-  },
-  {
-    id: "gem",
-    name: "Gem",
-    description: "Prismatic shard embedded in the header glow.",
-    icon: "/ZENO-08.svg",
-    initiallyCollected: true,
-  },
-  {
-    id: "coin",
-    name: "Coin",
-    description: "Found orbiting the Zen progress capsule.",
-    icon: "/share.svg",
-    initiallyCollected: false,
-  },
-  {
-    id: "book",
-    name: "Book",
-    description: "Hidden within the log book archives.",
-    icon: "/share.png",
-  },
-  {
-    id: "chick",
-    name: "Chick",
-    description: "Peeks out when accessibility tools are enabled.",
-    icon: "/pwa-192x192.png",
-  },
-  {
-    id: "key",
-    name: "Key",
-    description: "Rumoured to unlock the upcoming Rooms release.",
-    icon: "/pwa-512x512-maskable.png",
-  },
-];
-
-const HUNT_STORAGE_KEY = "zenotika-hunt-progress";
-const DEFAULT_COLLECTED_IDS = HUNT_ITEMS.filter((item) => item.initiallyCollected).map((item) => item.id);
+// Hunt data moved to centralized module for unified progress calculations.
+import { HUNT_ITEMS, HUNT_STORAGE_KEY, DEFAULT_COLLECTED_IDS, HUNT_PROGRESS_EVENT, type HuntItem } from '@/data/huntItems';
 
 const HERO_STATS = [
   { label: "Experiments", value: "06", detail: "Active prototypes" },
@@ -758,7 +708,9 @@ const ScavengerHuntSection = memo(function ScavengerHuntSection({ reducedMotion 
     }
 
     try {
-      window.localStorage.setItem(HUNT_STORAGE_KEY, JSON.stringify(Array.from(collectedSet)));
+  window.localStorage.setItem(HUNT_STORAGE_KEY, JSON.stringify(Array.from(collectedSet)));
+  // Dispatch global progress event so header / other listeners update live.
+  window.dispatchEvent(new CustomEvent(HUNT_PROGRESS_EVENT, { detail: { collected: Array.from(collectedSet) } }));
     } catch (error) {
       console.warn("[scavenger-hunt] failed to persist progress", error);
     }
@@ -795,6 +747,13 @@ const ScavengerHuntSection = memo(function ScavengerHuntSection({ reducedMotion 
         `${item.name} ${wasCollected ? "marked as hidden" : "marked as collected"}. ${String(updatedCount).padStart(2, "0")} of ${String(totalItems).padStart(2, "0")} found.`
       );
 
+      // Persist + emit after mutation to reflect new state externally.
+      try {
+        window.localStorage.setItem(HUNT_STORAGE_KEY, JSON.stringify(Array.from(next)));
+        window.dispatchEvent(new CustomEvent(HUNT_PROGRESS_EVENT, { detail: { collected: Array.from(next) } }));
+      } catch {
+        // ignore write errors
+      }
       return next;
     });
   };

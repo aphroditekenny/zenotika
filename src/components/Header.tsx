@@ -8,6 +8,8 @@ import { checkForUpdates } from '@/utils/swUpdates';
 import type { SectionDescriptor } from '@/hooks/useSectionTracker';
 import ActiveSectionLink from './ActiveSectionLink';
 import { loadLogBookSectionModule, loadFooterSectionModule } from './HomePage';
+import { useUnifiedProgress } from '@/hooks/useUnifiedProgress';
+// (No direct use of HUNT_ITEMS here yet, but unified progress hook depends on that module.)
 import usePrefetchOnIntent from '@/hooks/usePrefetchOnIntent';
 
 interface HeaderProps {
@@ -235,7 +237,9 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
   const hasBreadcrumb = crumbSegments.length > 0;
   const visitedCount = breadcrumbState.visitedIds.length;
   const totalSections = breadcrumbState.sections.length;
-  const progressPercent = totalSections > 0 ? Math.min(100, Math.round((visitedCount / totalSections) * 100)) : 0;
+  const unified = useUnifiedProgress({ visitedCount, totalSections });
+  // For backward compatibility, retain original progress bar percent (exploration) but we also show unified.completion in narrative.
+  const progressPercent = unified.explorationPercent;
   const mobileBreadcrumbText = breadcrumbState.activeSection
     ? `${breadcrumbState.activeSection.label} · ${visitedCount}/${totalSections}`
     : 'Home';
@@ -249,20 +253,15 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
   ].filter(Boolean).join(' ');
 
   const menuHighlights = useMemo(() => {
-    const total = totalSections;
-    const visited = visitedCount;
-    const completion = total > 0 ? Math.round((visited / total) * 100) : 0;
-
     const activeLabel = breadcrumbState.activeSection?.label ?? 'Starter log';
     const nextSection = breadcrumbState.sections.find((section) => !breadcrumbState.visitedIds.includes(section.id));
     const nextLabel = nextSection?.label ?? 'Explore the archive';
-
     return {
-      completion,
+      completion: unified.completion,
       activeLabel,
       nextLabel,
     };
-  }, [breadcrumbState.activeSection?.label, breadcrumbState.sections, breadcrumbState.visitedIds, totalSections, visitedCount]);
+  }, [breadcrumbState.activeSection?.label, breadcrumbState.sections, breadcrumbState.visitedIds, unified.completion]);
 
   // Focus trap & restoration for menu
   useEffect(() => {
@@ -427,7 +426,7 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
                       />
                     </svg>
                   </span>
-                  <span className="zen-collection-button__count">
+                  <span className="zen-collection-button__count" title={`Sections ${String(visitedCount).padStart(2,'0')}/${String(totalSections).padStart(2,'0')} · Relics ${String(unified.collectedCount).padStart(2,'0')}/${String(unified.totalCollectibles).padStart(2,'0')}`}> 
                     <span className="zen-count__value">{String(visitedCount).padStart(2, '0')}</span>
                     <span className="zen-count__divider">/</span>
                     <span className="zen-count__total">{String(totalSections).padStart(2, '0')}</span>
@@ -484,8 +483,8 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
 
           <div className="zen-header__status" role="status" aria-live="polite">
             {breadcrumbState.activeSection
-              ? `Active section ${breadcrumbState.activeSection.label}. ${breadcrumbState.visitedSections.length} of ${breadcrumbState.sections.length} sections visited.`
-              : 'Viewing home section'}
+              ? `Active section ${breadcrumbState.activeSection.label}. ${unified.statusLine}`
+              : `Viewing home section. ${unified.statusLine}`}
           </div>
         </div>
       </div>
