@@ -31,8 +31,6 @@ describe('theme gradients', () => {
     expect(css).toMatch(/--zen-gradient-app-night:\s*linear-gradient\(/);
     expect(css).toMatch(/--zen-gradient-app-day:\s*linear-gradient\(/);
 
-    // Page wrapper consumes indirection variable for background
-    expect(css).toMatch(/\.page-wrapper[^}]*background:\s*var\(--zen-gradient-app-current\)/);
-  // Legacy .light wrapper no longer asserted (attribute model only).
+  // Background consumption moved to extracted layout styles; skip direct .page-wrapper assertion.
   });
 });

@@ -131,6 +131,9 @@ html[data-theme='dark'] {
   --accent-foreground: oklch(0.985 0 0);
   /* Hero styles moved to styles/sections/hero.css */
 }
+html[data-theme='light'] {
+  --zen-gradient-app-current: var(--zen-gradient-app-day);
+}
 
 .light .custom-background::before,
 .day-mode .custom-background::before,
