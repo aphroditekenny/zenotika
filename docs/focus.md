@@ -297,3 +297,65 @@ Bidang peluang menyandingkan metrik internal (progress) dengan micro-narrative l
 ---
 
 Jika diperlukan versi fokus tunggal (misal “hanya peluang di Footer” atau “hanya analisis progress system”), atau ingin seluruh enumerasi peluang dipetakan ke kategori prioritas kuantitatif, sila sampaikan. Saya dapat lanjutkan dalam format lanjutan yang Anda inginkan.
+
+---
+
+## 13. Addendum Pembaruan Implementasi (2025-10-08)
+Status terbaru setelah perubahan kode (ref: commit lokal – ekstraksi hunt items & unified progress hook). Bagian ini menandai realisasi sebagian peluang yang sebelumnya bersifat prospektif.
+
+### 13.1 Ringkas Perubahan Kode
+- Ekstraksi data scavenger hunt ke modul pusat: `src/data/huntItems.ts` (mengurangi coupling dengan `HomePage.tsx`).
+- Penambahan hook baru: `useUnifiedProgress` yang menggabungkan dua domain progres: eksplorasi section (visited) + koleksi relic (hunt).
+- Header sekarang:
+	- Memanggil `useUnifiedProgress` untuk menghitung `explorationPercent`, `collectionPercent`, dan `completion` (rata‑rata sederhana tahap awal).
+	- Mengganti aria-live status menjadi narasi terpadu: `Exploration XX/YY · Relics AA/BB · System CC%`.
+	- Tooltip (title) pada tombol progress menampilkan ringkasan kombinasi sections + relics.
+- Scavenger Hunt Section sekarang mem-broadcast event kustom `zen:hunt-progress` setiap perubahan—memungkinkan sinkronisasi progres lintas komponen tanpa prop drilling tambahan.
+- Penyimpanan progres masih via `localStorage` (kunci: `zenotika-hunt-progress`) dengan fallback initial collected berdasarkan properti `initiallyCollected`.
+
+### 13.2 Dampak terhadap Peluang (Mapping OPP)
+| Kode | Judul | Status Implementasi | Catatan Lanjutan |
+|------|-------|---------------------|------------------|
+| OPP-8.2 | Integrasi Progres & Narasi | PARTIAL | Sudah ada model gabungan + status line; belum ada weighting adaptif atau storyline milestone. |
+| OPP-8.6 | Konsolidasi Indikator Progres | PARTIAL | Visual bar masih menampilkan eksplorasi saja; opsi: dual-bar, segmented, atau overlay meter tunggal. |
+| OPP-8.5 | Terminal / System Feedback Layer | BELUM | Narasi sudah lebih ringkas, tetapi belum memakai gaya pseudo-terminal penuh (prefix `SYS>` / animasi prompt). |
+| OPP-8.3 | Ekspansi Microcopy Sistemik | PARTIAL | Header status diperluas; form feedback & aria status lain belum dinarasikan uniform. |
+| OPP-8.10 | A11y + Narasi Sinkron | PARTIAL | Status line accessible; perlu audit istilah & mungkin mode verbose untuk screen reader. |
+| OPP-8.14 | Harmonisasi Penamaan | BELUM | Dokumentasi fokus belum diperbarui untuk menandai sumber baru `huntItems.ts`; section ini melakukannya. |
+
+### 13.3 Model Data Progres (Snapshot)
+```
+UnifiedProgressResult {
+	visitedCount: number;          // jumlah section pernah dilihat
+	totalSections: number;         // total section terdaftar dalam breadcrumb
+	collectedCount: number;        // jumlah relic terkumpul (Set size)
+	totalCollectibles: number;     // panjang HUNT_ITEMS
+	explorationPercent: number;    // 0..100 (float)
+	collectionPercent: number;     // 0..100 (float)
+	completion: number;            // Math.round((explorationPercent + collectionPercent)/2)
+	statusLine: string;            // Narasi ringkas terformat
+}
+```
+
+### 13.4 Jalur Evolusi yang Disarankan (Iterasi Berikut)
+1. Ganti `completion` dengan skema berbobot (misal eksplorasi 60%, koleksi 40%) atau fase adaptif (pre-50% eksplorasi > koleksi, sebaliknya setelah threshold).
+2. Tambahkan milestone event (CustomEvent `zen:progress-milestone`) untuk 25/50/75/100% guna memicu microcopy episodik.
+3. Visual: implementasi bar tersegmentasi (exploration vs relic) atau stacked micro-bar agar pengguna memahami komposisi tanpa membaca tooltip.
+4. Terminal Layer: gaya prompt `SYS>` + animasi type-in (respect prefers-reduced-motion) untuk `zen-header__status`.
+5. A11y variant: jika user mengaktifkan reduce motion atau high contrast, fallback status line lebih literal (hilangkan separator simbol).
+6. Persist unified snapshot (cache JSON) agar hook lain bisa melakukan analitik ringan tanpa re-derive.
+
+### 13.5 Risiko / Konsiderasi
+- Event Storming: terlalu banyak CustomEvent bisa menambah noise; batasi ke perubahan state material (debounce?).
+- Penggabungan persentase rata-rata bisa menimbulkan interpretasi keliru (misal 100% relic + 0% exploration = 50% “System”). Perlu tooltip edukatif atau weighting jelas.
+- Aksesibilitas: Status line multi-separator perlu diuji dengan pembaca layar (NVDA/JAWS) untuk memastikan tidak dibaca sebagai string datar yang membingungkan.
+
+### 13.6 Checklist Singkat untuk Iterasi Berikut (Opsional)
+- [ ] Weighted completion formula
+- [ ] Segmented progress bar UI
+- [ ] Milestone narrative events
+- [ ] Terminal-styled status (progressive enhancement)
+- [ ] A11y variant status line
+- [ ] Test unit hook (exploration vs collection cases)
+
+---
