@@ -1,0 +1,79 @@
+/* ============================================================================
+   Legacy Ambient / Background Extraction (Phase 2)
+   - Extracted from monolithic index.css to migrate toward modular architecture.
+   - All raw brand literals replaced with semantic tokens.
+   - Keep sentinel comments for color lint to allow progressive migration of
+     remaining legacy files.
+   ========================================================================== */
+
+/* color-lint-disable-start (extracted file, expected to be tokenized already) */
+
+.page-wrapper {
+  /* Use primary indirection variable (night by default) */
+  background: var(--zen-gradient-app-current);
+  color: var(--color-foreground, #ffffff);
+  transition: background var(--dur-medium) var(--ease-emphasized),
+              color var(--dur-medium) var(--ease-standard);
+}
+
+.light .page-wrapper,
+.day-mode .page-wrapper,
+html[data-theme='light'] .page-wrapper {
+  background: var(--zen-gradient-app-day);
+  color: var(--color-foreground-day-alt);
+}
+
+/* Ambient custom background (converted to tokens) */
+.custom-background {
+  background:
+    radial-gradient(circle at 30% 20%, var(--brand-violet-12, rgba(168,85,247,0.12)) 0%, transparent 60%),
+    radial-gradient(circle at 70% 80%, var(--blue-brand-08, rgba(59,130,246,0.08)) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, var(--pink-hot-06, rgba(255,122,138,0.06)) 0%, transparent 70%),
+    radial-gradient(ellipse at center top, var(--brand-violet-10, rgba(168,85,247,0.10)) 0%, transparent 50%),
+    var(--zen-gradient-app-night-alt);
+  transition: background var(--dur-medium) var(--ease-standard);
+}
+
+.light .custom-background,
+.day-mode .custom-background,
+html[data-theme='light'] .custom-background {
+  background:
+    radial-gradient(circle at 30% 20%, var(--pink-hot-14, rgba(255,122,138,0.14)) 0%, transparent 60%),
+    radial-gradient(circle at 70% 80%, var(--blue-brand-14, rgba(59,130,246,0.14)) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, var(--pink-hot-08, rgba(255,122,138,0.08)) 0%, transparent 70%),
+    radial-gradient(ellipse at center top, var(--brand-violet-08, rgba(168,85,247,0.08)) 0%, transparent 50%),
+    var(--zen-gradient-app-day-alt);
+}
+
+/* Ambient animated overlay extracted from legacy index.css and tokenized */
+.custom-background:before {
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 60%, var(--pink-hot-08, rgba(255,122,138,0.08)) 0%, transparent 40%),
+    radial-gradient(circle at 80% 40%, var(--brand-violet-08, rgba(168,85,247,0.08)) 0%, transparent 40%),
+    linear-gradient(45deg, transparent 40%, var(--blue-brand-05, rgba(59,130,246,0.05)) 50%, transparent 60%);
+  animation: 20s var(--ease-in-out, ease-in-out) infinite zenAmbientFlow;
+  position: absolute;
+  inset: 0;
+}
+
+.light .custom-background:before,
+.day-mode .custom-background:before,
+html[data-theme='light'] .custom-background:before {
+  background:
+    radial-gradient(circle at 20% 60%, var(--brand-violet-08, rgba(168,85,247,0.08)) 0%, transparent 40%),
+    radial-gradient(circle at 80% 40%, var(--pink-hot-08, rgba(255,122,138,0.08)) 0%, transparent 40%),
+    linear-gradient(45deg, transparent 40%, var(--blue-brand-08, rgba(59,130,246,0.08)) 50%, transparent 60%);
+}
+
+@keyframes zenAmbientFlow {
+  0%, 100% { opacity: .8; transform: scale(1) translateZ(0); }
+  50% { opacity: 1; transform: scale(1.02) translateZ(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-background { transition: none; }
+}
+
+/* color-lint-disable-end */

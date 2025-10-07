@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import "./styles/legacy/ambient.css"; // Phase 2: extracted ambient/background styles
 import { isFeatureEnabled } from "./featureFlags";
 import { initPerformanceMetrics } from "./utils/performanceMetrics";
 import { initVitalsReporter } from "./utils/vitalsReporter";

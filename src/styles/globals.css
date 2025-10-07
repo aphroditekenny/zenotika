@@ -52,6 +52,9 @@
   --radius-lg: 12px;
   --radius-xl: 20px;
   --radius-pill: 9999px;
+  --radius-2xl: 32px;
+  --radius-3xl: 48px;
+  --radius-glass: 22px;
   /* Legacy single radius (kept for compatibility) */
   --radius: 0.625rem;
 
@@ -65,6 +68,8 @@
   --space-6: 2rem;
   --space-7: 3rem;
   --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
 
   /* Z layer intentions (reference only; not all consumed yet) */
   --z-base: 0;
@@ -76,9 +81,14 @@
   /* Motion tokens */
   --ease-standard: cubic-bezier(.4,0,.2,1);
   --ease-emphasized: cubic-bezier(0.22,1,0.36,1);
+  --ease-snappy: cubic-bezier(.33,1,.68,1);
+  --ease-in: cubic-bezier(.4,0,1,1);
+  --ease-out-emph: cubic-bezier(0.05,0.7,0.1,1);
   --dur-fast: 120ms;
   --dur-medium: 240ms;
   --dur-slow: 480ms;
+  --dur-xfast: 80ms;
+  --dur-xl: 720ms;
 
   /* Glass / gradients / thematic accents */
   --zen-gradient-header-night: linear-gradient(135deg, rgba(11,12,29,0.52) 0%, rgba(18,20,46,0.72) 45%, rgba(6,7,18,0.88) 100%);
@@ -86,8 +96,57 @@
   --zen-gradient-footer-night: linear-gradient(160deg,#0f0e16 0%,#161f48 45%,#07002f 100%);
   --zen-gradient-footer-day: linear-gradient(160deg,#faf9ff 0%,#cbcfff 40%,#4952b0 100%);
   --zen-gradient-accent-main: linear-gradient(135deg,#f177a4 0%,#a855f7 100%);
+  /* Night / day gradient stop semantic aliases (Phase 1) */
+  --color-night-deep-1: #1a1b3e; /* darkest top blend (legacy) */
+  --color-night-deep-2: #0f1020; /* mid */
+  --color-night-deep-3: #060712; /* lower fade */
+  --color-night-deep-edge: #030508; /* near-black edge */
+  --color-day-indigo: #667eea;
+  --color-day-violet-mid: #764ba2;
+
+  /* Accent bright variants */
+  --color-brand-pink-hot: #ff7a8a; /* marketing bright */
+  --color-brand-blue: #3b82f6; /* blue utility */
+
+  /* Translucency scale for bright accents (Phase 1) */
+  --pink-hot-30: rgba(255,122,138,0.30);
+  --pink-hot-26: rgba(255,122,138,0.26);
+  --pink-hot-20: rgba(255,122,138,0.20);
+  --pink-hot-14: rgba(255,122,138,0.14);
+  --pink-hot-10: rgba(255,122,138,0.10);
+  --pink-hot-08: rgba(255,122,138,0.08);
+  --pink-hot-05: rgba(255,122,138,0.05);
+  --pink-hot-03: rgba(255,122,138,0.03);
+  --blue-brand-30: rgba(59,130,246,0.30);
+  --blue-brand-26: rgba(59,130,246,0.26);
+  --blue-brand-20: rgba(59,130,246,0.20);
+  --blue-brand-14: rgba(59,130,246,0.14);
+  --blue-brand-10: rgba(59,130,246,0.10);
+  --blue-brand-08: rgba(59,130,246,0.08);
+  --blue-brand-05: rgba(59,130,246,0.05);
+  --blue-brand-03: rgba(59,130,246,0.03);
+
+  /* Phase 2: semantic composite gradients built from stop aliases */
+  --zen-gradient-app-night-alt: linear-gradient(135deg,var(--color-night-deep-1) 0%,var(--color-night-deep-2) 40%,var(--color-night-deep-3) 80%,var(--color-night-deep-edge) 100%);
+  --zen-gradient-app-day-alt: linear-gradient(135deg,var(--color-day-indigo) 0%,var(--color-day-violet-mid) 50%,var(--color-day-indigo) 100%);
+  /* Legacy stop-position exact variants (for safe replacement of literals) */
+  --zen-gradient-app-night-legacy: linear-gradient(#1a1b3e 0%, #0f1020 50%, #060712 100%);
+  --zen-gradient-app-day-legacy: linear-gradient(#667eea 0%, #764ba2 50%, #667eea 100%);
+  /* Diagonal & horizontal accent legacy gradients */
+  --zen-gradient-app-day-diagonal: linear-gradient(135deg,#667eea 0%, #764ba2 100%);
+  --zen-gradient-accent-bright: linear-gradient(135deg,#ff7a8a 0%, #a855f7 100%);
+  --zen-gradient-accent-bright-soft: linear-gradient(135deg,#ff7a8a1a 0%, #a855f71a 100%);
+  --zen-gradient-accent-horizontal: linear-gradient(90deg,#ff7a8a,#a855f7);
+  /* Additional accent variants for legacy soft / strong mappings */
+  --zen-gradient-accent-bright-strong: linear-gradient(135deg, rgba(255,122,138,0.90) 0%, rgba(168,85,247,0.90) 100%);
+  --zen-gradient-accent-bright-fade: linear-gradient(135deg, rgba(255,122,138,0.10) 0%, rgba(168,85,247,0.10) 100%);
+  --zen-gradient-accent-bright-fade-mid: linear-gradient(135deg, rgba(255,122,138,0.15) 0%, rgba(168,85,247,0.15) 100%);
+  --zen-gradient-accent-bright-fade-strong: linear-gradient(135deg, rgba(255,122,138,0.20) 0%, rgba(168,85,247,0.20) 100%);
+  --zen-shadow-accent-soft: 0 25px 50px var(--brand-violet-30);
+  --zen-text-glow-accent: 0 4px 20px var(--brand-violet-30);
   --zen-glass-layer-strong: rgba(255,255,255,0.18);
   --zen-glass-layer-soft: rgba(255,255,255,0.08);
+  --zen-glass-layer-ultra: rgba(255,255,255,0.04);
   --zen-border-night: rgba(255,255,255,0.12);
   --zen-border-day: rgba(22,25,61,0.12);
   --zen-accent-pink: rgba(241,119,164,0.95);
@@ -97,6 +156,12 @@
   --zen-focus-ring: rgba(168,85,247,0.6);
   --zen-focus-ring-day: rgba(88,101,242,0.7);
   --zen-focus-color: var(--zen-focus-ring); /* switches in light theme */
+  --zen-outline-color: var(--zen-focus-color);
+  --zen-ring-offset: 2px;
+  /* Outline semantic tiers (for replacing scattered literal rgba outlines) */
+  --zen-outline-soft: rgba(168,85,247,0.50);
+  --zen-outline-base: var(--zen-focus-ring); /* 0.6 alpha base */
+  --zen-outline-strong: rgba(168,85,247,0.66);
 
   /* Indirection for current theme gradients */
   --zen-gradient-header-current: var(--zen-gradient-header-night);
@@ -147,6 +212,57 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  /* Extended semantic gradients & brand hues (from css.md + idea.md synthesis) */
+  --color-brand-pink: #f177a4;
+  --color-brand-violet: #a855f7;
+  --color-brand-violet-mid: #764ba2; /* extracted from app day gradient */
+  --color-brand-indigo-light: #667eea; /* extracted from app day gradient */
+  --color-brand-indigo: #4952b0;
+  --color-brand-navy: #07002f;
+  --color-brand-night-bg1: #0f0e16;
+  --color-brand-night-bg2: #161f48;
+  --color-brand-night-bg3: #060712;
+  --color-brand-day-bg1: #faf9ff;
+  --color-brand-day-bg2: #cbcfff;
+  /* Extended accent variants (hot pink & blue utility accents) */
+  --color-brand-pink-hot: #ff7a8a; /* brighter marketing accent variant */
+  --color-brand-blue: #3b82f6; /* utility blue (tailwind blue-500) */
+  /* Meta theme baseline colors (used by ThemeContext as fallbacks) */
+  --color-meta-theme-dark: #1a1b3e; /* deep variant aligned with night gradients */
+  --color-meta-theme-light: var(--color-brand-indigo-light);
+  --zen-gradient-app-night: linear-gradient(180deg, var(--color-brand-night-bg2) 0%, var(--color-brand-night-bg1) 50%, var(--color-brand-night-bg3) 100%);
+  --zen-gradient-app-day: linear-gradient(180deg, var(--color-brand-indigo-light) 0%, var(--color-brand-violet-mid) 50%, var(--color-brand-indigo-light) 100%);
+  --zen-gradient-app-current: var(--zen-gradient-app-night);
+  --zen-gradient-rainbow-accent: linear-gradient(90deg, var(--color-brand-pink), var(--color-brand-violet), #7884ff, var(--color-brand-pink));
+  --zen-gradient-rainbow-accent-static: linear-gradient(90deg, var(--color-brand-pink), #7884ff);
+  /* Brand translucent layers (semantic rgba tokens) */
+  --brand-pink-30: rgba(241,119,164,0.3);
+  --brand-pink-28: rgba(241,119,164,0.28);
+  --brand-pink-22: rgba(241,119,164,0.22);
+  --brand-pink-20: rgba(241,119,164,0.2);
+  --brand-pink-18: rgba(241,119,164,0.18);
+  --brand-pink-12: rgba(241,119,164,0.12);
+  --brand-pink-08: rgba(241,119,164,0.08);
+  --brand-pink-05: rgba(241,119,164,0.05);
+  --brand-violet-35: rgba(88,101,242,0.35);
+  --brand-violet-30: rgba(88,101,242,0.30);
+  --brand-violet-28: rgba(88,101,242,0.28);
+  --brand-violet-25: rgba(88,101,242,0.25);
+  --brand-violet-22: rgba(88,101,242,0.22);
+  --brand-violet-18: rgba(88,101,242,0.18);
+  --brand-violet-08: rgba(88,101,242,0.08);
+  --brand-indigo-25: rgba(73,82,176,0.25);
+  --brand-indigo-22: rgba(73,82,176,0.22);
+  --brand-indigo-15: rgba(73,82,176,0.15);
+  --brand-indigo-12: rgba(73,82,176,0.12);
+  --brand-indigo-08: rgba(73,82,176,0.08);
+  --brand-indigo-06: rgba(73,82,176,0.06);
+  --brand-navy-06: rgba(7,0,47,0.06);
+  /* Foreground day semantic (from #2d3748) */
+  --color-foreground-day-alt: #2d3748;
+  /* Deprecated (will be phased out): direct literal gradient usage in components */
+  --_deprecated-gradient-footer-night: var(--zen-gradient-footer-night);
+  --_deprecated-gradient-footer-day: var(--zen-gradient-footer-day);
 }
 
 /* Dark theme overrides (class or attribute) */
@@ -196,6 +312,7 @@
   --zen-gradient-header-current: var(--zen-gradient-header-day);
   --zen-gradient-footer-current: var(--zen-gradient-footer-day);
   --zen-focus-color: var(--zen-focus-ring-day);
+  --zen-gradient-app-current: var(--zen-gradient-app-day);
 }
 
 /* end consolidated design tokens */
@@ -329,7 +446,8 @@
 /* Things Inc Specific Styles */
 .page-wrapper {
   min-height: 100vh;
-  background: linear-gradient(180deg, #1a1b3e 0%, #0f1020 50%, #060712 100%); /* TODO: map to semantic gradient tokens */
+  /* Using semantic app gradient token */
+  background: var(--zen-gradient-app-current);
   color: white;
   position: relative;
   overflow-x: hidden;
@@ -337,11 +455,12 @@
 }
 
 /* Light mode page wrapper */
+/* Light/day wrapper — retained for backward compat; prefer [data-theme] */
 .light .page-wrapper,
 .day-mode .page-wrapper,
 html[data-theme='light'] .page-wrapper {
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 50%, #667eea 100%); /* TODO: token */
-  color: #2d3748; /* TODO: replace with semantic var */
+  background: var(--zen-gradient-app-day);
+  color: var(--color-foreground-day-alt);
 }
 
 .main-wrapper {
@@ -385,6 +504,12 @@ html[data-theme='light'] .page-wrapper {
   50% { opacity: 1; transform: scale(1.02) translateZ(0); }
 }
 
+/* Additional reduced-motion coverage for ambient decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  .custom-background::before { animation: none !important; }
+  .zen-header__glow, .zen-footer__stars, .zen-footer__mist { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+}
+
 /* Light mode background */
 .light .custom-background,
 .day-mode .custom-background,
@@ -394,7 +519,7 @@ html[data-theme='light'] .custom-background {
     radial-gradient(circle at 70% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
     radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 70%),
     radial-gradient(ellipse at center top, rgba(255, 122, 138, 0.15) 0%, transparent 50%),
-    linear-gradient(135deg, #667eea 0%, #764ba2 40%, #667eea 80%, #5a67d8 100%);
+    var(--zen-gradient-app-day);
 }
 
 .light .custom-background::before,

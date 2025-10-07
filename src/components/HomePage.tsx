@@ -1369,9 +1369,9 @@ const PhilosophySection = memo(function PhilosophySection() {
                   <svg className="zen-connections absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 200">
                     <defs>
                       <linearGradient id="connection-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#ff7a8a" stopOpacity="0.2"/>
-                        <stop offset="50%" stopColor="#a855f7" stopOpacity="0.3"/>
-                        <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.2"/>
+                        <stop offset="0%" stopColor="var(--color-brand-pink-hot)" stopOpacity="0.2"/>
+                        <stop offset="50%" stopColor="var(--color-brand-violet)" stopOpacity="0.3"/>
+                        <stop offset="100%" stopColor="var(--color-brand-blue)" stopOpacity="0.2"/>
                       </linearGradient>
                     </defs>
                     <path d="M50,80 Q150,50 250,80" stroke="url(#connection-gradient)" strokeWidth="1" fill="none" className="animate-pulse"/>

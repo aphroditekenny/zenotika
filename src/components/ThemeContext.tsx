@@ -85,7 +85,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         metaThemeColor.setAttribute('name', 'theme-color');
         document.head.appendChild(metaThemeColor);
       }
-      metaThemeColor.setAttribute('content', theme === 'dark' ? '#1a1b3e' : '#667eea');
+      // Use semantic CSS variables where possible; fallback to existing brand shades
+      // Night meta aims for a deep navy blend; light uses the indigo-light brand.
+  const styles = getComputedStyle(document.documentElement);
+  const darkColor = styles.getPropertyValue('--color-meta-theme-dark').trim() || styles.getPropertyValue('--color-brand-night-bg2').trim() || '#1a1b3e';
+  const lightColor = styles.getPropertyValue('--color-meta-theme-light').trim() || styles.getPropertyValue('--color-brand-indigo-light').trim();
+      metaThemeColor.setAttribute('content', theme === 'dark' ? darkColor : lightColor);
     };
 
     updateThemeMeta();

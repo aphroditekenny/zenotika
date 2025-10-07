@@ -183,9 +183,9 @@ function LogBookSection() {
           <svg className="w-full h-full" viewBox="0 0 1440 800" preserveAspectRatio="none">
             <defs>
               <linearGradient id="zenotika-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ff7a8a" stopOpacity="0.1" />
-                <stop offset="50%" stopColor="#a855f7" stopOpacity="0.05" />
-                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
+                <stop offset="0%" stopColor="var(--color-brand-pink-hot)" stopOpacity="0.1" />
+                <stop offset="50%" stopColor="var(--color-brand-violet)" stopOpacity="0.05" />
+                <stop offset="100%" stopColor="var(--color-brand-blue)" stopOpacity="0.1" />
               </linearGradient>
             </defs>
             <path d="M0,400 Q360,200 720,300 T1440,250" stroke="url(#zenotika-gradient)" strokeWidth="1" fill="none" className="animate-pulse" />
