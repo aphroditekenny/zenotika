@@ -108,6 +108,8 @@
         "pwa:icons": "node scripts/generate-pwa-icons.mjs",
     "og:image": "node scripts/generate-og-image.mjs",
     "lint:colors": "node scripts/lint-colors.mjs",
-    "lint:shadows": "node scripts/lint-shadows.mjs"
+        "lint:shadows": "node scripts/lint-shadows.mjs",
+        "mcp:github": "npm --prefix mcp/github run start",
+        "mcp:github:dev": "npm --prefix mcp/github run dev"
     }
 }

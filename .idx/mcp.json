@@ -9,6 +9,22 @@
         "--only",
         "auth,firestore"
       ]
+    },
+    "github": {
+      "command": "node",
+      "args": [
+        "mcp/github/dist/index.js"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+        "GITHUB_CLIENT_ID": "${GITHUB_CLIENT_ID}",
+        "GITHUB_CLIENT_SECRET": "${GITHUB_CLIENT_SECRET}",
+        "GITHUB_SCOPES": "${GITHUB_SCOPES}"
+      },
+      "meta": {
+        "description": "Zenotika GitHub MCP server (resources: repos, files; tools: searchIssues, listPullRequests, listCommits)",
+        "homepage": "https://github.com/aphroditekenny/zenotika"
+      }
     }
   }
 }

@@ -6,6 +6,8 @@
 
 Zenotika is a performance-focused React 19 + Vite PWA demonstrating accessible, modern UI/UX patterns with progressive enhancement.
 
+> Runtime requirement: Node.js 22 LTS (>=22.0.0). Node 20 is now in maintenance and Node 18 is EOL.
+
 Original inspiration Figma exploration: https://www.figma.com/design/qMHRh7E036Z4CmNzdch7HK/Replicate-Existing-UI-UX.
 
 ## Highlights
@@ -42,6 +44,7 @@ If you add a custom domain later, update:
 ## Commands
 
 ```bash
+node -v             # should be v22.x LTS (>=22.0.0)
 npm install         # install dependencies
 npm run dev         # start the Vite dev server (http://localhost:5173 by default)
 npm run lint        # run ESLint (React + a11y rules)

@@ -145,7 +145,6 @@ html[data-theme='light'] .custom-background::before {
   z-index: 10;
 }
 /* Quote, log, and portfolio section styles migrated to styles/sections/*.css */
-}
 
 /* Optimized Cloud Animations */
 .cloud-container {
