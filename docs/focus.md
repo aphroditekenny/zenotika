@@ -313,15 +313,24 @@ Status terbaru setelah perubahan kode (ref: commit lokal – ekstraksi hunt item
 - Scavenger Hunt Section sekarang mem-broadcast event kustom `zen:hunt-progress` setiap perubahan—memungkinkan sinkronisasi progres lintas komponen tanpa prop drilling tambahan.
 - Penyimpanan progres masih via `localStorage` (kunci: `zenotika-hunt-progress`) dengan fallback initial collected berdasarkan properti `initiallyCollected`.
 
+#### (Update Lanjutan)
+- Weighted progress (default eksplorasi 0.6, koleksi 0.4) menggantikan rata‑rata sederhana.
+- Milestone events `zen:progress-milestone` (25/50/75/100) siap dipakai untuk microcopy episodik.
+- Segmented dual micro-bar (eksplorasi & koleksi) ditambahkan di tombol progress (hover reveal) + base bar tetap eksplorasi.
+- Terminal-flavored secondary line (`SYS> EXP 03/08 | REL 02/06 | CORE 41%`) dekoratif (aria-hidden) di header status.
+
 ### 13.2 Dampak terhadap Peluang (Mapping OPP)
 | Kode | Judul | Status Implementasi | Catatan Lanjutan |
 |------|-------|---------------------|------------------|
-| OPP-8.2 | Integrasi Progres & Narasi | PARTIAL | Sudah ada model gabungan + status line; belum ada weighting adaptif atau storyline milestone. |
-| OPP-8.6 | Konsolidasi Indikator Progres | PARTIAL | Visual bar masih menampilkan eksplorasi saja; opsi: dual-bar, segmented, atau overlay meter tunggal. |
-| OPP-8.5 | Terminal / System Feedback Layer | BELUM | Narasi sudah lebih ringkas, tetapi belum memakai gaya pseudo-terminal penuh (prefix `SYS>` / animasi prompt). |
+| OPP-8.1 | Legend & A11y Detailing | DONE | Progress segmented legend (sr-only) + aria-describedby weights + unified summary. |
+| OPP-8.2 | Integrasi Progres & Narasi | ADVANCED | Unified model + weighting + milestone events; storyline microcopy belum. |
+| OPP-8.6 | Konsolidasi Indikator Progres | ADVANCED | Segmented always-visible micro-bar + unified status + adaptive weighting; legend visual opsional tersisa. |
+| OPP-8.5 | Terminal / System Feedback Layer | ADVANCED | Terminal line + typed animation + milestone microcopy; opsional prompt contextual lanjutan. |
+| OPP-8.8 | Orkestrasi Section | PARTIAL | Custom events `zen:storyline:section-enter/exit` + SR live announcer; belum ada visual storyline UI. |
+| OPP-8.9 | Visual Phase Interlocked | PARTIAL | Atmosphere phase (early/mid/late) → CSS vars (--zen-star-density-mult, --zen-mist-opacity, --zen-grid-glow); belum adaptive gradient/palette penuh. |
 | OPP-8.3 | Ekspansi Microcopy Sistemik | PARTIAL | Header status diperluas; form feedback & aria status lain belum dinarasikan uniform. |
 | OPP-8.10 | A11y + Narasi Sinkron | PARTIAL | Status line accessible; perlu audit istilah & mungkin mode verbose untuk screen reader. |
-| OPP-8.14 | Harmonisasi Penamaan | BELUM | Dokumentasi fokus belum diperbarui untuk menandai sumber baru `huntItems.ts`; section ini melakukannya. |
+| OPP-8.14 | Harmonisasi Penamaan | IN PROGRESS | `docs/naming-harmonization.md` ditambahkan; `progress-model.md` & microcopy ter-update, mapping legacy → baru akan melengkapi `docs/css.md`. |
 
 ### 13.3 Model Data Progres (Snapshot)
 ```
@@ -357,5 +366,67 @@ UnifiedProgressResult {
 - [ ] Terminal-styled status (progressive enhancement)
 - [ ] A11y variant status line
 - [ ] Test unit hook (exploration vs collection cases)
+
+---
+
+## 14. Addendum Pembaruan Implementasi Lanjutan (2025-10-08 / Siklus Atmosfer & Asset)
+Tambahan ini merekam perubahan lanjutan setelah Addendum 13 (masih di tanggal yang sama, tetapi siklus kerja berikut) mencakup: ekspansi atmosfer multi-phase, harmonisasi microcopy lintas header–footer, internalisasi asset logo, dan penguatan lapisan aksesibilitas progres.
+
+### 14.1 Delta Perubahan semenjak Addendum 13
+1. Microcopy Terpusat: Kamus microcopy sekarang menjadi sumber tunggal untuk: status progres utama, varian aksesibilitas (template a11y), milestone narrator (25/50/75/100), dan terminal secondary line.
+2. Weighted Progress Finalisasi: `useUnifiedProgress` kini memakai bobot adaptif (default eksplorasi 0.6 / koleksi 0.4) dengan ruang evolusi untuk reweighting fase lanjutan (early vs late completion) + emisi event `zen:progress-update` granular.
+3. Milestone Events Aktif: `zen:progress-milestone` (25/50/75/100) dipicu dan ditangani oleh narrator microcopy; live region milestone dipisah dari status umum (mengurangi noise screen reader).
+4. A11y Layer Refinement: Progressbar memakai `role="progressbar"` + `aria-valuenow` / `aria-valuetext`; legend sr-only menjelaskan komposisi bobot; milestone live region `aria-live="polite"` terisolasi.
+5. Atmosfer Multi-Phase Tokens: Penambahan fase dawn/day/dusk/night (di luar sekadar day/night) + early/mid/late atmosphere phase variables: `--zen-star-density-mult`, `--zen-mist-opacity`, `--zen-grid-glow`, `--zen-accent-gradient-*`, shadow & backdrop filter readability tokens.
+6. Readability Layer: Token `--zen-readable-surface-shadow` & util `.zen-readable-surface` disiapkan untuk adaptasi kontras dinamis (implementasi heuristik pengukuran kontras belum diterapkan → masih PARTIAL pada OPP‑8.13).
+7. Asset Internalization: Logo hero (day/night) dipindahkan dari CDN ke `/public/assets/logo/{day,night}.svg`; preload list & hero references diperbarui; memulai eksekusi OPP‑8.11.
+8. Footer Tagline Dinamis: Sistem rotasi tagline sosial (periode / daftar tagline) menambah kesan living surface (OPP‑8.7 maju → ADVANCED).
+9. Newsletter Feedback Narrativized: Pesan sukses / error difungsikan bersama microcopy system (memenuhi aspek OPP‑8.12; lanjut audit konsistensi tone pending).
+10. Event Orkestrasi Section: `zen:storyline:section-enter/exit` sekarang memicu announcer screen reader + membuka jalan HUD naratif (belum dibuat visual overlay → OPP‑8.8 tetap PARTIAL).
+
+### 14.2 Status OPP (Revisi Komprehensif)
+| Kode | Judul | Status | Ringkas Bukti & Sisa Pekerjaan |
+|------|-------|--------|---------------------------------|
+| OPP-8.1 | Legend & A11y Detailing | DONE | Progressbar semantics, legend sr-only, weighting dijelaskan, milestone live region terpisah. |
+| OPP-8.2 | Integrasi Progres & Narasi | ADVANCED | Unified weighted model + milestone narrator; storyline visual overlay belum. |
+| OPP-8.3 | Ekspansi Microcopy Sistemik | ADVANCED | Kamus terpusat: status, milestone, a11y; form & error domain lain audit pending. |
+| OPP-8.4 | Atmosfer Multi-Phase | PARTIAL | Phase tokens dawn/day/dusk/night + density vars; penerapan penuh di semua komponen dekor belum. |
+| OPP-8.5 | Terminal / System Feedback Layer | ADVANCED | Typed/terminal line + system-style prompts; perlu fallback high-contrast & reduced-motion variant review. |
+| OPP-8.6 | Konsolidasi Indikator Progres | ADVANCED | Segmented dual bars + unified status; visual composition (stack/legend UI) polishing tersisa. |
+| OPP-8.7 | Dinamisasi Sosial & Footer | ADVANCED | Rotasi tagline sosial; contextual triggers (waktu/fase) belum. |
+| OPP-8.8 | Orkestrasi Section | PARTIAL | Enter/exit events + SR announcer; belum ada HUD/storyline timeline. |
+| OPP-8.9 | Visual Phase Interlocked | PARTIAL | Phase intensity tokens tersedia; konsumsi adaptif (scroll/progress coupling) belum diterapkan. |
+| OPP-8.10 | Keseragaman Aksesibilitas + Narasi | ADVANCED | A11y template microcopy, milestone isolation; audit global form states pending. |
+| OPP-8.11 | Asset Konsolidasi | PARTIAL | Logo internalized; ikon sosial & sisa media eksternal belum diganti. |
+| OPP-8.12 | Variasi Feedback Form | ADVANCED | Newsletter microcopy narrativized; error taxonomy unifikasi belum. |
+| OPP-8.13 | Keterbacaan & Layer Komposisi | PARTIAL | Readability tokens & utility hadir; belum ada otomatisasi contrast measurement. |
+| OPP-8.14 | Konsistensi Penamaan & Dokumentasi | IN PROGRESS | Dok `naming-harmonization.md` + progress-model; mapping legacy→baru di `css.md` pending. |
+| OPP-8.15 | Telemetri Pengalaman | DONE | `progress_update` & milestone events + microcopy instrumentation; analytics hook in place. |
+
+### 14.3 Risiko Tambahan (Delta)
+- Overload Visual: Penambahan gradient & glow per phase memerlukan guard prefers-reduced-motion / low-power untuk menghindari battery drain.
+- A11y Noise: Milestone + status line + potential storyline HUD bisa menambah verbosity; perlu mode verbose toggle.
+- Token Drift: Penambahan banyak CSS variable tanpa dokumentasi mapping akan menaikkan cognitive load (prioritaskan update `docs/css.md`).
+
+### 14.4 Prioritas Iterasi Berikut (Refined Backlog Shortlist)
+1. Phase Consumption: Terapkan star/mist/grid komponen agar benar-benar membaca `--zen-star-density-mult` & `--zen-mist-opacity` (operasionalisasi OPP‑8.9).
+2. Contrast Heuristics: Utility JS untuk menghitung luminance backdrop & toggle `.zen-readable-surface` (menyelesaikan OPP‑8.13).
+3. Legacy→Token Mapping: Tabel eksplisit di `css.md` (menutup gap OPP‑8.14).
+4. Storyline HUD: Visual minimal (timeline or vertical rail) sinkron dengan `zen:storyline:section-enter` (memajukan OPP‑8.2 & 8.8).
+5. Asset Sweep: Inventaris & migrasi ikon sosial ke lokal (lanjut OPP‑8.11) + checksum preloading.
+6. A11y Verbose Mode: Preferensi user (localStorage / data-attr) men-switch microcopy ke variant lebih literal (finalisasi OPP‑8.10).
+
+### 14.5 Indikator Selesai (Definition of Done per Target Terbuka)
+| Target | DoD Ringkas |
+|--------|-------------|
+| OPP‑8.4 | Semua komponen atmosfer (stars, mist, grid, footer clouds) konsumsi phase tokens & transisi halus antar fase. |
+| OPP‑8.9 | Intensitas atmosfer beradaptasi terhadap unified progress (misal early→late menaikkan star density). |
+| OPP‑8.11 | 0 referensi CDN eksternal untuk aset penting (ikon, logo, decor). |
+| OPP‑8.13 | Kontras teks minimum WCAG AA otomatis dijaga lewat adaptive surface utility. |
+| OPP‑8.14 | Dok CSS berisi tabel legacy→baru + deprecation notes. |
+| OPP‑8.8 | HUD storyline menampilkan sekurang-kurangnya label section + milestone markers. |
+
+### 14.6 Catatan Penutup
+Perubahan lanjutan ini memindahkan fokus dari sekadar unifikasi progres menuju orkestrasi pengalaman multi-phase dengan fondasi telemetry & microcopy yang siap dieksploitasi untuk storytelling. Dokumentasi token & guard aksesibilitas menjadi kunci menjaga skalabilitas antar iterasi berikutnya.
 
 ---

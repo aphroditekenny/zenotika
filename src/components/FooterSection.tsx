@@ -1,4 +1,5 @@
-import { memo, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
+import { memo, useEffect, useRef, useState, useCallback, type CSSProperties, type FormEvent } from 'react';
+import { MICROCOPY } from '@/content/microcopy';
 import { useTheme } from './ThemeContext';
 import { useAccessibility } from './AccessibilityProvider';
 
@@ -202,8 +203,42 @@ function FooterSection() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<FormStatus>('idle');
   const [parallaxOffset, setParallaxOffset] = useState(0);
+  // OPP-8.7 dynamic social tagline rotation & ephemeral highlight
+  const [socialIndex, setSocialIndex] = useState(0);
+  const [socialHighlightId, setSocialHighlightId] = useState<string | null>(null);
+  // OPP-8.9 phase awareness (hook into global atmosphere phase attribute)
+  const [phase, setPhase] = useState<'early'|'mid'|'late'>('early');
   const innerRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
+  const socialTimerRef = useRef<number | null>(null);
+
+  // Observe HTML data-atmosphere-phase set by HomePage to adapt footer subtle intensities
+  useEffect(() => {
+    const root = document.documentElement;
+    const syncPhase = () => {
+      const current = (root.getAttribute('data-atmosphere-phase') as typeof phase) || 'early';
+      setPhase(current);
+      // Map phase to CSS variables for footer accent (density / glow)
+      const footerGlow = current === 'early' ? 0.25 : current === 'mid' ? 0.45 : 0.7;
+      root.style.setProperty('--zen-footer-glow-intensity', footerGlow.toString());
+      root.style.setProperty('--zen-footer-star-density', (footerGlow * 0.8 + 0.2).toFixed(2));
+    };
+    syncPhase();
+    const obs = new MutationObserver(syncPhase);
+    obs.observe(root, { attributes: true, attributeFilter: ['data-atmosphere-phase'] });
+    return () => obs.disconnect();
+  }, []);
+
+  // Rotate social tagline every 6s (skip when reducedMotion to avoid distraction)
+  useEffect(() => {
+    if (reducedMotion) return;
+    const advance = () => {
+      setSocialIndex(i => (i + 1) % SOCIAL_LINKS.length);
+      setSocialHighlightId(SOCIAL_LINKS[(socialIndex + 1) % SOCIAL_LINKS.length].name);
+    };
+    socialTimerRef.current = window.setInterval(advance, 6000);
+    return () => { if (socialTimerRef.current) window.clearInterval(socialTimerRef.current); };
+  }, [reducedMotion, socialIndex]);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -301,11 +336,11 @@ function FooterSection() {
   }`;
 
   const currentYear = new Date().getFullYear();
-  const message =
-    status === 'success'
-      ? 'You’re on the list! We’ll send you thoughtful Things soon.'
-      : status === 'error'
-      ? 'Please share a valid email address so the Things can find you.'
+  // OPP-8.12 narrativized feedback messages
+  const message = status === 'success'
+    ? MICROCOPY.newsletterSuccess.system
+    : status === 'error'
+      ? MICROCOPY.newsletterError.system
       : '';
 
   const feedbackClass = [
@@ -394,8 +429,9 @@ function FooterSection() {
                 <button
                   type="submit"
                   className="zen-footer-cta inline-flex min-w-[8rem] items-center justify-center rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-slate-900 transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300/60"
+                  aria-live="off"
                 >
-                  Sign up
+                  {status === 'success' ? MICROCOPY.newsletterEnlistedCta.system : status === 'error' ? MICROCOPY.newsletterRetryCta.system : MICROCOPY.newsletterIdleCta.system}
                 </button>
               </form>
 
@@ -453,43 +489,52 @@ function FooterSection() {
                 </p>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
-                {SOCIAL_LINKS.map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="zen-footer-card group flex items-center gap-3 rounded-2xl border px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-                  >
-                    <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 ${
-                        isDark ? 'bg-white/10' : 'bg-indigo-100'
-                      }`}
+                {SOCIAL_LINKS.map((social, idx) => {
+                  const isActive = idx === socialIndex;
+                  return (
+                    <a
+                      key={social.name}
+                      href={social.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`zen-footer-card group flex items-center gap-3 rounded-2xl border px-4 py-3 transition-all duration-500 hover:-translate-y-0.5 hover:shadow-lg ${isActive ? 'ring-1 ring-pink-400/60 shadow-pink-500/20' : ''}`}
+                      aria-current={isActive ? 'true' : undefined}
                     >
-                      <img
-                        src={isDark ? social.night : social.day}
-                        alt={`${social.name} icon`}
-                        className="h-5 w-5"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <span
-                        className={`text-sm font-semibold tracking-wide transition-colors duration-300 ${
-                          isDark ? 'text-white group-hover:text-white' : 'text-slate-900 group-hover:text-slate-950'
+                      <div
+                        className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 ${
+                          isDark ? 'bg-white/10' : 'bg-indigo-100'
                         }`}
                       >
-                        {social.name}
-                      </span>
-                      {social.tagline ? (
-                        <span className={`text-xs ${isDark ? 'text-white/50' : 'text-slate-500'}`}>
-                          {social.tagline}
+                        <img
+                          src={isDark ? social.night : social.day}
+                          alt={`${social.name} icon`}
+                          className="h-5 w-5"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <span
+                          className={`text-sm font-semibold tracking-wide transition-colors duration-300 ${
+                            isDark ? 'text-white group-hover:text-white' : 'text-slate-900 group-hover:text-slate-950'
+                          }`}
+                        >
+                          {social.name}
                         </span>
-                      ) : null}
-                    </div>
-                  </a>
-                ))}
+                        {social.tagline ? (
+                          <span
+                            className={`text-[11px] leading-snug transition-opacity duration-500 ${
+                              isActive ? 'opacity-100' : 'opacity-30'
+                            } ${isDark ? 'text-white/60' : 'text-slate-500'}`}
+                            aria-hidden={!isActive}
+                          >
+                            {social.tagline}
+                          </span>
+                        ) : null}
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
             </section>
           </div>

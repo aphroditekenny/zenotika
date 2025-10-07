@@ -85,6 +85,17 @@
 .zen-header--light .zen-collection-button__icon { background:linear-gradient(135deg, var(--brand-pink-30), var(--brand-violet-25)); }
 .zen-collection-button__bar { position:absolute; inset:auto 0 0; height:3px; background:rgba(255,255,255,0.12); transition:height .3s ease; }
 .zen-collection-button__bar span { display:block; height:100%; background:linear-gradient(90deg, var(--zen-accent-pink), var(--zen-accent-violet), var(--zen-accent-indigo), var(--zen-accent-pink)); background-size:200% 100%; animation: zenBarGradientFlow 3s ease infinite; transition: width .4s ease; }
+/* Segmented unified progress overlay */
+.zen-collection-button__segments { position:absolute; inset:auto 0 0; height:3px; display:flex; pointer-events:none; mix-blend-mode:screen; opacity:0; transition:opacity .35s ease; }
+.zen-header--light .zen-collection-button__segments { mix-blend-mode:normal; }
+/* Always visible but subtle; intensify on hover/focus */
+.zen-collection-button__segments { opacity:.55; }
+.zen-collection-button:hover .zen-collection-button__segments, .zen-collection-button:focus-visible .zen-collection-button__segments { opacity:1; }
+.zen-collection-button__segment { height:100%; background:linear-gradient(90deg, var(--brand-pink-30), var(--brand-violet-35)); animation: zenBarSegmentPulse 6s ease-in-out infinite; box-shadow:0 0 0 1px rgba(255,255,255,0.08) inset; }
+.zen-collection-button__segment.is-collection { background:linear-gradient(90deg, var(--brand-violet-40), var(--brand-indigo-40)); animation-duration:7.5s; }
+.zen-header--light .zen-collection-button__segment { box-shadow:0 0 0 1px rgba(22,25,61,0.1) inset; }
+
+@keyframes zenBarSegmentPulse { 0%,100% { filter:brightness(1); } 50% { filter:brightness(1.25); } }
 .zen-chip { display:inline-flex; align-items:center; justify-content:center; padding:.45rem .85rem; border-radius:999px; border:1px solid var(--zen-glass-layer-strong); background:var(--zen-glass-layer-soft); color:rgba(255,255,255,0.75); font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; font-weight:600; transition: transform var(--dur-fast) var(--ease-standard), background var(--dur-medium) var(--ease-standard), border-color var(--dur-medium) var(--ease-standard); position:relative; overflow:hidden; }
 .zen-chip--muted { background: rgba(82,196,164,0.18); border-color: rgba(82,196,164,0.3); color:rgba(255,255,255,0.85); }
 .zen-header--light .zen-chip { border-color:var(--zen-border-day); background:rgba(233,237,255,0.6); color:rgba(12,15,56,0.7); }
@@ -136,6 +147,8 @@
   .zen-mobile-menu.is-visible .zen-mobile-menu__inner { animation:none; }
   .zen-crumb.is-active .zen-crumb__button { animation:none; }
   .zen-collection-button__bar span { animation:none; background:linear-gradient(90deg, var(--zen-accent-pink), var(--zen-accent-indigo)); }
+  .zen-collection-button__segments { animation:none; }
+  .zen-collection-button__segment { animation:none; }
 }
 
 /* Desktop visibility for crumbs */
@@ -153,5 +166,18 @@
 /* High contrast / reduced transparency */
 @media (prefers-contrast: high) { .zen-header__atmosphere { backdrop-filter:none; } .zen-menu-trigger, .zen-logo-button, .zen-collection-button, .zen-chip { border-width:2px; } .zen-crumb.is-active .zen-crumb__button { outline:2px solid currentColor; outline-offset:2px; } }
 @media (prefers-reduced-transparency: reduce) { .zen-header__atmosphere { backdrop-filter:none; background:rgba(11,12,29,0.95); } .zen-header--light .zen-header__atmosphere { background:rgba(255,255,255,0.95); } .zen-menu-trigger, .zen-logo-button, .zen-collection-button { backdrop-filter:none; } }
+
+/* System / Terminal status line (progressive enhancement) */
+.zen-header__status { margin-top:.35rem; font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; font-weight:500; color:rgba(255,255,255,0.55); display:flex; flex-direction:column; gap:2px; }
+.zen-header--light .zen-header__status { color:rgba(22,25,61,0.55); }
+.zen-header__status-terminal { font-family: var(--font-mono, ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace); font-size:.6rem; letter-spacing:.15em; color:rgba(255,255,255,0.4); white-space:nowrap; overflow:hidden; max-width:100%; position:relative; }
+.zen-header--light .zen-header__status-terminal { color:rgba(22,25,61,0.48); }
+@media (prefers-reduced-motion:no-preference) { .zen-header__status-terminal { animation: zenStatusCursor 4s steps(1,end) infinite; } }
+@keyframes zenStatusCursor { 0%,96% { text-shadow:0 0 0 currentColor; } 97%,100% { text-shadow:0 0 2px currentColor; } }
+@media (max-width: 640px) { .zen-header__status-terminal { display:none; } }
+/* Milestone message */
+.zen-header__status-milestone { display:inline-block; margin-top:2px; font-size:.55rem; letter-spacing:.12em; font-weight:600; color:var(--zen-accent-pink); background:linear-gradient(90deg, var(--zen-accent-pink), var(--zen-accent-violet)); -webkit-background-clip:text; background-clip:text; color:transparent; animation: zenMilestoneReveal .6s ease; }
+@keyframes zenMilestoneReveal { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .zen-header__status-milestone { animation:none; } }
 
 /* End header.css */

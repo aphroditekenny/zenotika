@@ -1,25 +1,33 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from 'react';
 
 type Theme = 'light' | 'dark';
+type TimePhase = 'dawn' | 'day' | 'dusk' | 'night';
+type ThemeMode = 'manual' | 'auto';
 
 interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
   isDark: boolean;
   isLight: boolean;
+  phase: TimePhase;           // time-of-day derived phase
+  mode: ThemeMode;            // auto vs manual
+  setMode: (m: ThemeMode) => void;
+  refreshPhase: () => void;   // force re-evaluation (used if user changes system clock)
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const applyThemeClass = (theme: Theme) => {
+const applyThemeClass = (theme: Theme, phase: TimePhase) => {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
-  root.classList.remove('light', 'dark', 'day-mode');
+  root.classList.remove('light', 'dark', 'day-mode', 'phase-dawn', 'phase-day', 'phase-dusk', 'phase-night');
   if (theme === 'light') {
     root.classList.add('light', 'day-mode');
   } else {
     root.classList.add('dark');
   }
+  root.classList.add(`phase-${phase}`);
+  root.setAttribute('data-time-phase', phase);
 };
 
 const getInitialTheme = (): Theme => {
@@ -40,36 +48,57 @@ const getInitialTheme = (): Theme => {
   return prefersDark ? 'dark' : 'light';
 };
 
+function computePhase(date = new Date()): TimePhase {
+  const h = date.getHours();
+  if (h < 5) return 'night';
+  if (h < 9) return 'dawn';
+  if (h < 17) return 'day';
+  if (h < 20) return 'dusk';
+  return 'night';
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [mode, setMode] = useState<ThemeMode>('auto');
+  const [phase, setPhase] = useState<TimePhase>(() => computePhase());
   const [theme, setTheme] = useState<Theme>(() => {
     const initialTheme = getInitialTheme();
-    applyThemeClass(initialTheme);
+    applyThemeClass(initialTheme, phase);
     return initialTheme;
   });
 
   // Keep theme in sync with system preference when user hasn't explicitly chosen.
+  // Auto mode: react to system color scheme and clock progression
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
     const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (event: MediaQueryListEvent) => {
-      try {
-        const stored = window.localStorage.getItem('theme');
-        if (stored === 'light' || stored === 'dark') return;
-      } catch {
-        // ignore storage access issues
-      }
+    const handleScheme = (event: MediaQueryListEvent) => {
+      if (mode !== 'auto') return;
       setTheme(event.matches ? 'dark' : 'light');
     };
+    media.addEventListener('change', handleScheme);
+    return () => media.removeEventListener('change', handleScheme);
+  }, [mode]);
 
-    media.addEventListener('change', handleChange);
-    return () => media.removeEventListener('change', handleChange);
-  }, []);
+  // Recompute phase periodically (every 10 minutes) in auto mode
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (mode !== 'auto') return;
+    let raf: number | null = null;
+    let timer: number | null = null;
+    const tick = () => {
+      const next = computePhase();
+      setPhase(p => (p === next ? p : next));
+      timer = window.setTimeout(schedule, 600000); // 10 minutes
+    };
+    const schedule = () => { raf = requestAnimationFrame(tick); };
+    schedule();
+    return () => { if (raf) cancelAnimationFrame(raf); if (timer) clearTimeout(timer); };
+  }, [mode]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    applyThemeClass(theme);
+    applyThemeClass(theme, phase);
 
     try {
       window.localStorage.setItem('theme', theme);
@@ -94,18 +123,25 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     };
 
     updateThemeMeta();
-  }, [theme]);
+  }, [theme, phase]);
 
   const toggleTheme = () => {
+    setMode('manual');
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
+
+  const refreshPhase = () => setPhase(computePhase());
 
   const value: ThemeContextType = useMemo(() => ({
     theme,
     toggleTheme,
     isDark: theme === 'dark',
-    isLight: theme === 'light'
-  }), [theme]);
+    isLight: theme === 'light',
+    phase,
+    mode,
+    setMode,
+    refreshPhase
+  }), [theme, phase, mode]);
 
   return (
     <ThemeContext.Provider value={value}>

@@ -167,6 +167,9 @@ function HomePage({ onBackToLanding }: HomePageProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [contentLoaded, setContentLoaded] = useState(false);
+  // Storyline state: last dispatched section & adaptive atmosphere intensity
+  const lastStorySectionRef = useRef<string | null>(null);
+  const [atmospherePhase, setAtmospherePhase] = useState<'early'|'mid'|'late'>('early');
   const { reducedMotion, screenReaderMode } = useAccessibility();
   const sectionDefinitions = useMemo<SectionDescriptor[]>(
     () => [
@@ -183,6 +186,41 @@ function HomePage({ onBackToLanding }: HomePageProps) {
   const sectionTracker = useSectionTracker(sectionDefinitions, {
     rootMargin: "-45% 0px -45% 0px",
   });
+
+  // OPP-8.8: Orchestrate storyline events on section enter
+  useEffect(() => {
+    const active = sectionTracker.activeSection?.id;
+    if (!active) return;
+    if (lastStorySectionRef.current !== active) {
+      const detail = {
+        id: active,
+        index: sectionTracker.activeIndex,
+        visited: sectionTracker.visitedIds.slice(),
+        ts: Date.now(),
+      };
+      window.dispatchEvent(new CustomEvent('zen:storyline:section-enter', { detail }));
+      if (lastStorySectionRef.current) {
+        window.dispatchEvent(new CustomEvent('zen:storyline:section-exit', { detail: { id: lastStorySectionRef.current, to: active, ts: Date.now() } }));
+      }
+      lastStorySectionRef.current = active;
+    }
+  }, [sectionTracker.activeSection?.id, sectionTracker.activeIndex, sectionTracker.visitedIds]);
+
+  // OPP-8.9: Adapt atmosphere intensity & phase CSS variables based on scroll & unified conceptual progress (proxy: visited ratio)
+  useEffect(() => {
+    const total = sectionDefinitions.length || 1;
+    const ratio = sectionTracker.visitedIds.length / total;
+    let phase: typeof atmospherePhase = 'early';
+    if (ratio > 0.75) phase = 'late'; else if (ratio > 0.35) phase = 'mid';
+    if (phase !== atmospherePhase) setAtmospherePhase(phase);
+    const root = document.documentElement;
+    // Map phase to star field + mist intensity (CSS can read these vars)
+    const phaseIntensity = phase === 'early' ? 0.35 : phase === 'mid' ? 0.55 : 0.85;
+    root.style.setProperty('--zen-star-density-mult', phaseIntensity.toString());
+    root.style.setProperty('--zen-mist-opacity', (phaseIntensity * 0.6).toFixed(2));
+    root.style.setProperty('--zen-grid-glow', (0.2 + phaseIntensity * 0.5).toFixed(2));
+    root.setAttribute('data-atmosphere-phase', phase);
+  }, [sectionTracker.visitedIds, sectionDefinitions.length, atmospherePhase]);
 
   useEffect(() => {
     if (lazySectionsEnabled) {
@@ -241,6 +279,22 @@ function HomePage({ onBackToLanding }: HomePageProps) {
     };
   }, [updateScrollProgress, screenReaderMode]);
 
+  // Storyline announcer: listen to section-enter events and narrate (accessible only)
+  useEffect(() => {
+    if (!screenReaderMode) return;
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail as { id: string; index: number; visited: string[] } | undefined;
+      if (!detail) return;
+      const el = document.getElementById('zen-storyline-announcer');
+      if (el) {
+        const label = sectionDefinitions.find(s => s.id === detail.id)?.label || detail.id;
+        el.textContent = `Entering section ${label}. ${detail.visited.length} of ${sectionDefinitions.length} modules traversed.`;
+      }
+    };
+    window.addEventListener('zen:storyline:section-enter', handler);
+    return () => window.removeEventListener('zen:storyline:section-enter', handler);
+  }, [screenReaderMode, sectionDefinitions]);
+
   // Early return if not loaded to prevent flash
   if (!isLoaded) {
     return <PageLoading variant="home" message="Loading home page..." />;
@@ -275,6 +329,8 @@ function HomePage({ onBackToLanding }: HomePageProps) {
               visitedSections: sectionTracker.visitedSections,
           }}
         />
+        {/* OPP-8.1 / 8.8 overlay: narrative envelope live region (non-visual) hooking storyline events */}
+        <div className="sr-only" role="status" aria-live="polite" aria-atomic="true" id="zen-storyline-announcer" />
         
         <main className="main-wrapper" id="main-content">
           <div className="page-content_wrap">

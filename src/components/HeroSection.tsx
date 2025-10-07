@@ -21,11 +21,20 @@ function HeroSectionContent({ onNavigateToHome, persona, personaLocales }: HeroS
 
   useEffect(() => {
     // Optimistic immediate paint with quick image preload attempt
-    const timer = setTimeout(() => setIsLoaded(true), 100);
+    // Ensure we don't call setState after unmount (causes act() warnings in tests)
+    let cancelled = false;
+    const didSetRef = { current: false };
+    const safeSetLoaded = () => {
+      if (cancelled || didSetRef.current) return;
+      didSetRef.current = true;
+      setIsLoaded(true);
+    };
+
+    const timer = setTimeout(safeSetLoaded, 100);
 
     const preloadImages = [
-      "https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b9208ebb9e666ec8413b_Home-logo_night.png",
-      "https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6724406f04b26f75915dd8c2_Home-logo_day.png"
+      "/assets/logo/night.svg",
+      "/assets/logo/day.svg"
     ];
     const imagePromises = preloadImages.map(src => new Promise(resolve => {
       const img = new Image();
@@ -36,8 +45,14 @@ function HeroSectionContent({ onNavigateToHome, persona, personaLocales }: HeroS
     Promise.race([
       Promise.all(imagePromises),
       new Promise(res => setTimeout(res, 2000))
-    ]).then(() => { clearTimeout(timer); setIsLoaded(true); });
-    return () => clearTimeout(timer);
+    ]).then(() => {
+      clearTimeout(timer);
+      safeSetLoaded();
+    });
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
@@ -163,7 +178,7 @@ function HeroSectionContent({ onNavigateToHome, persona, personaLocales }: HeroS
               <div className="home-logo-wrap balloon relative flex items-center justify-center">
                 {isDark ? (
                   <OptimizedImage
-                    src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6705b9208ebb9e666ec8413b_Home-logo_night.png"
+                    src="/assets/logo/night.svg"
                     alt="Zenotika night logo — mindful balance, modern energy, intelligent function"
                     className=""
                     imgClassName="hero-logo hero-night w-full max-w-[320px] sm:max-w-[440px] lg:max-w-[520px] xl:max-w-[600px] h-auto object-contain filter drop-shadow-2xl"
@@ -174,7 +189,7 @@ function HeroSectionContent({ onNavigateToHome, persona, personaLocales }: HeroS
                   />
                 ) : (
                   <OptimizedImage
-                    src="https://cdn.prod.website-files.com/66ea3a5528a044beafcf913e/6724406f04b26f75915dd8c2_Home-logo_day.png"
+                    src="/assets/logo/day.svg"
                     alt="Zenotika day logo — mindful balance, modern energy, intelligent function"
                     className=""
                     imgClassName="hero-logo hero-day w-full max-w-[320px] sm:max-w-[440px] lg:max-w-[520px] xl:max-w-[600px] h-auto object-contain filter drop-shadow-2xl"

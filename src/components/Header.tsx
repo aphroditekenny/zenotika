@@ -9,6 +9,9 @@ import type { SectionDescriptor } from '@/hooks/useSectionTracker';
 import ActiveSectionLink from './ActiveSectionLink';
 import { loadLogBookSectionModule, loadFooterSectionModule } from './HomePage';
 import { useUnifiedProgress } from '@/hooks/useUnifiedProgress';
+import { renderProgressVoice, MICROCOPY, interpolate } from '@/content/microcopy';
+import { useMilestoneNarrator } from '@/hooks/useMilestoneNarrator';
+import { useTypedText } from '@/hooks/useTypedText';
 // (No direct use of HUNT_ITEMS here yet, but unified progress hook depends on that module.)
 import usePrefetchOnIntent from '@/hooks/usePrefetchOnIntent';
 
@@ -64,7 +67,7 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const { toggleTheme, isDark } = useTheme();
+  const { toggleTheme, isDark, phase, mode, setMode } = useTheme();
   const showPwa = isFeatureEnabled('pwa');
   const { canInstall, promptInstall, isStandalone, installed } = useInstallPrompt();
   const canCheckUpdates = typeof navigator !== 'undefined' && 'serviceWorker' in navigator;
@@ -237,7 +240,18 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
   const hasBreadcrumb = crumbSegments.length > 0;
   const visitedCount = breadcrumbState.visitedIds.length;
   const totalSections = breadcrumbState.sections.length;
-  const unified = useUnifiedProgress({ visitedCount, totalSections });
+  const unified = useUnifiedProgress({ visitedCount, totalSections }, { terminalStyle: true, adaptiveWeighting: true });
+  const milestone = useMilestoneNarrator();
+  const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const systemVoiceLine = renderProgressVoice({
+    visited: unified.visitedCount,
+    totalSec: unified.totalSections,
+    collected: unified.collectedCount,
+    totalCol: unified.totalCollectibles,
+    completion: unified.completion,
+    system: true
+  });
+  const typedTerminal = useTypedText(systemVoiceLine, { disabled: prefersReduced, immediate: false, speedMs: 14 });
   // For backward compatibility, retain original progress bar percent (exploration) but we also show unified.completion in narrative.
   const progressPercent = unified.explorationPercent;
   const mobileBreadcrumbText = breadcrumbState.activeSection
@@ -382,7 +396,7 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
             </div>
 
             <div className="zen-header__right">
-              <div className="zen-theme-toggle" role="presentation">
+              <div className="zen-theme-toggle" role="group" aria-label="Theme & phase controls">
                 <span aria-hidden="true">Night</span>
                 <button
                   type="button"
@@ -412,10 +426,25 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
                   </span>
                 </button>
                 <span aria-hidden="true">Day</span>
+                <span className="zen-theme-phase-label" aria-label={`Phase ${phase}`}>{phase}</span>
+                <button
+                  type="button"
+                  className="zen-theme-mode-toggle"
+                  onClick={() => { setMode(mode === 'auto' ? 'manual' : 'auto'); track('theme_mode_toggle', { to: mode === 'auto' ? 'manual' : 'auto' }); }}
+                  aria-pressed={mode === 'auto'}
+                  aria-label={`Switch theme mode to ${mode === 'auto' ? 'manual' : 'auto'}`}
+                >
+                  {mode === 'auto' ? 'auto' : 'man'}
+                </button>
               </div>
 
               <div className="zen-header__meta">
-                <button type="button" className="zen-collection-button" aria-label="Visited sections progress">
+                <button
+                  type="button"
+                  className="zen-collection-button"
+                  aria-label="Visited sections progress"
+                  aria-describedby="zen-progress-legend"
+                >
                   <span className="zen-collection-button__icon" aria-hidden="true">
                     <svg viewBox="0 0 32 32" fill="none">
                       <path
@@ -443,6 +472,36 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
                   </span>
                   <span className="zen-collection-button__bar" aria-hidden="true">
                     <span style={{ width: `${progressPercent}%` }} />
+                  </span>
+                  {/* Segmented unified progress (exploration vs collection) */}
+                  <span
+                    className="zen-collection-button__segments"
+                    role="progressbar"
+                    aria-label="Unified progress"
+                    aria-valuenow={unified.completion}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-describedby="zen-progress-legend"
+                    data-exploration-weight={unified.explorationWeight}
+                    data-collection-weight={unified.collectionWeight}
+                  >
+                    <span
+                      className="zen-collection-button__segment is-exploration"
+                      style={{ width: `${Math.min(100, unified.explorationPercent)}%` }}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="zen-collection-button__segment is-collection"
+                      style={{ width: `${Math.min(100, unified.collectionPercent)}%` }}
+                      aria-hidden="true"
+                    />
+                  </span>
+                  {/* Accessible legend (sr-only) summarizing segmented & weighted unified progress */}
+                  <span id="zen-progress-legend" className="sr-only">
+                    {`Exploration ${Math.round(unified.explorationPercent)} percent (weight ${(unified.explorationWeight*100).toFixed(0)}%), ` +
+                      `Collection ${Math.round(unified.collectionPercent)} percent (weight ${(unified.collectionWeight*100).toFixed(0)}%). ` +
+                      `Unified completion ${unified.completion} percent.`}
+                    {unified.weightingStrategy === 'adaptive' ? ' Adaptive weighting active.' : ''}
                   </span>
                 </button>
 
@@ -481,11 +540,41 @@ function Header({ onBackToLanding, breadcrumb }: HeaderProps) {
             </div>
           )}
 
-          <div className="zen-header__status" role="status" aria-live="polite">
-            {breadcrumbState.activeSection
-              ? `Active section ${breadcrumbState.activeSection.label}. ${unified.statusLine}`
-              : `Viewing home section. ${unified.statusLine}`}
-          </div>
+          {(() => {
+            const a11yEntry = MICROCOPY.progressA11yTemplate;
+            const a11yText = interpolate(a11yEntry.a11y || a11yEntry.plain || '', {
+              completion: `${unified.completion}%`,
+              visited: unified.visitedCount,
+              totalSec: unified.totalSections,
+              collected: unified.collectedCount,
+              totalCol: unified.totalCollectibles
+            });
+            return (
+              <div className="zen-header__status-group">
+                <div
+                  className="zen-header__status"
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  data-status-type="unified-progress"
+                >
+                  {breadcrumbState.activeSection
+                    ? `Active section ${breadcrumbState.activeSection.label}. ${a11yText}`
+                    : `Viewing home section. ${a11yText}`}
+                  <span className="zen-header__status-terminal" aria-hidden="true">{typedTerminal}</span>
+                </div>
+                <div
+                  className="zen-header__milestone-announcer sr-only"
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  data-status-type="milestone"
+                >
+                  {milestone.message ? `Milestone: ${milestone.message}` : ''}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
 
