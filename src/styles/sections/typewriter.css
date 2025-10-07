@@ -1,0 +1,229 @@
+/* Typewriter / Boot Sequence Section (token aligned) */
+.zen-typewriter {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(var(--space-6), 8vw, var(--space-7)) 0;
+  background:
+    radial-gradient(circle at 18% 18%, color-mix(in oklab, var(--color-brand-pink-hot) 12%, transparent) 0%, transparent 60%),
+    radial-gradient(circle at 78% 82%, color-mix(in oklab, var(--color-brand-blue) 12%, transparent) 0%, transparent 62%);
+}
+
+.light .zen-typewriter,
+.day-mode .zen-typewriter {
+  background:
+    radial-gradient(circle at 18% 18%, color-mix(in oklab, var(--color-brand-pink) 14%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 78% 82%, color-mix(in oklab, var(--color-brand-indigo-light) 12%, transparent) 0%, transparent 60%);
+}
+
+.zen-typewriter--skeleton {
+  background: var(--zen-gradient-app-night-alt);
+}
+
+.light .zen-typewriter--skeleton,
+.day-mode .zen-typewriter--skeleton {
+  background: var(--zen-gradient-app-day-diagonal);
+}
+
+.zen-typewriter__card {
+  background: color-mix(in oklab, var(--zen-glass-layer-strong) 80%, var(--color-brand-night-bg3) 20%);
+  border-radius: var(--radius-3xl);
+  border: 1px solid var(--zen-border-night);
+  padding: clamp(var(--space-5), 5vw, var(--space-6));
+  box-shadow: var(--zen-shadow-deep-ambient-strong);
+  backdrop-filter: blur(26px) saturate(160%);
+}
+
+.light .zen-typewriter__card,
+.day-mode .zen-typewriter__card {
+  background: color-mix(in oklab, var(--color-background) 82%, var(--zen-glass-layer-soft) 18%);
+  border-color: color-mix(in oklab, var(--color-background) 40%, transparent);
+  box-shadow: var(--zen-shadow-deep-ambient-soft);
+}
+
+.zen-typewriter__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+
+.zen-typewriter__eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-background) 70%, var(--color-foreground) 30%);
+}
+
+.light .zen-typewriter__eyebrow,
+.day-mode .zen-typewriter__eyebrow {
+  color: color-mix(in oklab, var(--color-foreground-day-alt) 55%, transparent);
+}
+
+.zen-typewriter__header h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0;
+}
+
+.zen-typewriter__meta {
+  display: grid;
+  justify-items: end;
+  gap: var(--space-1);
+}
+
+.zen-typewriter__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+@media (max-width: 600px) {
+  .zen-typewriter__controls {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-2);
+  }
+}
+
+.zen-typewriter__skip {
+  padding: 0.55rem 1.4rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in oklab, var(--color-background) 18%, transparent);
+  background: color-mix(in oklab, var(--color-background) 8%, transparent);
+  color: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition:
+    transform var(--dur-medium) var(--ease-standard),
+    background-color var(--dur-medium) var(--ease-standard),
+    border-color var(--dur-medium) var(--ease-standard),
+    color var(--dur-medium) var(--ease-standard);
+}
+
+.zen-typewriter__skip:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklab, var(--color-brand-pink-hot) 14%, transparent);
+  border-color: color-mix(in oklab, var(--color-brand-pink-hot) 20%, transparent);
+}
+
+.zen-typewriter__skip:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.zen-typewriter__skip:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--color-brand-pink-hot) 70%, transparent);
+  outline-offset: 2px;
+}
+
+.light .zen-typewriter__skip,
+.day-mode .zen-typewriter__skip {
+  background: color-mix(in oklab, var(--color-background) 12%, transparent);
+  border-color: color-mix(in oklab, var(--color-foreground-day-alt) 22%, transparent);
+}
+
+.light .zen-typewriter__skip:hover,
+.day-mode .zen-typewriter__skip:hover {
+  background: color-mix(in oklab, var(--color-foreground-day-alt) 18%, transparent);
+  border-color: color-mix(in oklab, var(--color-foreground-day-alt) 30%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zen-typewriter__controls,
+  .zen-typewriter__skip {
+    transition: none;
+  }
+}
+
+.zen-typewriter__progress-value {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.zen-typewriter__progress-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: color-mix(in oklab, var(--color-background) 60%, var(--color-foreground) 40%);
+}
+
+.light .zen-typewriter__progress-label,
+.day-mode .zen-typewriter__progress-label {
+  color: color-mix(in oklab, var(--color-foreground-day-alt) 60%, transparent);
+}
+
+.zen-typewriter__viewport {
+  margin-top: clamp(var(--space-4), 4vw, var(--space-5));
+  background: color-mix(in oklab, var(--color-brand-night-bg2) 45%, transparent);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--zen-border-night);
+  max-height: 320px;
+  overflow-y: auto;
+  padding: var(--space-4);
+  font-family: "IBM Plex Mono", "Fira Code", "Menlo", monospace;
+  color: color-mix(in oklab, var(--color-brand-blue) 35%, var(--color-background) 65%);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.light .zen-typewriter__viewport,
+.day-mode .zen-typewriter__viewport {
+  background: color-mix(in oklab, var(--color-background) 12%, transparent);
+  border-color: color-mix(in oklab, var(--color-background) 28%, transparent);
+  color: var(--color-foreground-day-alt);
+}
+
+.zen-typewriter__viewport::-webkit-scrollbar {
+  width: 6px;
+}
+
+.zen-typewriter__viewport::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--color-background) 25%, transparent);
+  border-radius: var(--radius-pill);
+}
+
+.zen-typewriter__line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding-block: 0.35rem;
+  transition: color var(--dur-medium) var(--ease-standard);
+}
+
+.zen-typewriter__line.is-active {
+  color: color-mix(in oklab, var(--color-brand-pink-hot) 38%, var(--color-background) 62%);
+}
+
+.light .zen-typewriter__line.is-active,
+.day-mode .zen-typewriter__line.is-active {
+  color: color-mix(in oklab, var(--color-foreground-day-alt) 70%, var(--color-brand-pink) 30%);
+}
+
+.zen-typewriter__prompt {
+  opacity: 0.6;
+}
+
+.zen-typewriter__cursor {
+  display: inline-block;
+  width: 0.75rem;
+  height: 1em;
+  background: currentColor;
+  border-radius: 1px;
+  margin-left: 0.25rem;
+  animation: zenCursorBlink 1s steps(2, start) infinite;
+}
+
+@keyframes zenCursorBlink {
+  to {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zen-typewriter__cursor {
+    animation: none;
+  }
+}

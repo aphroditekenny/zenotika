@@ -12,6 +12,8 @@ import "./styles/globals.css";
 import "./styles/header.css"; // modularized header styles
 import "./styles/footer.css"; // modularized footer styles
 import "./styles/sections/hero.css";
+import "./styles/sections/typewriter.css";
+import "./styles/sections/hunt.css";
 import "./styles/sections/about.css";
 import "./styles/sections/portfolio.css";
 import "./styles/sections/log.css";

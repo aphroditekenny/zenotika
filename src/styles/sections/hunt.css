@@ -1,0 +1,354 @@
+/* Collection / Scavenger Hunt Section (token aligned) */
+.zen-hunt {
+  position: relative;
+  padding: clamp(var(--space-6), 8vw, var(--space-7)) 0;
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in oklab, var(--color-brand-violet) 10%, transparent) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, color-mix(in oklab, var(--color-brand-blue) 8%, transparent) 0%, transparent 65%);
+}
+
+.light .zen-hunt,
+.day-mode .zen-hunt {
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in oklab, var(--color-brand-pink) 12%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 80% 80%, color-mix(in oklab, var(--color-brand-indigo-light) 10%, transparent) 0%, transparent 60%);
+}
+
+.zen-hunt--skeleton {
+  background: var(--zen-gradient-app-night-alt);
+}
+
+.light .zen-hunt--skeleton,
+.day-mode .zen-hunt--skeleton {
+  background: var(--zen-gradient-app-day-diagonal);
+}
+
+.zen-hunt__card {
+  background: color-mix(in oklab, var(--zen-glass-layer-strong) 78%, var(--color-brand-night-bg2) 22%);
+  border-radius: var(--radius-3xl);
+  border: 1px solid var(--zen-border-night);
+  padding: clamp(var(--space-5), 5vw, var(--space-6));
+  backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: var(--zen-shadow-deep-ambient-mid);
+}
+
+.light .zen-hunt__card,
+.day-mode .zen-hunt__card {
+  background: color-mix(in oklab, var(--color-background) 85%, var(--zen-glass-layer-soft) 15%);
+  border-color: color-mix(in oklab, var(--color-background) 40%, transparent);
+  box-shadow: var(--zen-shadow-deep-ambient-mid-soft);
+}
+
+.zen-hunt__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .zen-hunt__header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.zen-hunt__eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-background) 68%, var(--color-foreground) 32%);
+}
+
+.light .zen-hunt__eyebrow,
+.day-mode .zen-hunt__eyebrow {
+  color: color-mix(in oklab, var(--color-foreground-day-alt) 55%, transparent);
+}
+
+.zen-hunt__description {
+  margin-top: var(--space-2);
+  max-width: 40ch;
+  color: color-mix(in oklab, var(--color-background) 78%, var(--color-foreground) 22%);
+  line-height: 1.7;
+}
+
+.light .zen-hunt__description,
+.day-mode .zen-hunt__description {
+  color: color-mix(in oklab, var(--color-foreground-day-alt) 72%, transparent);
+}
+
+.zen-hunt__meta {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: end;
+}
+
+.zen-hunt__count {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  font-family: "IBM Plex Mono", "Fira Code", monospace;
+  font-size: 1.5rem;
+}
+
+.zen-hunt__count-divider {
+  opacity: 0.5;
+}
+
+.zen-hunt__progress {
+  position: relative;
+  width: 180px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--color-background) 15%, var(--color-foreground) 85%);
+  overflow: hidden;
+}
+
+.zen-hunt__progress span {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--zen-gradient-accent-horizontal);
+}
+
+.light .zen-hunt__progress,
+.day-mode .zen-hunt__progress {
+  background: color-mix(in oklab, var(--color-foreground-day-alt) 20%, var(--color-background) 80%);
+}
+
+.zen-hunt__toggle {
+  justify-self: end;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in oklab, var(--color-background) 18%, transparent);
+  background: color-mix(in oklab, var(--color-background) 10%, transparent);
+  color: inherit;
+  font-weight: 500;
+  transition:
+    background-color var(--dur-medium) var(--ease-standard),
+    transform var(--dur-medium) var(--ease-standard),
+    border-color var(--dur-medium) var(--ease-standard);
+}
+
+.zen-hunt__toggle:hover {
+  transform: translateY(-2px);
+  background: color-mix(in oklab, var(--color-brand-pink-hot) 16%, transparent);
+  border-color: color-mix(in oklab, var(--color-brand-pink-hot) 22%, transparent);
+}
+
+.light .zen-hunt__toggle,
+.day-mode .zen-hunt__toggle {
+  background: color-mix(in oklab, var(--color-background) 16%, transparent);
+  border-color: color-mix(in oklab, var(--color-foreground-day-alt) 24%, transparent);
+}
+
+.light .zen-hunt__toggle:hover,
+.day-mode .zen-hunt__toggle:hover {
+  background: color-mix(in oklab, var(--color-foreground-day-alt) 20%, transparent);
+  border-color: color-mix(in oklab, var(--color-foreground-day-alt) 32%, transparent);
+}
+
+.zen-hunt__panel {
+  margin-top: clamp(var(--space-5), 5vw, var(--space-6));
+  border-top: 1px solid var(--zen-border-night);
+  padding-top: clamp(var(--space-4), 4vw, var(--space-5));
+}
+
+.light .zen-hunt__panel,
+.day-mode .zen-hunt__panel {
+  border-color: color-mix(in oklab, var(--color-background) 28%, transparent);
+}
+
+.zen-hunt__grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .zen-hunt__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .zen-hunt__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.zen-hunt__item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-2xl);
+  background: color-mix(in oklab, var(--color-brand-night-bg3) 25%, transparent);
+  border: 1px solid var(--zen-border-night);
+  transition:
+    transform var(--dur-medium) var(--ease-standard),
+    border-color var(--dur-medium) var(--ease-standard),
+    background-color var(--dur-medium) var(--ease-standard);
+}
+
+.zen-hunt__item.is-collected {
+  border-color: color-mix(in oklab, var(--color-brand-violet) 45%, transparent);
+  background: color-mix(in oklab, var(--color-brand-violet) 18%, transparent);
+}
+
+.zen-hunt__item.is-hidden {
+  opacity: 0.6;
+}
+
+.light .zen-hunt__item,
+.day-mode .zen-hunt__item {
+  background: color-mix(in oklab, var(--color-background) 18%, transparent);
+  border-color: color-mix(in oklab, var(--color-foreground-day-alt) 22%, transparent);
+}
+
+.light .zen-hunt__item.is-collected,
+.day-mode .zen-hunt__item.is-collected {
+  background: color-mix(in oklab, var(--color-brand-violet) 18%, var(--color-background) 82%);
+  border-color: color-mix(in oklab, var(--color-brand-violet) 38%, transparent);
+}
+
+.zen-hunt__item:hover {
+  transform: translateY(-3px);
+}
+
+.zen-hunt__item-icon {
+  width: 56px;
+  aspect-ratio: 1;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: color-mix(in oklab, var(--color-background) 16%, transparent);
+  display: grid;
+  place-items: center;
+}
+
+.light .zen-hunt__item-icon,
+.day-mode .zen-hunt__item-icon {
+  background: color-mix(in oklab, var(--color-background) 28%, transparent);
+}
+
+.zen-hunt__item-icon img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.zen-hunt__item-name {
+  margin: 0;
+  font-weight: 600;
+}
+
+.zen-hunt__item-description {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  color: color-mix(in oklab, var(--color-background) 72%, var(--color-foreground) 28%);
+}
+
+.light .zen-hunt__item-description,
+.day-mode .zen-hunt__item-description {
+  color: color-mix(in oklab, var(--color-foreground-day-alt) 70%, transparent);
+}
+
+.zen-hunt__item-status {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-background) 64%, var(--color-foreground) 36%);
+}
+
+.zen-hunt__item.is-collected .zen-hunt__item-status {
+  color: color-mix(in oklab, var(--color-brand-violet) 65%, var(--color-background) 35%);
+}
+
+.light .zen-hunt__item-status,
+.day-mode .zen-hunt__item-status {
+  color: color-mix(in oklab, var(--color-foreground-day-alt) 55%, transparent);
+}
+
+.zen-hunt__item-actions {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: end;
+}
+
+.zen-hunt__item-toggle {
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in oklab, var(--color-background) 20%, transparent);
+  background: color-mix(in oklab, var(--color-background) 12%, transparent);
+  color: inherit;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition:
+    transform var(--dur-medium) var(--ease-standard),
+    background-color var(--dur-medium) var(--ease-standard),
+    border-color var(--dur-medium) var(--ease-standard),
+    color var(--dur-medium) var(--ease-standard);
+}
+
+.zen-hunt__item-toggle.is-collected {
+  border-color: color-mix(in oklab, var(--color-brand-violet) 42%, transparent);
+  background: color-mix(in oklab, var(--color-brand-violet) 24%, transparent);
+  color: color-mix(in oklab, var(--color-background) 85%, transparent);
+}
+
+.zen-hunt__item-toggle:hover {
+  transform: translateY(-2px);
+  background: color-mix(in oklab, var(--color-brand-pink-hot) 18%, transparent);
+  border-color: color-mix(in oklab, var(--color-brand-pink-hot) 25%, transparent);
+}
+
+.zen-hunt__item-toggle:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--color-brand-pink-hot) 70%, transparent);
+  outline-offset: 2px;
+}
+
+.zen-hunt__item-toggle:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.light .zen-hunt__item-toggle,
+.day-mode .zen-hunt__item-toggle {
+  background: color-mix(in oklab, var(--color-background) 20%, transparent);
+  border-color: color-mix(in oklab, var(--color-foreground-day-alt) 26%, transparent);
+}
+
+.light .zen-hunt__item-toggle.is-collected,
+.day-mode .zen-hunt__item-toggle.is-collected {
+  background: color-mix(in oklab, var(--color-brand-violet) 24%, var(--color-background) 76%);
+  color: color-mix(in oklab, var(--color-foreground-day-alt) 80%, transparent);
+}
+
+@media (max-width: 640px) {
+  .zen-hunt__item {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .zen-hunt__item-icon {
+    justify-self: center;
+  }
+
+  .zen-hunt__meta,
+  .zen-hunt__count,
+  .zen-hunt__progress,
+  .zen-hunt__toggle,
+  .zen-hunt__item-actions {
+    justify-self: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zen-hunt__item,
+  .zen-hunt__toggle,
+  .zen-hunt__item-toggle {
+    transition: none;
+  }
+}
