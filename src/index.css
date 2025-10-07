@@ -6134,15 +6134,7 @@ body { background: var(--color-background,var(--zen-white-solid)); color: var(--
   animation: zenShimmer 3s ease-in-out infinite;
 }
 
-@keyframes zenShimmer {
-  0% {
-    left: -100%;
-  }
-
-  100% {
-    left: 100%;
-  }
-}
+/* duplicate zenShimmer keyframes removed (guarded transform-only version at top) */
 
 .zen-triangle-arrangement {
   position: relative;
