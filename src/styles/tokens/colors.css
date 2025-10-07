@@ -1,0 +1,31 @@
+/* Phase 1 Color Tokens: extracted from globals.css semantic layer.
+   NOTE: These map existing --color-brand-* variables for future decoupling.
+   In Phase 2 we will replace direct literals in components with these tokens.
+*/
+:root {
+  /* Brand Core */
+  --token-color-brand-pink: var(--color-brand-pink);
+  --token-color-brand-violet: var(--color-brand-violet);
+  --token-color-brand-indigo: var(--color-brand-indigo);
+  --token-color-brand-indigo-light: var(--color-brand-indigo-light);
+  --token-color-brand-navy: var(--color-brand-navy);
+
+  /* Background Modes */
+  --token-color-surface-night-1: var(--color-brand-night-bg1);
+  --token-color-surface-night-2: var(--color-brand-night-bg2);
+  --token-color-surface-night-3: var(--color-brand-night-bg3);
+  --token-color-surface-day-1: var(--color-brand-day-bg1);
+  --token-color-surface-day-2: var(--color-brand-day-bg2);
+
+  /* Meta / Theme Accents */
+  --token-color-meta-dark: var(--color-meta-theme-dark);
+  --token-color-meta-light: var(--color-meta-theme-light);
+
+  /* Focus & Interaction (bridging to accessibility.css) */
+  --token-color-focus-ring: var(--focus-ring-color, var(--color-brand-violet));
+}
+
+/* Usage example (Phase 1 docs):
+   color: var(--token-color-brand-pink);
+   background: linear-gradient(var(--token-color-brand-violet), var(--token-color-brand-indigo));
+*/

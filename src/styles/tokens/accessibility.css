@@ -1,14 +1,24 @@
+/* Accessibility Tokens & Focus Styles (Phase 1)
+   - Centralized focus ring variables (consumed by colors.css token alias)
+   - Next: de-duplicate component-specific outline rules in header/footer
+*/
 :root {
   --focus-ring-color: color-mix(in srgb, var(--color-brand-violet) 60%, transparent);
   --focus-ring-width: 3px;
   --focus-ring-offset: 3px;
 }
 
+/* Generic focus ring application */
 .focus-ring:focus-visible,
 [role='button']:focus-visible,
 button:focus-visible,
-a:focus-visible {
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
   border-radius: 0.5rem;
 }
+
+/* Bridge: map legacy custom selectors (header/footer) later to .focus-ring to reduce CSS weight */

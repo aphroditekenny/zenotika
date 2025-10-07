@@ -1,4 +1,12 @@
 /* Newsletter & log styles moved to styles/sections/log.css */
+/* Phase 1 Token Imports ----------------------------------------------------
+  Spacing, motion, accessibility (focus), and color token indirections.
+  Keep above Tailwind layers so utilities can consume them.
+*/
+@import "./styles/tokens/spacing.css" layer(base);
+@import "./styles/tokens/motion.css" layer(base);
+@import "./styles/tokens/accessibility.css" layer(base);
+@import "./styles/tokens/colors.css" layer(base);
 /*! tailwindcss v4.1.3 | MIT License | https://tailwindcss.com */
 @layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
