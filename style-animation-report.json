@@ -1,287 +1,233 @@
 {
-  "total": 64,
+  "total": 50,
   "guarded": 47,
-  "guardedPct": 73.44,
-  "unsafeBlocks": 4,
-  "unsafePct": 6.25,
+  "guardedPct": 94,
+  "unsafeBlocks": 3,
+  "unsafePct": 6,
   "keyframes": [
     {
       "name": "fadeInUp",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "bounceDelay",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenGlow",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenShimmer",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenFloat",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenSparkle",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "dotBounce",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "skeletonShimmer",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "spinRing",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenGradientFlow",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenPulse",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "pulse",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "enter",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenAmbientFlow",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "floatVoxel",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "gentleFloat",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "scrollBounce",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenStarfield",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "floatAmbient",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "shimmer",
       "file": "A:\\dev\\zenotika\\src\\index.css",
       "guarded": true,
-      "disallowed": []
-    },
-    {
-      "name": "zenPulse",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "pulse",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "enter",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "zenAmbientFlow",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "scrollBounce",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "gentleFloat",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "bounceDelay",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "zenGlow",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "zenShimmer",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": [
-        "left"
-      ]
-    },
-    {
-      "name": "zenFloat",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "dotBounce",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "skeletonShimmer",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "spinRing",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
-    },
-    {
-      "name": "zenPulse",
-      "file": "A:\\dev\\zenotika\\src\\index.css",
-      "guarded": false,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenCloudFloat",
       "file": "A:\\dev\\zenotika\\src\\styles\\footer.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenFooterStars",
       "file": "A:\\dev\\zenotika\\src\\styles\\footer.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenFooterGrid",
       "file": "A:\\dev\\zenotika\\src\\styles\\footer.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenFooterMist",
       "file": "A:\\dev\\zenotika\\src\\styles\\footer.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "scrollBounce",
       "file": "A:\\dev\\zenotika\\src\\styles\\globals.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "gentleFloat",
       "file": "A:\\dev\\zenotika\\src\\styles\\globals.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "floatVoxel",
       "file": "A:\\dev\\zenotika\\src\\styles\\globals.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "floatAmbient",
       "file": "A:\\dev\\zenotika\\src\\styles\\globals.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "shimmer",
       "file": "A:\\dev\\zenotika\\src\\styles\\globals.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "fadeInUp",
       "file": "A:\\dev\\zenotika\\src\\styles\\globals.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "bounceDelay",
       "file": "A:\\dev\\zenotika\\src\\styles\\globals.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenGlow",
       "file": "A:\\dev\\zenotika\\src\\styles\\globals.css",
       "guarded": false,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenShimmer",
@@ -289,37 +235,43 @@
       "guarded": false,
       "disallowed": [
         "left"
-      ]
+      ],
+      "severity": "low"
     },
     {
       "name": "zenFloat",
       "file": "A:\\dev\\zenotika\\src\\styles\\globals.css",
       "guarded": false,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenHeaderReveal",
       "file": "A:\\dev\\zenotika\\src\\styles\\header.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenHeaderGlow",
       "file": "A:\\dev\\zenotika\\src\\styles\\header.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenLogoRipple",
       "file": "A:\\dev\\zenotika\\src\\styles\\header.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenBarGradientFlow",
       "file": "A:\\dev\\zenotika\\src\\styles\\header.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenCrumbPulse",
@@ -327,31 +279,36 @@
       "guarded": true,
       "disallowed": [
         "box-shadow"
-      ]
+      ],
+      "severity": "high"
     },
     {
       "name": "zenMobileMenuSlideIn",
       "file": "A:\\dev\\zenotika\\src\\styles\\header.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenCountReveal",
       "file": "A:\\dev\\zenotika\\src\\styles\\header.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenAmbientFlow",
       "file": "A:\\dev\\zenotika\\src\\styles\\legacy\\ambient.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenGlow",
       "file": "A:\\dev\\zenotika\\src\\styles\\sections\\about.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenShimmer",
@@ -359,43 +316,50 @@
       "guarded": true,
       "disallowed": [
         "left"
-      ]
+      ],
+      "severity": "low"
     },
     {
       "name": "zenFloat",
       "file": "A:\\dev\\zenotika\\src\\styles\\sections\\about.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenHeroFloat",
       "file": "A:\\dev\\zenotika\\src\\styles\\sections\\hero.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenHeroOrbit",
       "file": "A:\\dev\\zenotika\\src\\styles\\sections\\hero.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenHeroPulse",
       "file": "A:\\dev\\zenotika\\src\\styles\\sections\\hero.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenScrollBounce",
       "file": "A:\\dev\\zenotika\\src\\styles\\sections\\hero.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     },
     {
       "name": "zenCursorBlink",
       "file": "A:\\dev\\zenotika\\src\\styles\\sections\\typewriter.css",
       "guarded": true,
-      "disallowed": []
+      "disallowed": [],
+      "severity": "none"
     }
   ]
 }

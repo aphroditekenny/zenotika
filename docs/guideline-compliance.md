@@ -1,1 +1,64 @@
-# Guideline Compliance Matrix (Initial Pass)\n\nGenerated: 2025-10-08\nScope: Derives actionable rules from css.md & js.md (architecture, naming, theming, motion, spacing, tokens, accessibility, animation governance). Classifications: \n- Enforced (scripted)\n- Implemented (manual)\n- Partial\n- Missing\n- N/A (not applicable / deferred)\n\n## 1. Naming & Architecture\n| Rule | Status | Evidence | Remediation | Priority | Owner | Target \n|------|--------|----------|------------|---------|-------|--------|\n| Separate vendor/base layer from app components | Partial | Monolithic `index.css` + Tailwind layer + tokens; legacy Webflow blocks inline | Extract base/reset -> `styles/base/` & move legacy to `styles/legacy/` then purge | M | FE | Iteration 2 |\n| Use semantic variables instead of raw hex | Partial | 58 unique hex, white overlays tokenized | Black alpha + brand hues into tokens; ratchet < 40 | H | FE | Iteration 1 |\n| Consistent state modifiers (`.is-*`, `.has-*`) | Implemented | Existing `.is-featured`, `.is-hover-style` | Audit for stray non-conforming states | L | FE | Iteration 3 |\n| Avoid duplicated day/night DOM variants | Partial | `.day` / `.night` element pairs | Migrate to `[data-theme]` variant styling | H | FE | Iteration 2 |\n| Modularize components styles | Partial | Some in `styles/sections/`, large residual in `index.css` | Progressive extraction per section | M | FE | Rolling |\n| Central spacing scale | Implemented | `spacing.css` tokens present | Map remaining ad-hoc sizes -> scale | M | FE | Iteration 1 |\n| Central motion tokens | Partial | `motion.css` imported (assumed) but keyframes custom | Normalize durations/easings via tokens | M | FE | Iteration 2 |\n\n## 2. Theming\n| Rule | Status | Evidence | Remediation | Priority | Target |\n|------|--------|----------|------------|---------|--------|\n| Use CSS variables for theme colors | Implemented | `colors-semantic.css`, theme layer in index | Continue consolidation | M | Rolling |\n| Single DOM with attribute theme switch | Missing | Duplicated `.day/.night` assets | Introduce `[data-theme]` root + conditional styles | H | Iteration 2 |\n| Respect prefers-color-scheme | Missing | No media query override found | Add auto default + user override | M | Iteration 2 |\n\n## 3. Motion & Animation\n| Rule | Status | Evidence | Remediation | Priority | Target |\n|------|--------|----------|------------|---------|--------|\n| Guard non-essential motion with prefers-reduced-motion | Enforced | All keyframes within guard | Maintain script enforcement | H | Continuous |\n| Avoid layout thrash (transform/opacity only) | Implemented | Keyframes use transform/opacity | Add audit script to confirm | M | Iteration 1 |\n| Provide manual motion toggle | Partial | `MotionToggle.tsx` exists | Connect toggle -> root class to disable animations | M | Iteration 1 |\n| Normalize durations/easing tokens | Partial | Mixed inline durations & easing | Add `--motion-fast/standard/slow` & map | M | Iteration 2 |\n\n## 4. Color & Tokens\n| Rule | Status | Evidence | Remediation | Priority | Target |\n|------|--------|----------|------------|---------|--------|\n| No raw white hex overlays | Enforced | White alphas tokenized | N/A | - | Done |\n| Reduce unique hex below threshold | Enforced | 58 < limit 70 | Ratchet to 50 then 40 after black pass | H | Iteration 1 |\n| Use semantic brand palette | Partial | Brand hex scattered (#ff7a8a etc.) | Introduce brand tokens or mix derivations | H | Iteration 1 |\n| Discourage low-frequency one-offs | Partial | Many count=1 entries | Fold into color-mix or remove | M | Iteration 2 |\n\n## 5. Accessibility\n| Rule | Status | Evidence | Remediation | Priority | Target |\n|------|--------|----------|------------|---------|--------|\n| Focus visible styling | Implemented | `accessibility.css` .focus-ring utility | Replace bespoke outlines in headers/footers | M | Iteration 1 |\n| Non-hover content access on touch | Partial | Some hover overlays removed mobile | Verify information parity | M | Iteration 2 |\n| Reduced motion support | Partial | System guard present; toggle incomplete | Wire toggle -> `data-reduced-motion` attr | M | Iteration 1 |\n| High contrast text ratios | Partial | Need automated audit | Add axe/pa11y CI check | M | Iteration 2 |\n\n## 6. Spacing & Layout\n| Rule | Status | Evidence | Remediation | Priority | Target |\n|------|--------|----------|------------|---------|--------|\n| Unified spacing scale usage | Partial | Scale tokens exist; ad-hoc in legacy CSS | Map & replace top offenders | M | Iteration 1 |\n| Responsive via fluid clamp where appropriate | Partial | Headings use clamp; others static | Add clamp to major padding/margins | L | Iteration 3 |\n| Avoid deep z-index chaos | Partial | Large ranges (5000 etc.) | Introduce z-index scale tokens | L | Iteration 3 |\n\n## 7. Tooling & Scripts\n| Rule | Status | Evidence | Remediation | Priority | Target |\n|------|--------|----------|------------|---------|--------|\n| Automated keyframe guard audit | Enforced | `report-keyframes.mjs` | Maintain | H | Continuous |\n| Automated color entropy audit | Enforced | `report-colors.mjs` | Extend to classify brand vs neutral | M | Iteration 1 |\n| Threshold enforcement pipeline | Enforced | `enforce-style-thresholds.mjs` | Ratchet after next pass | H | Iteration 1 |\n| Animation property safety audit | Missing | No script for disallowed props | Add script scanning keyframe blocks | H | Iteration 1 |\n| Accessibility CI (contrast, focus) | Missing | No automated check | Add jest-axe / pa11y | M | Iteration 2 |\n\n## 8. Risk & Sequence Plan\n1. Color entropy (black alpha + brand) -> unlock ratchet 70 -> 50 -> 40.\n2. Add animation safety audit script producing `style-animation-report.json`.\n3. Wire MotionToggle to root attr & disable animation utilities when active.\n4. Theme attr migration `[data-theme]` replacing duplicated day/night nodes.\n5. Spacing remap (generate report of non-scale values, apply replacements).\n6. Add contrast & a11y CI.\n7. Modular extraction of residual monolith sections.\n\n## 9. Remediation Backlog (Actionable Items)\n| ID | Task | Category | Effort | Impact | Blockers | Status |\n|----|------|----------|--------|--------|----------|--------|\n| C-01 | Introduce black alpha tokens (03,05,08,10,15,24,40,60,80) | Color | S | H | None | Pending |\n| C-02 | Replace #000*, #000000**, #00000026 variants with tokens/color-mix | Color | M | H | C-01 | Pending |\n| C-03 | Brand pink (#ff7a8a) -> semantic token (primary-accent) | Color | S | M | None | Pending |\n| C-04 | Ratchet RAW_HEX_LIMIT 70 -> 50 | Tooling | XS | M | C-01/C-02 | Pending |\n| M-01 | Animation property audit script | Motion | M | M | None | Pending |\n| M-02 | Wire MotionToggle to add `data-reduced-motion` root attr | Motion | S | M | None | Pending |\n| T-01 | `[data-theme]` migration plan doc | Theming | S | H | None | Pending |\n| T-02 | Remove duplicated `.day/.night` DOM nodes incrementally | Theming | M | H | T-01 | Pending |\n| S-01 | Generate spacing usage report (non-token values) | Spacing | S | M | None | Pending |\n| S-02 | Replace top 20 ad-hoc spacings with scale tokens | Spacing | M | M | S-01 | Pending |\n| A11Y-01 | Replace bespoke outline rules with `.focus-ring` | Accessibility | S | M | None | Pending |\n| A11Y-02 | Add jest-axe or pa11y CI integration | Accessibility | M | M | None | Pending |\n| A11Y-03 | Verify hover-dependent info duplication on mobile | Accessibility | S | M | None | Pending |\n| THEME-01 | Add prefers-color-scheme auto default + manual override logic | Theming | S | M | None | Pending |\n| REF-01 | Extract base/reset from `index.css` | Architecture | M | M | None | Pending |\n| REF-02 | Extract sections (project, log, rooms) into modular files | Architecture | M | M | REF-01 | Pending |\n| PERF-01 | Critical CSS extraction plan | Performance | M | M | REF-01 | Pending |\n\n## 10. Metrics Baseline\n- Unique hex colors: 58 (target < 40)\n- Unguarded keyframes: 0 (steady-state)\n- Spacing tokens defined: 12 | Non-token spacing usage: (TBD after S-01)\n- Theme duplication: Day/Night variant pairs present (hero assets, cloud layers, background gradients)\n\n## 11. Next Immediate Actions (Proposed)\n1. Implement C-01/C-02 (black alpha token introduction + replacements).\n2. Add animation audit script (M-01).\n3. Ratchet RAW_HEX_LIMIT to 50 once unique hex <= 50.\n\n---\n*This file will be regenerated/updated as remediation tasks land.*\n
+# Guideline Compliance Matrix (Updated)
+
+Generated: 2025-10-08 (post color ratchet)
+Scope: Same as initial pass. This section supersedes the malformed single-line encoding above.
+
+## 1. Naming & Architecture
+| Rule | Status | Evidence | Remediation | Priority | Owner | Target |
+|------|--------|----------|------------|---------|-------|--------|
+| Separate vendor/base layer from app components | Partial | Monolithic `index.css` still large | Extract base + legacy to `styles/base` & `styles/legacy` | M | FE | Iteration 2 |
+| Use semantic variables instead of raw hex | Partial | 38 unique hex (down from 58) | Reduce to <30 (brand + one-offs) | H | FE | Iteration 2 |
+| Consistent state modifiers (`.is-*`, `.has-*`) | Implemented | Pattern present | Periodic audit | L | FE | Iteration 3 |
+| Avoid duplicated day/night DOM variants | Partial | `.day/.night` still present | `[data-theme]` migration plan (T-01) | H | FE | Iteration 2 |
+| Modularize components styles | Partial | Extraction in progress | Continue sectional split | M | FE | Rolling |
+| Central spacing scale | Implemented | Tokens present | Map residual ad-hoc values | M | FE | Iteration 1 |
+| Central motion tokens | Partial | Durations/easings mixed | Define motion scale & map | M | FE | Iteration 2 |
+
+## 2. Theming
+| Rule | Status | Evidence | Remediation | Priority | Target |
+|------|--------|----------|------------|---------|--------|
+| Use CSS variables for theme colors | Implemented | Token files + usage | Continue consolidation | M | Rolling |
+| Single DOM with attribute theme switch | Missing | Duplicated variants | Implement `[data-theme]` attr | H | Iteration 2 |
+| Respect prefers-color-scheme | Missing | No auto detection | Add media + override logic | M | Iteration 2 |
+
+## 3. Motion & Animation
+| Rule | Status | Evidence | Remediation | Priority | Target |
+|------|--------|----------|------------|---------|--------|
+| Guard non-essential motion | Enforced | Keyframe report 0 unguarded | Maintain | H | Continuous |
+| Avoid layout thrash | Implemented | transform/opacity usage | Add audit script (M-01) | M | Iteration 1 |
+| Provide manual motion toggle | Partial | Toggle component exists | Wire to root attr | M | Iteration 1 |
+| Normalize durations/easing | Partial | Mixed inline values | Introduce motion tokens | M | Iteration 2 |
+
+## 4. Color & Tokens
+| Rule | Status | Evidence | Remediation | Priority | Target |
+|------|--------|----------|------------|---------|--------|
+| No raw white hex overlays | Enforced | Replaced with `--zen-white-alpha-*` | N/A | - | Done |
+| Reduce unique hex below threshold | Enforced | 38 < limit 50 | Next ratchet -> 40 (<30 stretch) | H | Iteration 2 |
+| Use semantic brand palette | Partial | Brand pink inline (#ff7a8a) | Add brand tokens | H | Iteration 2 |
+| Discourage low-frequency one-offs | Partial | Many count=1 | Fold into mixes/remove | M | Iteration 2 |
+
+## 5. Accessibility (unchanged vs initial except motion toggle wiring)
+| Focus visible | Implemented | `.focus-ring` utility | Normalize legacy outlines | M | Iteration 1 |
+| Reduced motion support | Partial | Guarded animations; toggle un-wired | Wire toggle | M | Iteration 1 |
+
+## 6. Tooling & Scripts (delta)
+| Item | Status | Note |
+|------|--------|------|
+| Black alpha token ladder | Done | Added 25,50,70,90,95 extensions |
+| Color entropy ratchet 70->50 | Done | RAW_HEX_LIMIT updated |
+| Token directory excluded from color scan | Done | report-colors ignore implemented |
+| Animation safety JSON | Partial | GuardedPct 81% (duplicate-name parsing) |
+
+## 7. Metrics (Updated)
+- Unique hex colors: 27 (below ratcheted limit 40; next goal <30 then <25)
+- RAW_HEX_LIMIT: 40 (next planned 30)
+- Unguarded keyframes (report-keyframes): 0
+- Animation safety guardedPct: 94% (unsafe=3; severity classification active)
+
+## 8. Updated Next Actions
+1. Remediate 3 unsafe keyframes (remove box-shadow animation -> opacity/transform token).
+2. Final prune of rare colors to reach <30 (done) then push toward <25.
+3. Begin `[data-theme]` implementation replacing `.day/.night` wrappers.
+
+---
+This updated section will replace the earlier initial pass once verified; legacy encoded block retained temporarily for diff clarity.

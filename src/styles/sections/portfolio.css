@@ -1,4 +1,47 @@
-/* Portfolio Section (extracted from index.css) */
+/* Portfolio Section (extracted from index.css)
+   Combines section surface, controls wrapper, search input, and filter buttons.
+*/
+
+@layer components {
+  .zen-portfolio-section {
+    position: relative;
+    background: var(--zen-radial-duo-portfolio-night);
+  }
+
+  /* Light/day variant opacity tweak for star overlay handled elsewhere. */
+
+  .zen-portfolio-controls {
+    will-change: contents;
+    contain: layout;
+  }
+
+  .zen-search-input {
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    transition: all .3s cubic-bezier(.4, 0, .2, 1);
+  }
+
+  .zen-search-input:focus {
+    transform: scale(1.02);
+    box-shadow: var(--zen-shadow-accent-pink-md);
+  }
+
+  .zen-filter-btn {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--zen-white-alpha-10);
+    will-change: transform;
+    contain: layout style;
+    transition: transform .2s, box-shadow .2s;
+  }
+
+  .zen-filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--zen-shadow-elev-sm);
+  }
+}
+
+/* Future: unify filter/search control chrome with generic glass utility classes. *//* Portfolio Section (extracted from index.css) */
 .zen-portfolio-section {
 	position: relative;
 	background: var(--zen-radial-duo-portfolio-night);

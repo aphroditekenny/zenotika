@@ -1,0 +1,11 @@
+/* Shadow / Elevation Tokens (Phase 1) */
+@layer base {
+  :root {
+    --shadow-color-base: 220 40% 2%;
+    --shadow-elevation-1: 0 1px 2px hsl(var(--shadow-color-base)/0.25), 0 0 0 1px hsl(var(--shadow-color-base)/0.06);
+    --shadow-elevation-2: 0 2px 4px hsl(var(--shadow-color-base)/0.22), 0 1px 0 1px hsl(var(--shadow-color-base)/0.04);
+    --shadow-elevation-3: 0 4px 8px hsl(var(--shadow-color-base)/0.22), 0 2px 0 1px hsl(var(--shadow-color-base)/0.04);
+    --shadow-elevation-4: 0 8px 16px hsl(var(--shadow-color-base)/0.24), 0 4px 0 1px hsl(var(--shadow-color-base)/0.05);
+    --shadow-focus-ring: 0 0 0 3px color-mix(in oklab, var(--zen-accent-pink) 40%, transparent);
+  }
+}

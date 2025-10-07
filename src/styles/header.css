@@ -50,8 +50,17 @@
 .zen-crumb::before { left:-31px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04)); clip-path: path('M0 60L0.999994 60C17.5685 60 31 46.5685 31 30C31 13.4315 17.5685 0 1 0L0 0L0 60Z'); transform: scaleY(0.5) translateY(50%); }
 .zen-crumb::after { right:-16px; background: rgba(255,255,255,0.04); clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); transform: scaleY(0.5) translateY(50%); }
 .zen-header--light .zen-crumb::before, .zen-header--light .zen-crumb::after { background: linear-gradient(90deg, transparent, rgba(22,25,61,0.06)); }
-.zen-crumb.is-active .zen-crumb__button { color:var(--zen-white-solid); background: linear-gradient(135deg, var(--zen-accent-pink), var(--zen-accent-violet)); }
-.zen-header--light .zen-crumb.is-active .zen-crumb__button { color:#0b0c29; background: linear-gradient(135deg, rgba(255,180,210,0.95), rgba(193,200,255,0.9)); }
+.zen-crumb.is-active .zen-crumb__button {
+  color:var(--zen-white-solid);
+  background: linear-gradient(135deg, var(--zen-accent-pink), var(--zen-accent-violet));
+  box-shadow: var(--zen-shadow-focus-pulse);
+  animation: zenCrumbPulse 1.8s ease-in-out infinite;
+}
+.zen-header--light .zen-crumb.is-active .zen-crumb__button {
+  color:var(--zen-brand-crumb-active-dark);
+  background: linear-gradient(135deg, rgba(255,180,210,0.95), rgba(193,200,255,0.9));
+  box-shadow: var(--zen-shadow-focus-pulse);
+}
 .zen-crumb.is-visited:not(.is-active) .zen-crumb__button { color:rgba(255,255,255,0.7); }
 .zen-header--light .zen-crumb.is-visited:not(.is-active) .zen-crumb__button { color:rgba(22,25,61,0.72); }
 .zen-crumb__active-indicator { width:.4rem; height:.4rem; border-radius:50%; background:currentColor; opacity:.9; }
@@ -75,7 +84,7 @@
 .zen-collection-button__icon { display:inline-flex; align-items:center; justify-content:center; width:2.1rem; height:2.1rem; border-radius:50%; background:linear-gradient(135deg, var(--brand-pink-20), var(--brand-violet-22)); color:rgba(241,240,255,0.95); }
 .zen-header--light .zen-collection-button__icon { background:linear-gradient(135deg, var(--brand-pink-30), var(--brand-violet-25)); }
 .zen-collection-button__bar { position:absolute; inset:auto 0 0; height:3px; background:rgba(255,255,255,0.12); transition:height .3s ease; }
-.zen-collection-button__bar span { display:block; height:100%; background:linear-gradient(90deg, var(--zen-accent-pink), var(--zen-accent-violet), #7884ff, var(--zen-accent-pink)); background-size:200% 100%; animation: zenBarGradientFlow 3s ease infinite; transition: width .4s ease; }
+.zen-collection-button__bar span { display:block; height:100%; background:linear-gradient(90deg, var(--zen-accent-pink), var(--zen-accent-violet), var(--zen-accent-indigo), var(--zen-accent-pink)); background-size:200% 100%; animation: zenBarGradientFlow 3s ease infinite; transition: width .4s ease; }
 .zen-chip { display:inline-flex; align-items:center; justify-content:center; padding:.45rem .85rem; border-radius:999px; border:1px solid var(--zen-glass-layer-strong); background:var(--zen-glass-layer-soft); color:rgba(255,255,255,0.75); font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; font-weight:600; transition: transform var(--dur-fast) var(--ease-standard), background var(--dur-medium) var(--ease-standard), border-color var(--dur-medium) var(--ease-standard); position:relative; overflow:hidden; }
 .zen-chip--muted { background: rgba(82,196,164,0.18); border-color: rgba(82,196,164,0.3); color:rgba(255,255,255,0.85); }
 .zen-header--light .zen-chip { border-color:var(--zen-border-day); background:rgba(233,237,255,0.6); color:rgba(12,15,56,0.7); }
@@ -110,13 +119,8 @@
 
 /* Animations */
 @media (prefers-reduced-motion: no-preference) {
-  @keyframes zenHeaderReveal { from { opacity:0; transform:translateY(-100%);} to { opacity:1; transform:translateY(0);} }
-  @keyframes zenHeaderGlow { 0%,100% { opacity:.6; transform:scale(1);} 50% { opacity:.85; transform:scale(1.03);} }
-  @keyframes zenLogoRipple { 0% { transform:scale(.95); opacity:.8;} 50% { transform:scale(1.05); opacity:.4;} 100% { transform:scale(1.15); opacity:0;} }
-  @keyframes zenBarGradientFlow { 0% { background-position:0% 50%; } 50% { background-position:100% 50%; } 100% { background-position:0% 50%; } }
-  @keyframes zenCrumbPulse { 0%,100% { box-shadow:0 0 0 0 var(--brand-pink-30);} 50% { box-shadow: var(--zen-shadow-focus-pulse); } }
-  @keyframes zenMobileMenuSlideIn { from { opacity:0; transform:translateX(40px);} to { opacity:1; transform:translateX(0);} }
-  @keyframes zenCountReveal { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:translateY(0);} }
+   /* Keyframes migrated to motion/registry.css (zenHeaderReveal, zenHeaderGlow, zenLogoRipple,
+     zenBarGradientFlow, zenCrumbPulse, zenMobileMenuSlideIn, zenCountReveal) */
 }
 
 .zen-header { animation: zenHeaderReveal .6s cubic-bezier(0.22,1,0.36,1) forwards; }
@@ -130,7 +134,8 @@
   .zen-header { animation:none; }
   .zen-header__glow { animation:none; }
   .zen-mobile-menu.is-visible .zen-mobile-menu__inner { animation:none; }
-  .zen-collection-button__bar span { animation:none; background:linear-gradient(90deg, var(--zen-accent-pink), #7884ff); }
+  .zen-crumb.is-active .zen-crumb__button { animation:none; }
+  .zen-collection-button__bar span { animation:none; background:linear-gradient(90deg, var(--zen-accent-pink), var(--zen-accent-indigo)); }
 }
 
 /* Desktop visibility for crumbs */

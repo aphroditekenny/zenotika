@@ -19,7 +19,7 @@ function collectFiles(dir) {
   return out;
 }
 
-const files = collectFiles(CSS_DIR);
+const files = collectFiles(CSS_DIR).filter(f => !/src[\\/]+styles[\\/]+tokens[\\/]/.test(f));
 const freq = new Map();
 const fileUsage = new Map();
 

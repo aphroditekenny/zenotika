@@ -67,9 +67,7 @@ html[data-theme='light'] .custom-background:before {
     linear-gradient(45deg, transparent 40%, var(--blue-brand-08, rgba(59,130,246,0.08)) 50%, transparent 60%);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes zenAmbientFlow { 0%,100% { opacity:.8; transform:scale(1) translateZ(0);} 50% { opacity:1; transform:scale(1.02) translateZ(0);} }
-}
+/* Removed duplicate zenAmbientFlow keyframes – canonical definition in motion registry */
 
 @media (prefers-reduced-motion: reduce) {
   .custom-background { transition: none; }

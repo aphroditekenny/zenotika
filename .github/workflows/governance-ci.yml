@@ -1,0 +1,32 @@
+name: Governance CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Motion Registry Enforcement (strict)
+        run: node scripts/motion-registry-enforce.mjs --strict
+
+      - name: Color Lint
+        run: npm run lint:colors
+
+      - name: Run Tests
+        run: npm test -- --run

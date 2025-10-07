@@ -1,0 +1,14 @@
+/* Aggregated stylesheet bringing base, utilities, components, legacy layers together. */
+@import "./base.css" layer(base);
+@import "./motion/registry.css" layer(motion);
+@import "./utilities.css" layer(utilities);
+@import "./utilities/typography-utilities.css" layer(utilities);
+@import "./legacy/webflow.css" layer(legacy);
+@import "./components/project-card.css" layer(components);
+@import "./components/loading.css" layer(components);
+@import "./components/scroll-progress.css" layer(components);
+@import "./components/ambient-effects.css" layer(components);
+@import "./components/log-card.css" layer(components);
+@import "./sections/portfolio.css" layer(components);
+@import "./components/button-variants.css" layer(components);
+/* Additional component imports (rooms, log, footer, collection) will be appended here in subsequent splits. */

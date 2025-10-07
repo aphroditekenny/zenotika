@@ -79,7 +79,7 @@
 
 /* Clouds */
 .zen-cloud-drift { animation:zenCloudFloat linear infinite; will-change:transform; backface-visibility:hidden; transform:translateZ(0); }
-@media (prefers-reduced-motion: no-preference) { @keyframes zenCloudFloat { 0%,100% { transform:translate(0,0) scale(1);} 25% { transform:translate(var(--zen-cloud-dx,20px), calc(var(--zen-cloud-dy,-10px) * 0.5)) scale(1.02);} 50% { transform:translate(calc(var(--zen-cloud-dx,20px) * 1.2), var(--zen-cloud-dy,-10px)) scale(1);} 75% { transform:translate(calc(var(--zen-cloud-dx,20px) * 0.5), calc(var(--zen-cloud-dy,-10px) * 0.8)) scale(.98);} } }
+/* keyframes zenCloudFloat now lives in motion/registry.css */
 
 /* Footer nav links */
 .zen-footer nav a:focus-visible { outline:2px solid rgba(168,85,247,.6); outline-offset:4px; border-radius:.5rem; }
@@ -110,12 +110,7 @@
 @media (min-width:1920px){ .zen-footer__layout { gap:clamp(4rem,6vw,6rem); } }
 @media (min-width:2560px){ .zen-footer { padding-top:8rem; padding-bottom:8rem; } .zen-footer__layout { gap:8rem; } .zen-footer__grid { background-size:200px 200px; } }
 
-/* Keyframes */
-@media (prefers-reduced-motion: no-preference) {
-   @keyframes zenFooterStars { 0%{ transform:translate3d(0,0,0) scale(1);} 50%{ transform:translate3d(-2%,1%,0) scale(1.02);} 100%{ transform:translate3d(0,0,0) scale(1);} }
-   @keyframes zenFooterGrid { 0%{ transform:rotate(8deg) translate3d(0,0,0);} 50%{ transform:rotate(8deg) translate3d(-3%,1%,0);} 100%{ transform:rotate(8deg) translate3d(0,0,0);} }
-   @keyframes zenFooterMist { 0%,100%{ transform:translate3d(0,0,0) scale(1);} 50%{ transform:translate3d(1%,-2%,0) scale(1.03);} }
-}
+/* Footer keyframes (zenFooterStars, zenFooterGrid, zenFooterMist) migrated to motion/registry.css */
 
 @media (prefers-reduced-motion:reduce){ .zen-footer__stars, .zen-footer__mist, .zen-cloud-drift, .zen-footer__grid, .zen-footer__inner { animation:none !important; } .zen-footer__inner { transition-duration:.001ms !important; transform:none !important; } }
 

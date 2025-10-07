@@ -1,0 +1,14 @@
+/* Radius Scale Tokens */
+@layer base {
+  :root {
+    --radius-xs: 2px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+    --radius-3xl: 32px;
+    --radius-round: 50%;
+    --radius-pill: 999px;
+  }
+}

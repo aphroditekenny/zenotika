@@ -9,7 +9,7 @@ interface SampleLottieProps {
 
 const SampleLottie = memo(function SampleLottie({ id = 'sample-pulse', className }: SampleLottieProps) {
   // Demonstrate color remap: map pink fill to current brand violet token value
-  const brandViolet = getCssVar('--token-color-brand-violet', '#a855f7');
+  const brandViolet = getCssVar('--token-color-brand-violet'); // removed raw hex fallback (must exist via tokens)
   const ref = useLottie({
     id,
     src: `${import.meta.env.BASE_URL}animations/sample.json`,
@@ -19,10 +19,9 @@ const SampleLottie = memo(function SampleLottie({ id = 'sample-pulse', className
     speed: 1,
     respectPerfBudget: true,
     telemetry: true,
-    colorRemap: {
-      '#f477a4': brandViolet, // approximate original to mapped token
-      '#f177a4': brandViolet
-    },
+    // colorRemap expects original frame colors; legacy pink shades removed from animation file.
+    // If reintroduced, add token-driven remap without raw hex literals.
+    colorRemap: {},
     segments: [[0,30],[30,59]],
     segmentIndex: 0,
     preloadFonts: false,

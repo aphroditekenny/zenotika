@@ -25,8 +25,7 @@ describe('theme gradients', () => {
     expect(css).toMatch(/--zen-gradient-app-current:\s*var\(--zen-gradient-app-night\)/);
 
     // Light theme override switches indirection
-    expect(css).toMatch(/\.light[^{]*{[^}]*--zen-gradient-app-current:\s*var\(--zen-gradient-app-day\)/);
-    expect(css).toMatch(/html\[data-theme='light'].*--zen-gradient-app-current:\s*var\(--zen-gradient-app-day\)/s);
+  expect(css).toMatch(/html\[data-theme='light']\s*{[^}]*--zen-gradient-app-current:\s*var\(--zen-gradient-app-day\)/);
 
     // Night & day gradient definitions exist
     expect(css).toMatch(/--zen-gradient-app-night:\s*linear-gradient\(/);
@@ -34,7 +33,6 @@ describe('theme gradients', () => {
 
     // Page wrapper consumes indirection variable for background
     expect(css).toMatch(/\.page-wrapper[^}]*background:\s*var\(--zen-gradient-app-current\)/);
-    // Light wrapper variant explicitly sets day gradient
-    expect(css).toMatch(/\.light \.page-wrapper[^{]*{[^}]*background:\s*var\(--zen-gradient-app-day\)/);
+  // Legacy .light wrapper no longer asserted (attribute model only).
   });
 });

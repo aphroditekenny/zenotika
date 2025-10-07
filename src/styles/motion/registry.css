@@ -1,0 +1,68 @@
+/* Motion Registry (Single Source of Truth)
+   All @keyframes must be defined here (except whitelisted always-on minimal spinners).
+   Guards: wrapped in prefers-reduced-motion: no-preference. Add new animations at bottom.
+*/
+@layer motion {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Entrance & Utility */
+    @keyframes fadeInUp { 0% { opacity:0; transform:translateY(12px);} 100% { opacity:1; transform:translateY(0);} }
+    @keyframes enter { 0% { opacity:0; transform:translateY(8px);} 100% { opacity:1; transform:translateY(0);} }
+
+    /* Pulses / Emphasis */
+    @keyframes bounceDelay { 0%,80%,100% { transform:scale(1);} 40% { transform:scale(1.12);} }
+    @keyframes zenPulse { 0%,100% { opacity:.9; transform:scale(1);} 50% { opacity:.6; transform:scale(.96);} }
+    @keyframes pulse { 0%,100% { opacity:1;} 50% { opacity:.4;} }
+
+    /* Glow / Shimmer */
+    @keyframes zenGlow { 0%,100% { opacity:.6; transform:scale(1);} 50% { opacity:1; transform:scale(1.15);} }
+    @keyframes zenShimmer { 0% { transform:translateX(-10%);} 100% { transform:translateX(110%);} }
+    @keyframes shimmer { 0% { background-position:-200px 0;} 100% { background-position:calc(200px + 100%) 0;} }
+
+    /* Float / Drift */
+    @keyframes zenFloat { 0%,100% { transform:translateY(0);} 50% { transform:translateY(-6px);} }
+    @keyframes gentleFloat { 0%,100% { transform:translateY(0) rotate(0); } 25% { transform:translateY(-8px) rotate(.5deg);} 50% { transform:translateY(-12px) rotate(0);} 75% { transform:translateY(-8px) rotate(-.5deg);} }
+    @keyframes floatVoxel { 0% { transform:translateY(0);} 50% { transform:translateY(-8px);} 100% { transform:translateY(0);} }
+    @keyframes floatAmbient { 0%,100% { transform:translateY(0) rotate(0);} 33% { transform:translateY(-6px) rotate(1deg);} 66% { transform:translateY(-3px) rotate(-1deg);} }
+
+    /* Ambient / Background */
+    @keyframes zenAmbientFlow { 0%,100% { opacity:.8; transform:scale(1);} 50% { opacity:1; transform:scale(1.02);} }
+    @keyframes zenGradientFlow { 0% { background-position:0% 50%;} 50% { background-position:100% 50%;} 100% { background-position:0% 50%;} }
+    @keyframes zenStarfield { 0% { transform:translate3d(0,0,0);} 100% { transform:translate3d(-400px,-180px,0);} }
+
+    /* Particles / Sparkle */
+    @keyframes zenSparkle { 0%,100% { opacity:0;} 50% { opacity:1;} }
+
+    /* Indicators / Bounces */
+    @keyframes scrollBounce { 0%,20%,50%,80%,100% { transform:translateY(0);} 40% { transform:translateY(-8px);} 60% { transform:translateY(-4px);} }
+    @keyframes dotBounce { 0%,100% { transform:translateY(0);} 50% { transform:translateY(-6px);} }
+
+    /* Skeleton / Loading */
+    @keyframes skeletonShimmer { 0% { background-position:-200px 0;} 100% { background-position:200px 0;} }
+    /* spinRing intentionally always-on capable; still guarded for consistency */
+    @keyframes spinRing { 0% { transform:rotate(0deg);} 100% { transform:rotate(360deg);} }
+
+    /* Hero / Header Specific */
+    @keyframes zenHeaderReveal { from { opacity:0; transform:translateY(-100%);} to { opacity:1; transform:translateY(0);} }
+    @keyframes zenHeaderGlow { 0%,100% { opacity:.6; transform:scale(1);} 50% { opacity:.85; transform:scale(1.03);} }
+    @keyframes zenLogoRipple { 0% { transform:scale(.95); opacity:.8;} 50% { transform:scale(1.05); opacity:.4;} 100% { transform:scale(1.15); opacity:0;} }
+    @keyframes zenBarGradientFlow { 0% { background-position:0% 50%; } 50% { background-position:100% 50%; } 100% { background-position:0% 50%; } }
+    @keyframes zenCrumbPulse { 0%,100% { opacity:.6;} 50% { opacity:1;} }
+    @keyframes zenMobileMenuSlideIn { from { opacity:0; transform:translateX(40px);} to { opacity:1; transform:translateX(0);} }
+    @keyframes zenCountReveal { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:translateY(0);} }
+
+    /* Hero Section Specific */
+    @keyframes zenHeroFloat { 0%,100% { transform: translate3d(0,0,0);} 50% { transform: translate3d(0,-10px,0);} }
+    @keyframes zenHeroOrbit { 0% { transform:rotate(0deg);} 100% { transform:rotate(360deg);} }
+    @keyframes zenHeroPulse { 0%,100% { opacity:.75; transform:scale(1);} 50% { opacity:.55; transform:scale(.9);} }
+    @keyframes zenScrollBounce { 0%,100% { transform:translateY(0);} 50% { transform:translateY(3px);} }
+
+    /* Typewriter / Cursor */
+    @keyframes zenCursorBlink { to { visibility:hidden; } }
+
+    /* Footer Ambient */
+    @keyframes zenCloudFloat { 0%,100% { transform:translate(0,0) scale(1);} 25% { transform:translate(var(--zen-cloud-dx,20px), calc(var(--zen-cloud-dy,-10px) * 0.5)) scale(1.02);} 50% { transform:translate(calc(var(--zen-cloud-dx,20px) * 1.2), var(--zen-cloud-dy,-10px)) scale(1);} 75% { transform:translate(calc(var(--zen-cloud-dx,20px) * 0.5), calc(var(--zen-cloud-dy,-10px) * 0.8)) scale(.98);} }
+    @keyframes zenFooterStars { 0%{ transform:translate3d(0,0,0) scale(1);} 50%{ transform:translate3d(-2%,1%,0) scale(1.02);} 100%{ transform:translate3d(0,0,0) scale(1);} }
+    @keyframes zenFooterGrid { 0%{ transform:rotate(8deg) translate3d(0,0,0);} 50%{ transform:rotate(8deg) translate3d(-3%,1%,0);} 100%{ transform:rotate(8deg) translate3d(0,0,0);} }
+    @keyframes zenFooterMist { 0%,100%{ transform:translate3d(0,0,0) scale(1);} 50%{ transform:translate3d(1%,-2%,0) scale(1.03);} }
+  }
+}

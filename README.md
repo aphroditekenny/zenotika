@@ -139,3 +139,94 @@ Run through these steps after significant UI changes:
 4. Log Book section reveals on scroll with animations intact.
 5. Theme toggle switches light/dark variants and persists across refresh.
 6. Run Lighthouse or axe browser extension; elevate any P0 accessibility issues immediately.
+
+## Layered CSS Architecture (Phase 1/2 Migration)
+
+We are migrating away from a monolithic `src/index.css` into an explicit layered system:
+
+Order & Purpose:
+1. `base` – resets + root design tokens (spacing, radius, typography, colors, shadows, motion, accessibility) consolidated in `src/styles/base.css`.
+2. `utilities` – token-driven single‑purpose helpers in `src/styles/utilities.css` (no hard-coded pixel values; always reference tokens).
+3. `components` – modular component sheets (e.g. `project-card.css`) under `src/styles/components/`.
+4. `legacy` – isolated Webflow vendor classes in `src/styles/legacy/webflow.css` scheduled for incremental deletion.
+
+Aggregator: `src/styles/aggregate.css` imports these with `@import ... layer(...)` so cascade intent is deterministic and purge tooling can operate safely.
+
+### Token Usage Conventions
+- Spacing: use `var(--space-*)` (e.g. `--space-4`) instead of multiplying a `--spacing` base (deprecated).
+- Radius: apply `--radius-*` tokens; only use ad-hoc radii for prototypes (and remove before commit).
+- Typography: reference fluid size tokens (`--text-base`, `--text-xl`) or semantic utility classes (`heading-token-h2`).
+- Colors: all new colors must come from `colors-semantic.css`. Raw hex additions will fail the color report.
+- Shadows: use `--shadow-elevation-*` or existing `--zen-shadow-*`—never inline multi-layer shadows.
+
+### Legacy `.w-*` Class Pruning
+Run the advisory script:
+```bash
+node scripts/report-unused-w-classes.mjs
+```
+It lists legacy classes not referenced in any `src/**/*.tsx?` or `.html` file. Remove unused entries from `legacy/webflow.css` in small batches to minimize risk.
+
+### Adding a New Component Stylesheet
+1. Create `src/styles/components/<name>.css` with `@layer components { /* styles */ }`.
+2. Import it in `src/styles/aggregate.css` after existing component imports.
+3. Use only design tokens and avoid deep element selectors (prefer class scopes).
+
+### Upcoming Work
+- Extract remaining large blocks: rooms, blog/log, footer, collection, ambient effects.
+- Motion registry file centralizing keyframes (guards enforced via script).
+- CSS coverage script to gate unused rules in CI.
+
+### Reporting & Governance (recap)
+Run:
+```bash
+npm run report:colors
+npm run report:keyframes
+node scripts/report-unused-w-classes.mjs
+```
+Combine with `npm run style:audit` (when thresholds are activated) to prevent regressions.
+
+## Motion Registry Contribution Rules
+
+All animation `@keyframes` (except explicitly whitelisted micro spinners) live in a single guarded file: `src/styles/motion/registry.css`.
+
+Rules:
+- Do NOT define `@keyframes` in component/local stylesheets. If needed, add them to the registry under an appropriate category comment.
+- Every non‑whitelisted keyframe is wrapped in a single `@media (prefers-reduced-motion: no-preference)` guard in the registry, so component CSS never needs its own guard.
+- Run `npm run report:keyframes` or `node scripts/motion-registry-enforce.mjs --strict` before committing; CI fails on stray or duplicate definitions.
+- Use descriptive names prefixed with `zen` for project‑specific animations (e.g. `zenHeroFloat`); reserve generic names for widely reusable transitions.
+- For an always‑on spinner, add its name to the whitelist constant in `motion-registry-enforce.mjs` with justification.
+
+Adding a keyframe:
+1. Open `registry.css` and locate the correct category block (Entrance, Float, Ambient, etc.).
+2. Append your `@keyframes` inside the existing media query.
+3. Reference it via `animation:` in component styles.
+4. Run enforcement script; fix any failures before committing.
+
+## Theming Model (No `.dark` Classes)
+
+Themes use an attribute selector on the root element: `html[data-theme='dark']` or `html[data-theme='light']`.
+
+Guidelines:
+- Never reintroduce `.dark` or `.light` class selectors.
+- Prefer token indirection variables (e.g. `--zen-gradient-header-current`) so components stay theme‑agnostic.
+- For new theme‑aware tokens, provide both variants and map them through a `--*-current` alias that flips under `[data-theme='dark']`.
+
+Switch theme example:
+```ts
+document.documentElement.setAttribute('data-theme', 'dark');
+```
+
+## Style Extraction Strategy
+
+We are shrinking `src/index.css` by moving cohesive blocks to:
+- `styles/sections/*.css`
+- `styles/components/*.css`
+- `styles/legacy/*.css`
+
+Extraction checklist:
+1. Move declarations; wrap with `@layer components {}` if target file lacks a layer.
+2. Replace original block with a short pointer comment.
+3. Re-run color + keyframe reports.
+4. Keep refactors narrow—avoid unrelated stylistic changes.
+
+This iteration: Ambient/starfield/floating utilities extracted to `components/ambient-effects.css`.

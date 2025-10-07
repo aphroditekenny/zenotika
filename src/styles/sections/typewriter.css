@@ -216,7 +216,7 @@
   animation: zenCursorBlink 1s steps(2, start) infinite;
 }
 
-@media (prefers-reduced-motion: no-preference) { @keyframes zenCursorBlink { to { visibility:hidden; } } }
+/* keyframes zenCursorBlink migrated to motion/registry.css */
 
 @media (prefers-reduced-motion: reduce) {
   .zen-typewriter__cursor {

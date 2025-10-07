@@ -25,8 +25,8 @@ const PATTERNS = [
   /#2d3748(?![0-9a-f])/gi,
 ];
 
-// Allow list: lines that intentionally define the tokens in globals.css
-const ALLOW_TOKEN_FILE = /styles[\\/]+globals\.css$/;
+// Allow list: token source-of-truth files (globals + semantic colors)
+const ALLOW_TOKEN_FILE = /styles[\\/]+(globals|tokens[\\/]+colors-semantic)\.css$/;
 
 let failures = 0;
 

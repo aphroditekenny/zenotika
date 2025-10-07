@@ -1,0 +1,23 @@
+/* Button Variants (extracted from index.css)
+   Focus: .button.big.learn-more subtle motion + focus ring.
+   Other button styles remain until audited.
+*/
+
+@layer components {
+  .button.big.learn-more {
+    position: relative;
+    transition: opacity .2s, transform .2s;
+  }
+
+  .button.big.learn-more:hover {
+    opacity: .9;
+    transform: translateY(-1px);
+  }
+
+  .button.big.learn-more:focus-visible {
+    outline: 2px solid var(--zen-outline-soft);
+    outline-offset: 2px;
+  }
+}
+
+/* Consider consolidating large button variants into a design-token driven system. */

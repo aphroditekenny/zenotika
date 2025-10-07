@@ -201,14 +201,6 @@ export function OptimizedImage({
   );
 }
 
-// CSS for shimmer effect (add to globals.css)
-const shimmerStyles = `
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.animate-shimmer {
-  animation: shimmer 1.5s infinite;
-}
-`;
+// Shimmer effect keyframes centralized in styles/motion/registry.css. If runtime injection is ever required
+// (e.g., for SSR environments without global CSS), import a lightweight shim instead of redefining @keyframes here.
+const shimmerStyles = ``;

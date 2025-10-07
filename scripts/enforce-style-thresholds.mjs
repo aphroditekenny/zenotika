@@ -6,9 +6,9 @@
 import { readFileSync } from 'node:fs';
 
 // Ratcheted thresholds (phase 3): tightening raw hex and enforcing zero unguarded keyframes.
-// History: RAW_HEX_LIMIT 140 -> 120 -> 100 -> 70 (current) ; planned next < 40 after overlay normalization.
+// History: RAW_HEX_LIMIT 140 -> 120 -> 100 -> 70 -> 50 (current) ; next planned < 40 after brand + legacy color consolidation.
 //          UNGUARDED_LIMIT 67 -> 45 -> 5 -> 0 (current enforced steady-state).
-const RAW_HEX_LIMIT = parseInt(process.env.RAW_HEX_LIMIT || '70', 10);
+const RAW_HEX_LIMIT = parseInt(process.env.RAW_HEX_LIMIT || '40', 10);
 const UNGUARDED_LIMIT = parseInt(process.env.UNGUARDED_LIMIT || '0', 10);
 
 function countLines(file, predicate) {
@@ -17,7 +17,19 @@ function countLines(file, predicate) {
   } catch { return 0; }
 }
 
-const rawHexCount = countLines('color-report.txt', l => /^#[0-9a-f]{3,8}/i.test(l));
+// More robust: trim, ensure line begins with hex and not a header, and capture only first column.
+const rawHexCount = countLines('color-report.txt', l => {
+  const t = l.trim();
+  if (!t || t.startsWith('=') || t.toLowerCase().startsWith('raw hex')) return false;
+  return /^#[0-9a-f]{3,8}\b/i.test(t);
+});
+
+if (process.env.DEBUG_THRESHOLDS === '1') {
+  try {
+    const lines = readFileSync('color-report.txt','utf8').split(/\r?\n/).filter(l=>/^#[0-9a-f]{3,8}\b/i.test(l.trim())).slice(0,5);
+    console.log('[debug] sample hex lines:', lines);
+  } catch {}
+}
 const unguarded = countLines('keyframe-report.txt', l => /UNGUARDED/.test(l));
 
 console.log(`Raw hex count: ${rawHexCount} (limit ${RAW_HEX_LIMIT})`);

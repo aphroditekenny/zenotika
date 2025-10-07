@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import "./index.css";
+// Aggregated layered CSS (base, utilities, components, legacy)
+import "./styles/aggregate.css";
 import "./styles/legacy/ambient.css"; // Phase 2: extracted ambient/background styles
 import { isFeatureEnabled } from "./featureFlags";
 import { initPerformanceMetrics } from "./utils/performanceMetrics";

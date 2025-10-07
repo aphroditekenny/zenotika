@@ -1,0 +1,31 @@
+/* Base Layer: resets + root CSS variables previously in index.css theme/base layers */
+@import "./tokens/spacing.css" layer(base);
+@import "./tokens/radius.css" layer(base);
+@import "./tokens/typography.css" layer(base);
+@import "./tokens/colors-semantic.css" layer(base);
+@import "./tokens/shadows.css" layer(base);
+@import "./tokens/motion.css" layer(base);
+@import "./tokens/accessibility.css" layer(base);
+
+@layer base {
+  :root {
+    /* Tailwind legacy root variables (trimmed to those still used) */
+    --spacing: .25rem; /* deprecated: migrate to --space-* tokens */
+  }
+
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  html { -webkit-text-size-adjust:100%; line-height:1.5; font-family:var(--font-sans-primary, system-ui,sans-serif); }
+  body { line-height:inherit; }
+  img,svg,video,canvas,audio,iframe,embed,object { display:block; }
+  img,video { max-width:100%; height:auto; }
+  ol,ul,menu { list-style:none; }
+  button,input,select,textarea { font:inherit; color:inherit; background:transparent; }
+  table { border-collapse:collapse; }
+  ::placeholder { color:currentColor; opacity:1; }
+
+  /* Global focus-visible ring (Sprint 1) */
+  :focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+  }
+}

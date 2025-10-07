@@ -1,0 +1,7 @@
+/* Webflow Legacy Vendor Layer (Isolated) -------------------------------------------------
+   Extracted during Phase 1 modularization. Only classes still referenced should remain.
+   TODO: After auditing usage, progressively delete unused groups.
+*/
+@layer legacy {
+  /* Purged unused legacy .w-* classes (see report-unused-w-classes). Remaining are referenced in source. */
+}

@@ -52,7 +52,7 @@
 }
 
 .pillar-icon { animation: zenGlow 3s ease-in-out infinite; }
-@media (prefers-reduced-motion: no-preference) { @keyframes zenGlow { 0%,100% { opacity:0.6; transform:scale(1); } 50% { opacity:1; transform:scale(1.2); } } }
+/* keyframes zenGlow migrated to motion/registry.css */
 
 .zen-symbol {
 	position: relative;
@@ -64,7 +64,7 @@
 }
 
 .zen-symbol::before { content:""; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,color-mix(in oklab, var(--color-brand-pink-hot) 10%, transparent),transparent); animation: zenShimmer 3s ease-in-out infinite; }
-@media (prefers-reduced-motion: no-preference) { @keyframes zenShimmer { 0% { left:-100%; } 100% { left:100%; } } }
+/* keyframes zenShimmer migrated to motion/registry.css */
 
 .zen-triangle-arrangement {
 	position: relative;
@@ -81,7 +81,7 @@
 }
 
 .zen-floating-elements { animation: zenFloat 8s ease-in-out infinite; }
-@media (prefers-reduced-motion: no-preference) { @keyframes zenFloat { 0%,100% { transform:translateY(0) rotate(0); } 33% { transform:translateY(-4px) rotate(1deg); } 66% { transform:translateY(4px) rotate(-1deg); } } }
+/* keyframes zenFloat migrated to motion/registry.css */
 
 .zen-mission-statement blockquote {
 	position: relative;

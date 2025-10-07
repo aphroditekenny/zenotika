@@ -1,14 +1,29 @@
-:root {
-  --space-1: 0.125rem;
-  --space-2: 0.25rem;
-  --space-3: 0.5rem;
-  --space-4: 0.75rem;
-  --space-5: 1rem;
-  --space-6: 1.5rem;
-  --space-7: 2rem;
-  --space-8: 3rem;
-  --space-9: 4rem;
-  --space-10: 6rem;
-  --space-11: 8rem;
-  --space-12: 12rem;
+/* Spacing Scale Tokens (Phase 1 Extraction)
+   Consolidated from legacy utilities. Provides a consistent 4px baseline.
+   Note: Old implicit --spacing * N pattern will migrate to explicit tokens.
+*/
+@layer base {
+  :root {
+    /* 4px baseline multiples */
+    --space-1: 0.25rem; /* 4px */
+    --space-2: 0.5rem;  /* 8px */
+    --space-3: 0.75rem; /* 12px */
+    --space-4: 1rem;    /* 16px */
+    --space-5: 1.25rem; /* 20px */
+    --space-6: 1.5rem;  /* 24px */
+    --space-7: 2rem;    /* 32px */
+    --space-8: 2.5rem;  /* 40px */
+    --space-9: 3rem;    /* 48px */
+    --space-10: 4rem;   /* 64px */
+    --space-11: 5rem;   /* 80px */
+    --space-12: 6rem;   /* 96px */
+
+    /* Extended (large marketing/hero spacing) */
+    --space-13: 8rem;   /* 128px */
+    --space-14: 12rem;  /* 192px */
+
+    /* Container widths (migrated from index.css) */
+    --container-4xl: 56rem; /* 896px */
+    --container-6xl: 72rem; /* 1152px */
+  }
 }
