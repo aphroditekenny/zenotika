@@ -72,7 +72,7 @@
       --tw-inset-ring-shadow: 0 0 #0000;
       --tw-ring-inset: initial;
       --tw-ring-offset-width: 0px;
-      --tw-ring-offset-color: #fff;
+  --tw-ring-offset-color: var(--zen-white-solid);
       --tw-ring-offset-shadow: 0 0 #0000;
       --tw-blur: initial;
       --tw-brightness: initial;
@@ -121,7 +121,7 @@
     --color-pink-400: oklch(.718 .202 349.761);
     --color-pink-500: oklch(.656 .241 354.308);
     --color-black: #000;
-    --color-white: #fff;
+  --color-white: var(--zen-white-solid);
     --spacing: .25rem;
     --container-4xl: 56rem;
     --container-6xl: 72rem;
@@ -1310,13 +1310,7 @@
   }
 
   .border-white\/20 {
-    border-color: #fff3;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .border-white\/20 {
-      border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-    }
+    border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
   }
 
   .bg-black {
@@ -1422,13 +1416,7 @@
   }
 
   .bg-white\/5 {
-    background-color: #ffffff0d;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-white\/5 {
-      background-color: color-mix(in oklab, var(--color-white) 5%, transparent);
-    }
+    background-color: var(--zen-white-alpha-05);
   }
 
   .bg-white\/10 {
@@ -1442,23 +1430,11 @@
   }
 
   .bg-white\/20 {
-    background-color: #fff3;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-white\/20 {
-      background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-    }
+    background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
   }
 
   .bg-white\/80 {
-    background-color: #fffc;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-white\/80 {
-      background-color: color-mix(in oklab, var(--color-white) 80%, transparent);
-    }
+    background-color: color-mix(in oklab, var(--color-white) 80%, transparent);
   }
 
   .bg-white\/95 {
@@ -1913,43 +1889,19 @@
   }
 
   .text-white\/40 {
-    color: #fff6;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .text-white\/40 {
-      color: color-mix(in oklab, var(--color-white) 40%, transparent);
-    }
+    color: color-mix(in oklab, var(--color-white) 40%, transparent);
   }
 
   .text-white\/60 {
-    color: #fff9;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .text-white\/60 {
-      color: color-mix(in oklab, var(--color-white) 60%, transparent);
-    }
+    color: var(--zen-white-alpha-60);
   }
 
   .text-white\/70 {
-    color: #ffffffb3;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .text-white\/70 {
-      color: color-mix(in oklab, var(--color-white) 70%, transparent);
-    }
+    color: var(--zen-white-alpha-70);
   }
 
   .text-white\/80 {
-    color: #fffc;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .text-white\/80 {
-      color: color-mix(in oklab, var(--color-white) 80%, transparent);
-    }
+    color: color-mix(in oklab, var(--color-white) 80%, transparent);
   }
 
   .text-white\/90 {
@@ -1983,13 +1935,7 @@
   }
 
   .placeholder-white\/60::placeholder {
-    color: #fff9;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .placeholder-white\/60::placeholder {
-      color: color-mix(in oklab, var(--color-white) 60%, transparent);
-    }
+    color: var(--zen-white-alpha-60);
   }
 
   .opacity-0 {
@@ -2194,25 +2140,13 @@
 
   @media (hover: hover) {
     .hover\:bg-white\/15:hover {
-      background-color: #ffffff26;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .hover\:bg-white\/15:hover {
-        background-color: color-mix(in oklab, var(--color-white) 15%, transparent);
-      }
+      background-color: var(--zen-white-alpha-15);
     }
   }
 
   @media (hover: hover) {
     .hover\:bg-white\/20:hover {
-      background-color: #fff3;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .hover\:bg-white\/20:hover {
-        background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-      }
+      background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
     }
   }
 
@@ -2239,13 +2173,7 @@
   }
 
   .focus\:bg-white\/15:focus {
-    background-color: #ffffff26;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .focus\:bg-white\/15:focus {
-      background-color: color-mix(in oklab, var(--color-white) 15%, transparent);
-    }
+    background-color: var(--zen-white-alpha-15);
   }
 
   .focus\:outline-none:focus {
@@ -2663,14 +2591,14 @@
 
 :root {
   --font-size: 16px;
-  --background: #fff;
+  --background: var(--zen-white-solid);
   --foreground: oklch(.145 0 0);
-  --primary: #030213;
+  --primary: var(--zen-bg-deep);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(.95 .0058 264.53);
-  --secondary-foreground: #030213;
+  --secondary-foreground: var(--zen-bg-deep);
   --muted: #ececf0;
-  --muted-foreground: #717182;
+  --muted-foreground: var(--zen-neutral-muted-foreground);
   --border: #0000001a;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -2692,7 +2620,7 @@
 }
 
 .page-wrapper {
-  color: #fff;
+  color: var(--zen-white-solid);
   background: var(--zen-gradient-app-night-legacy);
   min-height: 100vh;
   position: relative;
@@ -2743,7 +2671,7 @@
 .project-card {
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
-  background: #ffffff0d;
+  background: var(--zen-white-alpha-05);
   border: 1px solid var(--zen-white-alpha-10);
   border-radius: 20px;
   transition: transform .3s;
@@ -2757,7 +2685,7 @@
 .stars-overlay {
   pointer-events: none;
   opacity: .4;
-  background-image: radial-gradient(1px 1px at 20px 30px, #fff, #0000), radial-gradient(1px 1px at 40px 70px, #fff, #0000), radial-gradient(1px 1px at 90px 40px, #fff, #0000), radial-gradient(1px 1px at 130px 80px, #fff, #0000), radial-gradient(1px 1px at 160px 30px, #fff, #0000);
+  background-image: radial-gradient(1px 1px at 20px 30px, var(--zen-white-solid), #0000), radial-gradient(1px 1px at 40px 70px, var(--zen-white-solid), #0000), radial-gradient(1px 1px at 90px 40px, var(--zen-white-solid), #0000), radial-gradient(1px 1px at 130px 80px, var(--zen-white-solid), #0000), radial-gradient(1px 1px at 160px 30px, var(--zen-white-solid), #0000);
   background-repeat: repeat;
   background-size: 320px 160px;
   width: 100%;
@@ -2808,26 +2736,26 @@
 
 :root {
   --font-size: 16px;
-  --background: #fff;
+  --background: var(--zen-white-solid);
   --foreground: oklch(.145 0 0);
-  --card: #fff;
+  --card: var(--zen-white-solid);
   --card-foreground: oklch(.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(.145 0 0);
-  --primary: #030213;
+  --primary: var(--zen-bg-deep);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(.95 .0058 264.53);
-  --secondary-foreground: #030213;
+  --secondary-foreground: var(--zen-bg-deep);
   --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
+  --muted-foreground: var(--zen-neutral-muted-foreground);
+  --accent: var(--zen-neutral-accent);
+  --accent-foreground: var(--zen-bg-deep);
   --destructive: #d4183d;
-  --destructive-foreground: #fff;
+  --destructive-foreground: var(--zen-white-solid);
   --border: #0000001a;
   --input: transparent;
-  --input-background: #f3f3f5;
-  --switch-background: #cbced4;
+  --input-background: var(--zen-neutral-input-bg);
+  --switch-background: var(--zen-neutral-switch-bg);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
   --ring: oklch(.708 0 0);
@@ -2839,7 +2767,7 @@
   --radius: .625rem;
   --sidebar: oklch(.985 0 0);
   --sidebar-foreground: oklch(.145 0 0);
-  --sidebar-primary: #030213;
+  --sidebar-primary: var(--zen-bg-deep);
   --sidebar-primary-foreground: oklch(.985 0 0);
   --sidebar-accent: oklch(.97 0 0);
   --sidebar-accent-foreground: oklch(.205 0 0);
@@ -2999,7 +2927,7 @@
 }
 
 .w-button {
-  color: #fff;
+  color: var(--zen-white-solid);
   cursor: pointer;
   background: var(--zen-gradient-accent-bright);
   border: none;
@@ -3319,7 +3247,7 @@
 /* Duplicate unguarded @keyframes fadeInUp removed. Guarded definition lives in the consolidated motion block at top of file under @media (prefers-reduced-motion: no-preference). */
 
 .stars-overlay {
-  background-image: radial-gradient(1px 1px at 20px 30px, #fff9, #0000), radial-gradient(1px 1px at 40px 70px, #fff6, #0000), radial-gradient(1px 1px at 90px 40px, #ffffff80, #0000), radial-gradient(1px 1px at 130px 80px, #ffffff4d, #0000), radial-gradient(1px 1px at 160px 30px, #fff9, #0000);
+  background-image: radial-gradient(1px 1px at 20px 30px, var(--zen-white-alpha-60), #0000), radial-gradient(1px 1px at 40px 70px, color-mix(in oklab, var(--color-white) 40%, transparent), #0000), radial-gradient(1px 1px at 90px 40px, color-mix(in oklab, var(--color-white) 50%, transparent), #0000), radial-gradient(1px 1px at 130px 80px, color-mix(in oklab, var(--color-white) 30%, transparent), #0000), radial-gradient(1px 1px at 160px 30px, var(--zen-white-alpha-60), #0000);
   background-repeat: repeat;
   background-size: 200px 100px;
   animation: 40s linear infinite zenSparkle;
@@ -3331,7 +3259,7 @@
 .log-card-frame {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
-  background: #ffffff0d;
+  background: var(--zen-white-alpha-05);
   border: 1px solid var(--zen-white-alpha-10);
   box-shadow: var(--zen-shadow-card);
 }
@@ -3355,8 +3283,8 @@
 
 .light .project-card,
 .day-mode .project-card {
-  background: #fff3;
-  border-color: #ffffff4d;
+  background: color-mix(in oklab, var(--color-white) 20%, transparent);
+  border-color: color-mix(in oklab, var(--color-white) 30%, transparent);
 }
 
 .zen-focus {
@@ -3409,8 +3337,8 @@
 }
 
 .zen-philosophy-footer:hover .philosophy-essence {
-  background: #ffffff14;
-  border-color: #ffffff26;
+  background: var(--zen-white-alpha-08);
+  border-color: var(--zen-white-alpha-15);
   transform: translateY(-1px);
 }
 
@@ -3466,8 +3394,8 @@
 .zen-newsletter-prompt {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
-  background: #ffffff08;
-  border: 1px solid #ffffff14;
+  background: var(--zen-white-alpha-03);
+  border: 1px solid var(--zen-white-alpha-08);
   box-shadow: var(--zen-shadow-card-soft);
 }
 
@@ -3476,14 +3404,14 @@
   backdrop-filter: blur(20px) saturate(180%);
   will-change: transform;
   contain: layout style;
-  background: #ffffff08;
-  border: 1px solid #ffffff14;
+  background: var(--zen-white-alpha-03);
+  border: 1px solid var(--zen-white-alpha-08);
   box-shadow: var(--zen-shadow-card-soft);
 }
 
 .log-card:hover {
-  background: #ffffff0d;
-  border-color: #ffffff1f;
+  background: var(--zen-white-alpha-05);
+  border-color: var(--zen-white-alpha-10);
   transform: translateY(-2px);
 }
 
@@ -3496,13 +3424,13 @@
 .tag {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border: 1px solid #ffffff1a;
+  border: 1px solid var(--zen-white-alpha-10);
   transition: all .2s;
 }
 
 .tag:hover {
   background: var(--zen-white-alpha-15);
-  border-color: #fff3;
+  border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
 }
 
 /* Duplicate unguarded @keyframes bounceDelay removed (see consolidated guarded block). */
@@ -3537,7 +3465,7 @@
   backdrop-filter: blur(10px);
   will-change: transform;
   contain: layout style;
-  border: 1px solid #ffffff1a;
+  border: 1px solid var(--zen-white-alpha-10);
 }
 
 .zen-filter-btn:hover {
@@ -3560,16 +3488,16 @@
   will-change: transform;
   contain: layout style;
   cursor: pointer;
-  background: #ffffff08;
-  border: 1px solid #ffffff14;
+  background: var(--zen-white-alpha-03);
+  border: 1px solid var(--zen-white-alpha-08);
   border-radius: 24px;
   overflow: hidden;
   box-shadow: var(--zen-shadow-card-soft);
 }
 
 .enhanced-project-card:hover {
-  background: #ffffff0f;
-  border-color: #ffffff26;
+  background: var(--zen-white-alpha-08);
+  border-color: var(--zen-white-alpha-15);
   transform: translateY(-8px)scale(1.02);
   box-shadow: var(--zen-shadow-card-hover);
 }
@@ -3583,19 +3511,19 @@
 .project-category {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border: 1px solid #ff7a8a33;
+  border: 1px solid var(--zen-accent-pink-alpha-20);
 }
 
 .tag-badge {
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  border: 1px solid #ffffff1a;
+  border: 1px solid var(--zen-white-alpha-10);
   transition: all .2s;
 }
 
 .tag-badge:hover {
   background: var(--zen-white-alpha-15);
-  border-color: #fff3;
+  border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
 }
 
 .zen-about-section {
@@ -3610,18 +3538,18 @@
 .section-badge {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border: 1px solid #ff7a8a33;
+  border: 1px solid var(--zen-accent-pink-alpha-20);
 }
 
 .philosophy-pillar {
-  border-left: 1px solid #ffffff1a;
+  border-left: 1px solid var(--zen-white-alpha-10);
   padding-left: 1rem;
   transition: border-color .3s;
   position: relative;
 }
 
 .philosophy-pillar:hover {
-  border-left-color: #ff7a8a66;
+  border-left-color: var(--zen-accent-pink-alpha-40);
 }
 
 .pillar-icon {
@@ -3633,8 +3561,8 @@
 .zen-symbol {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
-  background: #ffffff08;
-  border: 1px solid #ffffff14;
+  background: var(--zen-white-alpha-03);
+  border: 1px solid var(--zen-white-alpha-08);
   position: relative;
   overflow: hidden;
   box-shadow: var(--zen-shadow-card-soft);
@@ -3642,7 +3570,7 @@
 
 .zen-symbol:before {
   content: "";
-  background: linear-gradient(90deg, #0000, #ff7a8a1a, #0000);
+  background: linear-gradient(90deg, #0000, color-mix(in oklab, var(--color-white) 10%, transparent), #0000);
   width: 100%;
   height: 100%;
   animation: 3s ease-in-out infinite zenShimmer;
@@ -3676,8 +3604,8 @@
 .zen-mission-statement blockquote {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  background: #ffffff05;
-  border: 1px solid #ffffff0d;
+  background: var(--zen-white-alpha-03);
+  border: 1px solid var(--zen-white-alpha-05);
   border-radius: 20px;
   padding: 2rem;
   position: relative;
@@ -3706,21 +3634,21 @@
 .light .enhanced-project-card,
 .day-mode .enhanced-project-card {
   color: var(--color-foreground-day-alt);
-  background: #ffffff26;
-  border-color: #ffffff40;
+  background: color-mix(in oklab, var(--color-white) 15%, transparent);
+  border-color: color-mix(in oklab, var(--color-white) 25%, transparent);
 }
 
 .light .enhanced-project-card:hover,
 .day-mode .enhanced-project-card:hover {
-  background: #ffffff40;
-  border-color: #ffffff59;
+  background: color-mix(in oklab, var(--color-white) 25%, transparent);
+  border-color: color-mix(in oklab, var(--color-white) 35%, transparent);
 }
 
 .light .zen-search-input,
 .day-mode .zen-search-input {
   color: var(--color-foreground-day-alt);
-  background: #ffffff26;
-  border-color: #ffffff40;
+  background: color-mix(in oklab, var(--color-white) 15%, transparent);
+  border-color: color-mix(in oklab, var(--color-white) 25%, transparent);
 }
 
 .light .zen-search-input::placeholder,
@@ -3733,8 +3661,8 @@
 .light .zen-symbol,
 .day-mode .zen-symbol {
   color: var(--color-foreground-day-alt);
-  background: #ffffff26;
-  border-color: #ffffff40;
+  background: color-mix(in oklab, var(--color-white) 15%, transparent);
+  border-color: color-mix(in oklab, var(--color-white) 25%, transparent);
 }
 
 .page-transition-wrapper {
@@ -3818,7 +3746,7 @@
 /* Duplicate unguarded @keyframes dotBounce removed (see consolidated guarded block). */
 
 .skip-link {
-  color: #fff;
+  color: var(--zen-white-solid);
   z-index: 10001;
   background: #000;
   border-radius: 4px;
@@ -3832,7 +3760,7 @@
 
 .skip-link:focus {
   outline-offset: 2px;
-  outline: 2px solid #ff7a8a;
+  outline: 2px solid var(--zen-accent-pink);
   top: 6px;
 }
 
@@ -3851,26 +3779,26 @@
 [data-focus-visible="true"] :focus-visible {
   outline-offset: 2px;
   border-radius: 4px;
-  outline: 2px solid #ff7a8a;
+  outline: 2px solid var(--zen-accent-pink);
 }
 
 [data-high-contrast="true"] {
   --background: #000;
-  --foreground: #fff;
-  --border: #fff;
+  --foreground: var(--zen-white-solid);
+  --border: var(--zen-white-solid);
 }
 
 [data-high-contrast="true"] .enhanced-project-card,
 [data-high-contrast="true"] .zen-symbol,
 [data-high-contrast="true"] .zen-search-input {
   background: #000;
-  border: 2px solid #fff;
+  border: 2px solid var(--zen-white-solid);
 }
 
 [data-high-contrast="true"] .zen-filter-btn {
-  color: #fff;
+  color: var(--zen-white-solid);
   background: #000;
-  border: 2px solid #fff;
+  border: 2px solid var(--zen-white-solid);
 }
 
 [data-reduced-motion="true"] *,
@@ -3955,7 +3883,7 @@
 
 .ring-segment {
   border: 3px solid #0000;
-  border-top-color: #ff7a8a;
+  border-top-color: var(--zen-accent-pink);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -4218,7 +4146,7 @@
 }
 
 .landing-page-wrapper {
-  color: #fff;
+  color: var(--zen-white-solid);
   background: var(--zen-background-landing-night);
   height: 100vh;
   position: relative;
@@ -4331,7 +4259,7 @@
 }
 
 .home-page-wrapper {
-  color: #fff;
+  color: var(--zen-white-solid);
   background: var(--zen-gradient-app-night-legacy);
   min-height: 100vh;
   transition: background .5s, color .5s;
@@ -4650,15 +4578,15 @@
 }
 
 .text-white\/60 {
-  color: #fff9;
+  color: var(--zen-white-alpha-60);
 }
 
 .text-white\/40 {
-  color: #fff6;
+  color: color-mix(in oklab, var(--color-white) 40%, transparent);
 }
 
 .bg-white\/40 {
-  background-color: #fff6;
+  background-color: color-mix(in oklab, var(--color-white) 40%, transparent);
 }
 
 .light .text-white\/60,
@@ -4681,9 +4609,9 @@
 }
 
 .w-input {
-  color: #fff;
-  background: #ffffff1a;
-  border: 1px solid #fff3;
+  color: var(--zen-white-solid);
+  background: var(--zen-white-alpha-10);
+  border: 1px solid color-mix(in oklab, var(--color-white) 20%, transparent);
   border-radius: 50px;
   width: 100%;
   padding: 12px 20px;
@@ -4691,11 +4619,11 @@
 }
 
 .w-input::placeholder {
-  color: #fff9;
+  color: var(--zen-white-alpha-60);
 }
 
 .w-input:focus {
-  border-color: #ff7a8a80;
+  border-color: var(--zen-accent-pink-alpha-50);
   outline: none;
   box-shadow: var(--zen-shadow-focus-accent-soft);
 }
@@ -4953,7 +4881,7 @@
 @property --tw-ring-offset-color {
   syntax: "*";
   inherits: false;
-  initial-value: #fff;
+  initial-value: var(--zen-white-solid);
 }
 
 @property --tw-ring-offset-shadow {
@@ -5106,20 +5034,20 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
+  --primary: var(--zen-bg-deep);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
+  --secondary-foreground: var(--zen-bg-deep);
   --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
+  --muted-foreground: var(--zen-neutral-muted-foreground);
+  --accent: var(--zen-neutral-accent);
+  --accent-foreground: var(--zen-bg-deep);
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
   --border: rgba(0, 0, 0, 0.1);
   --input: transparent;
-  --input-background: #f3f3f5;
-  --switch-background: #cbced4;
+  --input-background: var(--zen-neutral-input-bg);
+  --switch-background: var(--zen-neutral-switch-bg);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
   --ring: oklch(0.708 0 0);
@@ -5131,7 +5059,7 @@
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #030213;
+  --sidebar-primary: var(--zen-bg-deep);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
@@ -5181,7 +5109,7 @@
 /* Replaced Tailwind-like @apply with direct properties */
 * { border-color: var(--color-border, rgba(0,0,0,0.1)); outline-color: color-mix(in oklab, var(--color-ring, rgba(0,0,0,0.4)) 50%, transparent); }
 html { font-size: var(--font-size,16px); scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; transition: color-scheme .3s ease; }
-body { background: var(--color-background,#fff); color: var(--color-foreground,#000); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; margin:0; padding:0; overflow-x:hidden; min-height:100vh; position:relative; transition: background-color .5s ease, color .5s ease; }
+body { background: var(--color-background,var(--zen-white-solid)); color: var(--color-foreground,#000); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; margin:0; padding:0; overflow-x:hidden; min-height:100vh; position:relative; transition: background-color .5s ease, color .5s ease; }
 
 /* Base typography (flattened from @layer base) */
  :where(:not(:has([class*=" text-"]), :not(:has([class^=text-])))) {
@@ -5505,7 +5433,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
 .w-button {
   background:
     linear-gradient(135deg,
-      #ff7a8a 0%,
+  var(--zen-accent-pink) 0%,
       var(--color-brand-violet) 100%);
   border: none;
   border-radius: 50px;
@@ -6472,7 +6400,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
   top: -40px;
   left: 6px;
   background: #000;
-  color: #fff;
+  color: var(--zen-white-solid);
   padding: 8px;
   text-decoration: none;
   border-radius: 4px;
@@ -6482,7 +6410,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
 
 .skip-link:focus {
   top: 6px;
-  outline: 2px solid #ff7a8a;
+  outline: 2px solid var(--zen-accent-pink);
   outline-offset: 2px;
 }
 
@@ -6499,7 +6427,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
 }
 
 [data-focus-visible=true] *:focus-visible {
-  outline: 2px solid #ff7a8a;
+  outline: 2px solid var(--zen-accent-pink);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -7204,7 +7132,7 @@ body { background: var(--color-background,#fff); color: var(--color-foreground,#
 .is-pink {
   background:
     linear-gradient(135deg,
-      #ff7a8a 0%,
+  var(--zen-accent-pink) 0%,
       var(--color-brand-violet) 100%);
 }
 

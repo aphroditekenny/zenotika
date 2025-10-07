@@ -115,7 +115,7 @@
 
 .zen-hero__button.is-primary {
   background: var(--zen-gradient-accent-bright-strong);
-  color: #ffffff;
+  color: var(--zen-white-solid);
   border-color: transparent;
   box-shadow: var(--zen-shadow-accent-xl-soft);
 }
@@ -249,7 +249,7 @@
   display: block;
   font-size: clamp(1.9rem, 3vw, 2.5rem);
   font-weight: 700;
-  color: #ffffff;
+  color: var(--zen-white-solid);
 }
 
 .light .zen-hero__stat-value,
@@ -291,7 +291,7 @@
 
 .zen-scroll-prompt__link:hover {
   transform: translateY(2px);
-  background: color-mix(in oklab, #ffffff 18%, transparent);
+  background: color-mix(in oklab, var(--zen-white-solid) 18%, transparent);
 }
 
 .light .zen-scroll-prompt__link,

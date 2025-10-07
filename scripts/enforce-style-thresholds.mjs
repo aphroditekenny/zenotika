@@ -5,9 +5,11 @@
  */
 import { readFileSync } from 'node:fs';
 
-// Ratcheted thresholds (phase 2). Next planned: RAW_HEX_LIMIT < 40, UNGUARDED_LIMIT -> 0.
-const RAW_HEX_LIMIT = parseInt(process.env.RAW_HEX_LIMIT || '100', 10); // was 140 -> 120 -> 100
-const UNGUARDED_LIMIT = parseInt(process.env.UNGUARDED_LIMIT || '5', 10); // was 67 -> 45 -> 5
+// Ratcheted thresholds (phase 3): tightening raw hex and enforcing zero unguarded keyframes.
+// History: RAW_HEX_LIMIT 140 -> 120 -> 100 -> 70 (current) ; planned next < 40 after overlay normalization.
+//          UNGUARDED_LIMIT 67 -> 45 -> 5 -> 0 (current enforced steady-state).
+const RAW_HEX_LIMIT = parseInt(process.env.RAW_HEX_LIMIT || '70', 10);
+const UNGUARDED_LIMIT = parseInt(process.env.UNGUARDED_LIMIT || '0', 10);
 
 function countLines(file, predicate) {
   try {

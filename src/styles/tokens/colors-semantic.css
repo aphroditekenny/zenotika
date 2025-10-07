@@ -8,7 +8,6 @@
     --zen-white-alpha-95: #fffc;     /* alias for near-white overlay */
     /* High-frequency whites & overlays */
     --zen-white-solid: #ffffff;
-    --zen-white-short: #fff; /* legacy shorthand - migrate to solid if equal */
     --zen-white-alpha-10: #ffffff1a; /* ~10% */
     --zen-white-alpha-15: #ffffff26; /* ~15% */
   --zen-bg-deep: #030213; /* deep background tone */
@@ -16,5 +15,32 @@
   --zen-white-alpha-03: #ffffff08; /* ~3% */
   --zen-white-alpha-05: #ffffff0d; /* ~5% */
   --zen-white-alpha-08: #ffffff14; /* ~8% */
+  /* Mid-tier overlays (phase 2 additions) */
+  --zen-white-alpha-24: #ffffff3d; /* ~24% */
+  --zen-white-alpha-60: #ffffff99; /* ~60% */
+
+    /* Phase 3: Black / Deep overlay ladder (mirrors white alpha scale) */
+    --zen-black-solid: #000000;
+    --zen-black-alpha-03: #00000008; /* ~3% */
+    --zen-black-alpha-05: #0000000d; /* ~5% */
+    --zen-black-alpha-08: #00000014; /* ~8% */
+    --zen-black-alpha-10: #0000001a; /* ~10% */
+    --zen-black-alpha-15: #00000026; /* ~15% */
+    --zen-black-alpha-24: #0000003d; /* ~24% */
+    --zen-black-alpha-40: #00000066; /* ~40% */
+    --zen-black-alpha-60: #00000099; /* ~60% */
+    --zen-black-alpha-80: #000000cc; /* ~80% */
+
+    /* Brand Accent (phase 3) */
+    --zen-accent-pink: #ff7a8a;
+    --zen-accent-pink-alpha-20: #ff7a8a33;
+    --zen-accent-pink-alpha-40: #ff7a8a66;
+    --zen-accent-pink-alpha-50: #ff7a8a80;
+
+    /* Neutral UI grays (phase 3 consolidation) */
+    --zen-neutral-muted-foreground: #717182; /* replaces #717182 */
+    --zen-neutral-accent: #e9ebef; /* replaces #e9ebef */
+    --zen-neutral-input-bg: #f3f3f5; /* replaces #f3f3f5 */
+    --zen-neutral-switch-bg: #cbced4; /* replaces #cbced4 */
   }
 }

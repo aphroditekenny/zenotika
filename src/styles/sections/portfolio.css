@@ -49,13 +49,13 @@
 .light .zen-search-input,
 .day-mode .zen-search-input {
 	color: var(--color-foreground-day-alt);
-	background: color-mix(in oklab, #ffffff 18%, transparent);
-	border-color: color-mix(in oklab, #ffffff 35%, transparent);
+	background: color-mix(in oklab, var(--zen-white-solid) 18%, transparent);
+	border-color: color-mix(in oklab, var(--zen-white-solid) 35%, transparent);
 }
 
 .light .zen-filter-btn,
 .day-mode .zen-filter-btn {
 	color: var(--color-foreground-day-alt);
-	background: color-mix(in oklab, #ffffff 18%, transparent);
-	border-color: color-mix(in oklab, #ffffff 35%, transparent);
+	background: color-mix(in oklab, var(--zen-white-solid) 18%, transparent);
+	border-color: color-mix(in oklab, var(--zen-white-solid) 35%, transparent);
 }

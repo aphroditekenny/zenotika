@@ -67,13 +67,13 @@
 }
 
 .zen-philosophy-footer:hover .philosophy-essence {
-  background: color-mix(in oklab, #ffffff 8%, transparent);
-  border-color: color-mix(in oklab, #ffffff 15%, transparent);
+  background: color-mix(in oklab, var(--zen-white-solid) 8%, transparent);
+  border-color: color-mix(in oklab, var(--zen-white-solid) 15%, transparent);
   transform: translateY(-1px);
 }
 
 .light .zen-philosophy-footer:hover .philosophy-essence,
 .day-mode .zen-philosophy-footer:hover .philosophy-essence {
-  background: color-mix(in oklab, #ffffff 15%, transparent);
-  border-color: color-mix(in oklab, #ffffff 25%, transparent);
+  background: color-mix(in oklab, var(--zen-white-solid) 15%, transparent);
+  border-color: color-mix(in oklab, var(--zen-white-solid) 25%, transparent);
 }

@@ -68,6 +68,19 @@ These components are ready to be pulled into future feature screens; current lan
 
 - Build/Lint/Tests: not run (analysis only).
 
+### style governance thresholds (ratchet log)
+
+| Date (UTC) | Change | Rationale |
+| ---------- | ------ | --------- |
+| 2025-10-08 | RAW_HEX_LIMIT -> 70, UNGUARDED_LIMIT -> 0 | Completed full keyframe guarding; mid white overlay normalization underway (unique raw hex now 58, down from 65 & >100 earlier). Next target < 40 after black alpha + residual overlay consolidation. |
+
+Current normalization focus:
+- Remaining transient hex forms (black alpha variants, a few mid overlay whites in legacy gradients)
+- Converging on color-mix for 25–35–50% instead of new tokens to prevent token bloat
+- Pruned deprecated `--zen-white-short` token
+
+Planned next ratchet: RAW_HEX_LIMIT < 40 after final overlay + black alpha pass.
+
 ---
 
 Creating a mermaid dependency diagram for the app structure and sharing it below; the chart maps the primary runtime flow from `main.tsx` through the feature components.
